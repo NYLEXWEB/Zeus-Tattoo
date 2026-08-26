@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), sans-serif;
+  --font-serif: var(--font-cormorant), serif;
+  
+  --color-brand-black: #080808;
+  --color-brand-charcoal: #111111;
+  --color-brand-off-white: #F2EEE6;
+  --color-brand-warm-cream: #E8DFD1;
+}
+
+:root {
+  background-color: #080808;
+  color: #F2EEE6;
+}
+
+/* Custom Minimal Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080808;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #222222;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
+
+/* Selection Color */
+::selection {
+  background-color: #E8DFD1;
+  color: #080808;
+}
+
+/* Hide default scrollbar behavior on maps/carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
