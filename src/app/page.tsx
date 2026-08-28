@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import Styles from "@/components/Styles";
-import Artists from "@/components/Artists";
+import Services from "@/components/Services";
 import Portfolio from "@/components/Portfolio";
-import Safety from "@/components/Safety";
+import Artists from "@/components/Artists";
+import StudioHygiene from "@/components/StudioHygiene";
+import Process from "@/components/Process";
 import PricingAftercare from "@/components/PricingAftercare";
-import FAQ from "@/components/FAQ";
 import Testimonials from "@/components/Testimonials";
+import FAQ from "@/components/FAQ";
+import ContactLocation from "@/components/ContactLocation";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
@@ -22,47 +25,56 @@ export default function Home() {
   const closeBooking = () => setIsBookingOpen(false);
 
   return (
-    <div className="bg-brand-black text-brand-off-white font-sans selection:bg-brand-warm-cream selection:text-brand-black">
-      {/* Sticky Premium Navigation Header */}
+    <div className="bg-brand-black text-brand-off-white font-sans selection:bg-brand-warm-cream selection:text-brand-black relative">
+      {/* Luxury Follower Cursor */}
+      <CustomCursor />
+
+      {/* Sticky Navigation Header with Glassmorphism */}
       <Navbar onOpenBooking={openBooking} />
 
-      {/* Main Structural Body */}
+      {/* Main Storytelling Sections */}
       <main>
-        {/* Cinematic Hero Block */}
+        {/* Hero Section with 000%-100% Loading Screen & 300 WebP Canvas Scrubbing */}
         <Hero onOpenBooking={openBooking} />
 
-        {/* Studio Story & Stats (Dark) */}
-        <About />
+        {/* Studio Intro & Statistics (THE STUDIO) */}
+        <About onOpenBooking={openBooking} />
 
-        {/* Style Showcase Horizontal Slide (Off-White) */}
-        <Styles />
+        {/* Studio Services Expandable Accordion */}
+        <Services onOpenBooking={openBooking} />
 
-        {/* Master Artists Grid (Dark) */}
-        <Artists />
-
-        {/* masonry portfolio gallery (Off-White) */}
+        {/* Selected Works Gallery & Full-Screen Lightbox */}
         <Portfolio />
 
-        {/* Safety commitments (Dark) */}
-        <Safety onOpenBooking={openBooking} />
+        {/* Resident Artists Profiles */}
+        <Artists />
 
-        {/* Pricing Guide & Aftercare details (Off-White) */}
-        <PricingAftercare />
+        {/* Studio Hygiene & Atmosphere (PRECISION. HYGIENE. CRAFT.) */}
+        <StudioHygiene />
 
-        {/* Common FAQ accordion dropdowns (Dark) */}
-        <FAQ />
+        {/* 3-Step Client Process */}
+        <Process onOpenBooking={openBooking} />
 
-        {/* Customer reviews carousel (Off-White) */}
+        {/* Investment & Tattoo Aftercare Guide */}
+        <PricingAftercare onOpenBooking={openBooking} />
+
+        {/* Client Reviews Carousel */}
         <Testimonials />
 
-        {/* Final CTA (Dark) */}
+        {/* Frequently Asked Questions */}
+        <FAQ />
+
+        {/* Bangalore Location & Map Section */}
+        <ContactLocation onOpenBooking={openBooking} />
+
+        {/* Final Conversion CTA */}
         <FinalCTA onOpenBooking={openBooking} />
       </main>
 
-      {/* Branding Footer Details */}
+      {/* Luxury Footer */}
       <Footer />
 
-      {/* Booking Form Floating Modal Backdrop */}
+      {/* Booking Form Modal Overlay */}
       <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
     </div>
   );

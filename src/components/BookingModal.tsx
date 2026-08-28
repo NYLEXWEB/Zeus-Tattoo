@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, Clock, User, Sparkles, CheckCircle2, Upload } from "lucide-react";
+import { X, CheckCircle2, Upload, MessageCircle, Phone, Sparkles } from "lucide-react";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -17,6 +17,7 @@ interface FormState {
   style: string;
   placement: string;
   size: string;
+  budget: string;
   date: string;
   time: string;
   message: string;
@@ -36,8 +37,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     email: "",
     artist: "No Preference",
     style: "Realism",
-    placement: "Arm",
+    placement: "Arm (Forearm / Sleeve)",
     size: "Medium (2\"-6\")",
+    budget: "₹10,000 - ₹25,000",
     date: "",
     time: "Afternoon (2:00 PM - 6:00 PM)",
     message: "",
@@ -51,7 +53,6 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear errors when user types
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -68,7 +69,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
-    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+    if (!formData.phone.trim()) newErrors.phone = "Phone/WhatsApp number is required";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -85,12 +86,10 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    
-    // Simulate API Submission
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
-    }, 1500);
+    }, 1200);
   };
 
   const handleReset = () => {
@@ -100,8 +99,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
       email: "",
       artist: "No Preference",
       style: "Realism",
-      placement: "Arm",
+      placement: "Arm (Forearm / Sleeve)",
       size: "Medium (2\"-6\")",
+      budget: "₹10,000 - ₹25,000",
       date: "",
       time: "Afternoon (2:00 PM - 6:00 PM)",
       message: "",
@@ -124,33 +124,73 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             className="absolute inset-0 bg-brand-black/90 backdrop-blur-md cursor-pointer"
           />
 
-          {/* Modal Panel Slide Up */}
+          {/* Modal Panel */}
           <motion.div
             initial={{ opacity: 0, y: 50, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.95 }}
-            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-            className="relative z-10 w-full max-w-2xl bg-brand-charcoal border border-brand-off-white/10 rounded-[4px] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+            transition={{ duration: 0.45, ease: [0.25, 1, 0.5, 1] }}
+            className="relative z-10 w-full max-w-3xl bg-brand-charcoal border border-brand-off-white/10 rounded-[4px] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
           >
             {/* Header */}
-            <div className="p-6 md:p-8 border-b border-brand-off-white/5 flex items-center justify-between">
+            <div className="p-6 md:p-8 border-b border-brand-off-white/10 flex items-center justify-between bg-brand-black/40">
               <div className="flex flex-col">
-                <span className="font-sans text-[10px] tracking-[0.3em] text-brand-warm-cream uppercase">
-                  Appointment Booking
+                <span className="font-sans text-[10px] tracking-[0.35em] text-brand-warm-cream uppercase flex items-center gap-1.5">
+                  <Sparkles size={12} />
+                  YOUR IDEA. OUR CRAFT.
                 </span>
                 <h3 className="font-serif text-2xl md:text-3xl text-brand-off-white uppercase mt-1">
-                  Book Your Session
+                  Book Your Consultation
                 </h3>
               </div>
               <button
                 onClick={onClose}
-                className="w-10 h-10 border border-brand-off-white/10 hover:border-brand-warm-cream rounded-full flex items-center justify-center text-brand-off-white hover:text-brand-warm-cream transition-colors cursor-pointer"
+                className="w-10 h-10 border border-brand-off-white/20 hover:border-brand-warm-cream rounded-full flex items-center justify-center text-brand-off-white hover:text-brand-warm-cream transition-colors cursor-pointer"
+                aria-label="Close Booking Modal"
               >
                 <X size={18} />
               </button>
             </div>
 
-            {/* Form Content / Success View */}
+            {/* Direct Instant Contact Shortcuts Bar */}
+            <div className="bg-brand-black/80 border-b border-brand-off-white/5 px-6 py-3 flex flex-wrap items-center justify-between gap-4 text-xs font-sans">
+              <span className="text-[10px] tracking-widest text-brand-off-white/50 uppercase">
+                PREFER DIRECT MESSAGE?
+              </span>
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://wa.me/919876543210"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 text-[11px] text-brand-warm-cream hover:underline uppercase tracking-wider font-semibold"
+                >
+                  <MessageCircle size={13} />
+                  WhatsApp
+                </a>
+                <a
+                  href="https://instagram.com/zeustattoo"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 text-[11px] text-brand-warm-cream hover:underline uppercase tracking-wider font-semibold"
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                  @zeustattoo
+                </a>
+                <a
+                  href="tel:+919876543210"
+                  className="flex items-center gap-1 text-[11px] text-brand-warm-cream hover:underline uppercase tracking-wider font-semibold"
+                >
+                  <Phone size={13} />
+                  Call Us
+                </a>
+              </div>
+            </div>
+
+            {/* Form Container */}
             <div className="flex-1 overflow-y-auto p-6 md:p-8 custom-scrollbar">
               <AnimatePresence mode="wait">
                 {!isSuccess ? (
@@ -165,7 +205,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     {/* Full Name & Email row */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
                           Full Name *
                         </label>
                         <input
@@ -173,10 +213,10 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                           name="fullName"
                           value={formData.fullName}
                           onChange={handleInputChange}
-                          className={`bg-brand-black/50 border ${
-                            errors.fullName ? "border-red-500/50 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
+                          className={`bg-brand-black/60 border ${
+                            errors.fullName ? "border-red-500/60 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
                           } px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px]`}
-                          placeholder="John Doe"
+                          placeholder="Your Full Name"
                         />
                         {errors.fullName && (
                           <span className="text-[10px] text-red-400 font-sans tracking-wide mt-1.5">{errors.fullName}</span>
@@ -184,7 +224,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       </div>
 
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
                           Email Address *
                         </label>
                         <input
@@ -192,10 +232,10 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                           name="email"
                           value={formData.email}
                           onChange={handleInputChange}
-                          className={`bg-brand-black/50 border ${
-                            errors.email ? "border-red-500/50 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
+                          className={`bg-brand-black/60 border ${
+                            errors.email ? "border-red-500/60 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
                           } px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px]`}
-                          placeholder="johndoe@email.com"
+                          placeholder="yourname@domain.com"
                         />
                         {errors.email && (
                           <span className="text-[10px] text-red-400 font-sans tracking-wide mt-1.5">{errors.email}</span>
@@ -206,18 +246,18 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     {/* Phone & Preferred Artist */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
-                          Phone Number *
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
+                          Phone / WhatsApp Number *
                         </label>
                         <input
                           type="tel"
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          className={`bg-brand-black/50 border ${
-                            errors.phone ? "border-red-500/50 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
+                          className={`bg-brand-black/60 border ${
+                            errors.phone ? "border-red-500/60 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
                           } px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px]`}
-                          placeholder="+1 (555) 000-0000"
+                          placeholder="+91 98765 43210"
                         />
                         {errors.phone && (
                           <span className="text-[10px] text-red-400 font-sans tracking-wide mt-1.5">{errors.phone}</span>
@@ -225,7 +265,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       </div>
 
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
                           Preferred Artist
                         </label>
                         <select
@@ -234,11 +274,11 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                           onChange={handleInputChange}
                           className="bg-brand-black border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] cursor-pointer"
                         >
-                          <option value="No Preference">No Preference (First Available)</option>
-                          <option value="Arjun">Arjun (Realism / Black & Grey)</option>
-                          <option value="Meera">Meera (Fine Line / Minimalist)</option>
-                          <option value="Rahul">Rahul (Japanese / Neo-Traditional)</option>
-                          <option value="Sahana">Sahana (Geometric / Custom)</option>
+                          <option value="No Preference">No Preference (First Available Master)</option>
+                          <option value="Rahul Sharma">Rahul Sharma (Realism & Portraits)</option>
+                          <option value="Meera Nair">Meera Nair (Fine Line & Micro)</option>
+                          <option value="Arjun Verma">Arjun Verma (Black & Grey Sleeves)</option>
+                          <option value="Sahana Rao">Sahana Rao (Geometry & Cover-Ups)</option>
                         </select>
                       </div>
                     </div>
@@ -246,7 +286,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     {/* Style & Placement */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
                           Tattoo Style
                         </label>
                         <select
@@ -255,19 +295,18 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                           onChange={handleInputChange}
                           className="bg-brand-black border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] cursor-pointer"
                         >
-                          <option value="Realism">Realism</option>
-                          <option value="Black & Grey">Black & Grey</option>
-                          <option value="Fine Line">Fine Line</option>
-                          <option value="Japanese">Japanese</option>
-                          <option value="Geometric">Geometric</option>
-                          <option value="Minimalist">Minimalist</option>
-                          <option value="Other">Other / Custom</option>
+                          <option value="Realism">Hyper-Realism & Portraits</option>
+                          <option value="Black & Grey">Black & Grey Monochromatic</option>
+                          <option value="Fine Line">Fine Line & Botanicals</option>
+                          <option value="Traditional">Geometric & Dotwork</option>
+                          <option value="Cover Up">Cover-Up & Transformation</option>
+                          <option value="Custom">Custom Concept</option>
                         </select>
                       </div>
 
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
-                          Tattoo Placement
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
+                          Body Placement
                         </label>
                         <select
                           name="placement"
@@ -275,23 +314,23 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                           onChange={handleInputChange}
                           className="bg-brand-black border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] cursor-pointer"
                         >
-                          <option value="Arm">Arm (Sleeve, Forearm, Bicep)</option>
-                          <option value="Leg">Leg (Thigh, Calf, Ankle)</option>
+                          <option value="Arm (Forearm / Sleeve)">Arm (Forearm / Full Sleeve)</option>
+                          <option value="Leg (Thigh / Calf)">Leg (Thigh / Calf / Ankle)</option>
                           <option value="Chest">Chest</option>
-                          <option value="Back">Back (Full/Upper/Lower)</option>
-                          <option value="Shoulder">Shoulder</option>
+                          <option value="Back (Full / Upper)">Back (Full / Upper Back)</option>
+                          <option value="Shoulder">Shoulder / Collarbone</option>
                           <option value="Ribs">Ribs / Torso</option>
-                          <option value="Hand">Hand / Wrist</option>
+                          <option value="Hand / Wrist">Hand / Wrist</option>
                           <option value="Neck">Neck / Behind Ear</option>
-                          <option value="Other">Other Placement</option>
+                          <option value="Other">Other Custom Placement</option>
                         </select>
                       </div>
                     </div>
 
-                    {/* Size & Date */}
+                    {/* Size & Budget */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
                           Approximate Size
                         </label>
                         <select
@@ -300,71 +339,70 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                           onChange={handleInputChange}
                           className="bg-brand-black border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] cursor-pointer"
                         >
-                          <option value="Small (< 2&quot;)">Small (Less than 2 inches)</option>
+                          <option value="Small (< 2&quot;)">Small (Micro / Under 2 inches)</option>
                           <option value="Medium (2&quot;-6&quot;)">Medium (2 to 6 inches)</option>
-                          <option value="Large (6&quot;+)">Large (Greater than 6 inches)</option>
-                          <option value="Full Sleeve / Back">Full Sleeve / Full Back Piece</option>
+                          <option value="Large (6&quot;+)">Large (6+ inches)</option>
+                          <option value="Full Sleeve / Back">Full Sleeve / Back Piece</option>
                         </select>
                       </div>
 
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
+                          Estimated Budget Range
+                        </label>
+                        <select
+                          name="budget"
+                          value={formData.budget}
+                          onChange={handleInputChange}
+                          className="bg-brand-black border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] cursor-pointer"
+                        >
+                          <option value="₹3,500 - ₹10,000">₹3,500 - ₹10,000</option>
+                          <option value="₹10,000 - ₹25,000">₹10,000 - ₹25,000</option>
+                          <option value="₹25,000 - ₹50,000">₹25,000 - ₹50,000</option>
+                          <option value="₹50,000+">₹50,000+ (Full Project)</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Preferred Date & Reference Upload */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="flex flex-col">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
                           Preferred Date *
                         </label>
-                        <div className="relative">
-                          <input
-                            type="date"
-                            name="date"
-                            min={new Date().toISOString().split("T")[0]}
-                            value={formData.date}
-                            onChange={handleInputChange}
-                            className={`w-full bg-brand-black/50 border ${
-                              errors.date ? "border-red-500/50 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
-                            } px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px]`}
-                          />
-                        </div>
+                        <input
+                          type="date"
+                          name="date"
+                          min={new Date().toISOString().split("T")[0]}
+                          value={formData.date}
+                          onChange={handleInputChange}
+                          className={`bg-brand-black/60 border ${
+                            errors.date ? "border-red-500/60 focus:border-red-500" : "border-brand-off-white/10 focus:border-brand-warm-cream"
+                          } px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px]`}
+                        />
                         {errors.date && (
                           <span className="text-[10px] text-red-400 font-sans tracking-wide mt-1.5">{errors.date}</span>
                         )}
                       </div>
-                    </div>
-
-                    {/* Preferred Time & Reference Image Upload */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
-                          Preferred Time Frame
-                        </label>
-                        <select
-                          name="time"
-                          value={formData.time}
-                          onChange={handleInputChange}
-                          className="bg-brand-black border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] cursor-pointer"
-                        >
-                          <option value="Morning (10:00 AM - 2:00 PM)">Morning (10:00 AM - 2:00 PM)</option>
-                          <option value="Afternoon (2:00 PM - 6:00 PM)">Afternoon (2:00 PM - 6:00 PM)</option>
-                          <option value="Evening (6:00 PM - 8:00 PM)">Evening (6:00 PM - 8:00 PM)</option>
-                        </select>
-                      </div>
 
                       <div className="flex flex-col">
-                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
+                        <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
                           Reference Image (Optional)
                         </label>
                         <div className="relative">
                           <input
                             type="file"
-                            id="reference-upload"
+                            id="reference-upload-modal"
                             accept="image/*"
                             onChange={handleFileChange}
                             className="hidden"
                           />
                           <label
-                            htmlFor="reference-upload"
-                            className="w-full flex items-center justify-between bg-brand-black/50 border border-brand-off-white/10 px-4 py-3 text-sm text-brand-off-white/60 hover:text-brand-warm-cream hover:border-brand-warm-cream font-sans rounded-[3px] cursor-pointer transition-colors duration-300"
+                            htmlFor="reference-upload-modal"
+                            className="w-full flex items-center justify-between bg-brand-black/60 border border-brand-off-white/10 px-4 py-3 text-sm text-brand-off-white/70 hover:text-brand-warm-cream hover:border-brand-warm-cream font-sans rounded-[3px] cursor-pointer transition-colors duration-300"
                           >
                             <span className="truncate max-w-[180px]">
-                              {fileName ? fileName : "Upload Reference..."}
+                              {fileName ? fileName : "Attach Reference..."}
                             </span>
                             <Upload size={16} className="text-brand-off-white/40" />
                           </label>
@@ -372,18 +410,18 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                       </div>
                     </div>
 
-                    {/* Message */}
+                    {/* Message / Description */}
                     <div className="flex flex-col">
-                      <label className="font-sans text-[10px] tracking-widest text-brand-off-white/60 uppercase mb-2">
-                        Tattoo Description & Notes
+                      <label className="font-sans text-[10px] tracking-widest text-brand-off-white/70 uppercase mb-2">
+                        Tattoo Description & Ideas
                       </label>
                       <textarea
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
-                        rows={4}
-                        className="bg-brand-black/50 border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] resize-none"
-                        placeholder="Describe your design idea, placement preference, and any text formatting details here..."
+                        rows={3}
+                        className="bg-brand-black/60 border border-brand-off-white/10 focus:border-brand-warm-cream px-4 py-3 text-sm text-brand-off-white font-sans outline-none transition-colors rounded-[3px] resize-none"
+                        placeholder="Tell us about the story behind your tattoo, specific element requests, or any questions..."
                       />
                     </div>
 
@@ -391,20 +429,20 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="group w-full py-4 mt-4 bg-brand-off-white hover:bg-brand-warm-cream disabled:bg-brand-off-white/45 disabled:cursor-not-allowed text-brand-black font-sans text-xs font-bold tracking-widest uppercase transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-lg"
+                      className="group w-full py-4 mt-2 bg-brand-off-white hover:bg-brand-warm-cream disabled:bg-brand-off-white/40 text-brand-black font-sans text-xs font-bold tracking-widest uppercase transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xl"
                     >
                       {isSubmitting ? (
                         <div className="w-4 h-4 border-2 border-brand-black border-t-transparent rounded-full animate-spin" />
                       ) : (
                         <>
-                          Submit Inquiry
-                          <Sparkles size={12} className="group-hover:scale-125 transition-transform" />
+                          REQUEST CONSULTATION
+                          <Sparkles size={13} className="group-hover:scale-125 transition-transform" />
                         </>
                       )}
                     </button>
                   </motion.form>
                 ) : (
-                  // Success State
+                  /* Success View */
                   <motion.div
                     key="success"
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -412,28 +450,23 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="flex flex-col items-center justify-center text-center py-12 px-4"
                   >
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                      className="text-brand-warm-cream mb-6"
-                    >
+                    <div className="text-brand-warm-cream mb-6">
                       <CheckCircle2 size={64} className="stroke-1" />
-                    </motion.div>
+                    </div>
                     
-                    <h4 className="font-serif text-3xl text-brand-off-white uppercase mb-4">
+                    <h4 className="font-serif text-3xl md:text-4xl text-brand-off-white uppercase mb-4">
                       Inquiry Received
                     </h4>
                     
-                    <p className="text-brand-off-white/70 font-sans text-sm leading-relaxed max-w-md mb-8">
-                      Thank you for contacting Zeus Tattoo Studio, <strong className="text-brand-off-white">{formData.fullName}</strong>. We have saved your preference for a <strong className="text-brand-off-white">{formData.style}</strong> tattoo with <strong className="text-brand-off-white">{formData.artist}</strong> on <strong className="text-brand-off-white">{formData.date}</strong>. Our team will review your project and email you within 24 hours.
+                    <p className="text-brand-off-white/75 font-sans text-xs md:text-sm leading-relaxed max-w-md mb-8">
+                      Thank you for contacting Zeus Tattoo Studio, <strong className="text-brand-off-white">{formData.fullName}</strong>. We have logged your consultation request for a <strong className="text-brand-off-white">{formData.style}</strong> project on <strong className="text-brand-off-white">{formData.date}</strong>. Our Koramangala team will review your project and get back to you within 24 hours.
                     </p>
 
                     <button
                       onClick={handleReset}
                       className="px-8 py-3.5 border border-brand-off-white/20 hover:border-brand-warm-cream text-brand-off-white hover:text-brand-warm-cream font-sans text-xs font-semibold tracking-widest uppercase transition-colors cursor-pointer"
                     >
-                      Close Window
+                      CLOSE WINDOW
                     </button>
                   </motion.div>
                 )}

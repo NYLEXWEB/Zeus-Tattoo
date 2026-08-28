@@ -1,56 +1,69 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
 interface Artist {
-  id: number;
   name: string;
-  specialty: string;
+  role: string;
+  experience: string;
+  specialization: string;
+  signatureStyle: string;
+  bio: string;
   image: string;
+  instagram: string;
 }
 
 export default function Artists() {
   const artists: Artist[] = [
     {
-      id: 1,
-      name: "Arjun",
-      specialty: "Realism / Black & Grey",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop",
+      name: "Rahul Sharma",
+      role: "Founder & Master Realism Artist",
+      experience: "10+ Years",
+      specialization: "Photorealism & Portraiture",
+      signatureStyle: "Hyper-Contrast Realism",
+      bio: "Internationally acclaimed artist known for capturing lifelike human portraits and wildlife depth with anatomical accuracy.",
+      image: "/images/artist_arjun.jpg",
+      instagram: "https://instagram.com/zeustattoo",
     },
     {
-      id: 2,
-      name: "Meera",
-      specialty: "Fine Line / Minimalist",
-      image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600&auto=format&fit=crop",
+      name: "Meera Nair",
+      role: "Fine Line & Micro Specialist",
+      experience: "7+ Years",
+      specialization: "Single-Needle Botanicals & Micro-Realism",
+      signatureStyle: "Whisper Linework",
+      bio: "Master of delicate single-needle techniques, combining organic floral movement with surgical linework precision.",
+      image: "/images/artist_meera.jpg",
+      instagram: "https://instagram.com/zeustattoo",
     },
     {
-      id: 3,
-      name: "Rahul",
-      specialty: "Japanese / Neo-Traditional",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop",
+      name: "Arjun Verma",
+      role: "Black & Grey Sleeve Master",
+      experience: "9+ Years",
+      specialization: "Mythological & Custom Sleeves",
+      signatureStyle: "Obsidian Gradient Wash",
+      bio: "Specializes in multi-session arm & leg sleeves blending classical Greek mythology, dark surrealism, and dramatic contrast.",
+      image: "/images/artist_rahul.jpg",
+      instagram: "https://instagram.com/zeustattoo",
     },
     {
-      id: 4,
-      name: "Sahana",
-      specialty: "Geometric / Custom",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop",
+      name: "Sahana Rao",
+      role: "Custom & Cover-Up Artist",
+      experience: "8+ Years",
+      specialization: "Sacred Geometry & Cover-Ups",
+      signatureStyle: "Dotwork & Stipple Symmetry",
+      bio: "Expert in complex cover-up re-imagining and geometric dotwork precision tailored specifically for body contours.",
+      image: "/images/artist_sahana.jpg",
+      instagram: "https://instagram.com/zeustattoo",
     },
   ];
 
-  const handleScrollToPortfolio = () => {
-    const portfolioSection = document.querySelector("#portfolio");
-    if (portfolioSection) {
-      portfolioSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
   return (
-    <section id="artists" className="bg-brand-black py-24 md:py-32 overflow-hidden border-b border-brand-off-white/5">
+    <section id="artists" className="bg-brand-black py-28 md:py-36 overflow-hidden border-b border-brand-off-white/5">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-
+        
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16 md:mb-20">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-24">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -58,13 +71,12 @@ export default function Artists() {
             transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
             className="max-w-xl"
           >
-            <span className="font-sans text-xs font-semibold tracking-[0.4em] text-brand-warm-cream uppercase mb-4 block">
-              Our Artists
+            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-brand-warm-cream uppercase mb-4 block">
+              THE MASTERS BEHIND THE CRAFT
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight text-brand-off-white uppercase">
-              Meet the
-              <br />
-              <span className="italic font-light text-brand-warm-cream">Creative Minds</span>
+            <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-off-white uppercase">
+              RESIDENT<br />
+              <span className="italic font-light text-brand-warm-cream">ARTISTS</span>
             </h2>
           </motion.div>
 
@@ -73,77 +85,81 @@ export default function Artists() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ delay: 0.2, duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-            className="text-brand-off-white/70 font-sans text-sm md:text-base leading-relaxed tracking-wide max-w-sm"
+            className="text-brand-off-white/70 font-sans text-xs md:text-sm leading-relaxed tracking-wide max-w-md"
           >
-            Each artist brings a unique style, perspective and passion to the studio. Find the one who matches your vision.
+            Our resident artists bring decades of collective artistic mastery, specializing in distinct genres to deliver unrivaled skin artwork.
           </motion.p>
         </div>
 
-        {/* Artists Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+        {/* Artist Profiles Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {artists.map((artist, index) => (
             <motion.div
-              key={artist.id}
-              initial={{ opacity: 0, y: 40 }}
+              key={artist.name}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.1, duration: 1, ease: [0.25, 1, 0.5, 1] }}
-              whileHover={{ y: -10 }}
-              className="group relative flex flex-col bg-brand-charcoal overflow-hidden border border-brand-off-white/5"
+              transition={{ delay: index * 0.1, duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
+              className="group flex flex-col bg-brand-charcoal border border-brand-off-white/10 rounded-[3px] overflow-hidden hover:border-brand-warm-cream/40 transition-all duration-500 shadow-xl"
             >
-              {/* Aspect-Ratio Box for portrait image */}
-              <div className="aspect-[3/4] overflow-hidden relative bg-brand-black">
+              {/* Image Frame */}
+              <div className="relative aspect-[4/5] overflow-hidden bg-brand-black">
                 <img
                   src={artist.image}
                   alt={artist.name}
-                  className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-102 group-hover:brightness-100 transition-all duration-700"
+                  className="w-full h-full object-cover grayscale group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700"
                   loading="lazy"
                 />
-
-                {/* Overlay details appearing on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-
-                {/* View Portfolio Hover Action overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
-                  <button
-                    onClick={handleScrollToPortfolio}
-                    className="px-5 py-2.5 bg-brand-off-white text-brand-black font-sans text-[10px] font-bold tracking-widest uppercase hover:bg-brand-warm-cream transition-colors duration-300 flex items-center gap-1.5 cursor-pointer shadow-lg"
-                  >
-                    View Portfolio
-                    <ArrowRight size={10} />
-                  </button>
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-brand-charcoal via-transparent to-transparent opacity-80" />
+                
+                {/* Experience Badge */}
+                <span className="absolute top-4 right-4 bg-brand-black/80 backdrop-blur-xs border border-brand-off-white/20 text-brand-warm-cream text-[9px] tracking-[0.2em] uppercase px-3 py-1 font-sans">
+                  {artist.experience}
+                </span>
               </div>
 
-              {/* Name & Specialty */}
-              <div className="p-6 flex flex-col border-t border-brand-off-white/5 relative z-10 bg-brand-charcoal">
-                <h3 className="font-serif text-xl text-brand-off-white font-medium uppercase tracking-wide">
-                  {artist.name}
-                </h3>
-                <span className="text-[10px] tracking-widest text-brand-warm-cream/80 font-sans uppercase mt-1">
-                  {artist.specialty}
-                </span>
+              {/* Profile Copy */}
+              <div className="p-6 md:p-8 flex flex-col justify-between flex-1">
+                <div>
+                  <span className="text-[10px] tracking-[0.3em] text-brand-warm-cream uppercase font-sans font-semibold">
+                    {artist.role}
+                  </span>
+                  <h3 className="font-serif text-2xl text-brand-off-white uppercase mt-1 mb-3">
+                    {artist.name}
+                  </h3>
+                  <p className="text-xs text-brand-off-white/60 font-sans leading-relaxed tracking-wide mb-6">
+                    {artist.bio}
+                  </p>
+                </div>
+
+                {/* Details Footer */}
+                <div className="border-t border-brand-off-white/10 pt-4 mt-auto flex flex-col gap-2">
+                  <div className="flex justify-between items-center text-[10px] tracking-wider text-brand-off-white/50 font-sans uppercase">
+                    <span>Style:</span>
+                    <strong className="text-brand-off-white">{artist.signatureStyle}</strong>
+                  </div>
+
+                  <a
+                    href={artist.instagram}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 flex items-center justify-between text-xs font-sans font-semibold tracking-widest text-brand-warm-cream hover:text-brand-off-white transition-colors group/link"
+                  >
+                    <span className="flex items-center gap-1.5 uppercase text-[10px]">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                      </svg>
+                      @zeustattoo
+                    </span>
+                    <ArrowUpRight size={14} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                  </a>
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
-
-        {/* View All Artists Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="flex justify-center"
-        >
-          <button
-            onClick={handleScrollToPortfolio}
-            className="group px-8 py-3.5 border border-brand-off-white/10 hover:border-brand-warm-cream text-brand-off-white hover:text-brand-warm-cream font-sans text-xs font-semibold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer"
-          >
-            View All Artists
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-          </button>
-        </motion.div>
 
       </div>
     </section>

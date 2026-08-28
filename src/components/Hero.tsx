@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface HeroProps {
@@ -22,15 +22,13 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   // Preloading progress states
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobileDevice, setIsMobileDevice] = useState(false);
   
   // Cache and queue refs
   const imagesCache = useRef<{ [key: number]: HTMLImageElement }>({});
-  const isMobileRef = useRef(false);
   const loadingStatus = useRef<{ [key: number]: 'unloaded' | 'loading' | 'loaded' }>({});
   const loadQueue = useRef<number[]>([]);
   
-  // Animation state refs (prevents triggering React re-renders)
+  // Animation state refs
   const targetFrameRef = useRef(1);
   const currentFrameRef = useRef(1);
 
@@ -41,8 +39,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       while (s.length < size) s = "0" + s;
       return s;
     };
-    const deviceSubdir = isMobileRef.current ? "mobile" : "desktop";
-    return `/frames/${deviceSubdir}/frame-${pad(index, 4)}.webp`;
+    return `/frames/desktop/frame-${pad(index, 4)}.webp`;
   };
 
   // Canvas drawing function
@@ -52,7 +49,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Retrieve image from cache or find the closest loaded frame to avoid flickering
     let img = imagesCache.current[frameIndex];
     if (!img) {
       for (let offset = 1; offset < totalFrames; offset++) {
@@ -69,7 +65,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
 
     if (!img) return;
 
-    // Handle high DPI screens
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
     const displayWidth = Math.round(rect.width * dpr);
@@ -82,7 +77,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Calculate background cover dimensions (aspect ratio preservation)
     const imageRatio = img.width / img.height;
     const canvasRatio = canvas.width / canvas.height;
     
@@ -103,66 +97,58 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
   };
 
-  // Mathematical interpolation (lerp) helper for overlays
+  // Mathematical interpolation helper for stages
   const getStageStyles = (progress: number, start: number, peakStart: number, peakEnd: number, end: number) => {
     let opacity = 0;
-    let y = 30; // Starts 30px lower
+    let y = 30;
     
     if (progress >= start && progress <= end) {
       if (progress < peakStart) {
-        // Fading and moving in
         const p = (progress - start) / (peakStart - start);
         opacity = p;
         y = 30 * (1 - p);
       } else if (progress > peakEnd) {
-        // Fading and moving out (upwards)
         const p = (end - progress) / (end - peakEnd);
         opacity = p;
         y = -30 * (1 - p);
       } else {
-        // Fully peak visible
         opacity = 1;
         y = 0;
       }
     } else if (progress > end) {
-      y = -30; // Remained pushed up
+      y = -30;
     }
     
     return { opacity, y };
   };
 
-  // Direct DOM styling engine (bypasses React loop for maximum performance)
   const updateStageDOM = (progress: number) => {
     const stage1 = stage1Ref.current;
     const stage2 = stage2Ref.current;
     const stage3 = stage3Ref.current;
     const scrollIndicator = scrollIndicatorRef.current;
 
-    // Stage 1 (0% to 28% scroll progress)
     if (stage1) {
-      const { opacity, y } = getStageStyles(progress, 0, 0.05, 0.18, 0.28);
+      const { opacity, y } = getStageStyles(progress, 0, 0.05, 0.22, 0.32);
       stage1.style.opacity = opacity.toString();
       stage1.style.transform = `translateY(${y}px)`;
       stage1.style.pointerEvents = opacity > 0.1 ? "auto" : "none";
     }
 
-    // Stage 2 (35% to 63% scroll progress)
     if (stage2) {
-      const { opacity, y } = getStageStyles(progress, 0.35, 0.42, 0.55, 0.63);
+      const { opacity, y } = getStageStyles(progress, 0.38, 0.45, 0.58, 0.68);
       stage2.style.opacity = opacity.toString();
       stage2.style.transform = `translateY(${y}px)`;
       stage2.style.pointerEvents = opacity > 0.1 ? "auto" : "none";
     }
 
-    // Stage 3 (70% to 95% scroll progress)
     if (stage3) {
-      const { opacity, y } = getStageStyles(progress, 0.70, 0.77, 0.88, 0.95);
+      const { opacity, y } = getStageStyles(progress, 0.72, 0.78, 0.90, 0.98);
       stage3.style.opacity = opacity.toString();
       stage3.style.transform = `translateY(${y}px)`;
       stage3.style.pointerEvents = opacity > 0.1 ? "auto" : "none";
     }
 
-    // Scroll Down indicator (fades out rapidly as user scrolls)
     if (scrollIndicator) {
       const opacity = Math.max(0, 1 - progress * 8);
       scrollIndicator.style.opacity = opacity.toString();
@@ -171,19 +157,13 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   };
 
   useEffect(() => {
-    // Detect mobile viewport and initialize loading states
-    const isMobile = window.innerWidth < 768;
-    setIsMobileDevice(isMobile);
-    isMobileRef.current = isMobile;
-
     for (let i = 1; i <= totalFrames; i++) {
       loadingStatus.current[i] = 'unloaded';
     }
 
-    const criticalCount = 30; // Block the screen until first 30 frames load
+    const criticalCount = 30;
     let loadedCritical = 0;
 
-    // Image Loader with caching states
     const loadFrame = (index: number, isCritical = false) => {
       if (loadingStatus.current[index] === 'loaded') {
         if (isCritical) {
@@ -225,7 +205,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           resolve(img);
         };
         img.onerror = () => {
-          loadingStatus.current[index] = 'unloaded'; // allow retry
+          loadingStatus.current[index] = 'unloaded';
           if (isCritical) {
             loadedCritical++;
             setLoadingProgress(Math.round((loadedCritical / criticalCount) * 100));
@@ -235,50 +215,39 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       });
     };
 
-    // Prioritization function
     const prioritizeQueue = (currentFrameIndex: number) => {
       loadQueue.current.sort((a, b) => Math.abs(a - currentFrameIndex) - Math.abs(b - currentFrameIndex));
     };
 
-    // Background workers to load the remaining frames
     const runWorker = async () => {
       if (loadQueue.current.length === 0) return;
       const nextFrame = loadQueue.current.shift();
-      if (nextFrame) {
-        if (loadingStatus.current[nextFrame] === 'unloaded') {
-          await loadFrame(nextFrame, false);
-        }
+      if (nextFrame && loadingStatus.current[nextFrame] === 'unloaded') {
+        await loadFrame(nextFrame, false);
       }
       setTimeout(runWorker, 10);
     };
 
     const startBackgroundWorkers = () => {
-      const numWorkers = 4;
-      for (let i = 0; i < numWorkers; i++) {
+      for (let i = 0; i < 4; i++) {
         runWorker();
       }
     };
 
-    // Load first frame immediately
     loadFrame(1, true).then(() => {
-      // Load critical batch (2 to 30)
       const criticalBatch = Array.from({ length: criticalCount - 1 }, (_, i) => i + 2);
       Promise.all(criticalBatch.map(idx => loadFrame(idx, true))).then(() => {
-        // Once the critical batch is cached, fade out the loading screen after a small delay
         setTimeout(() => {
           setIsLoading(false);
-        }, 500);
+        }, 400);
 
-        // Queue remaining frames and start background workers
         loadQueue.current = Array.from({ length: totalFrames - criticalCount }, (_, i) => i + criticalCount + 1);
         startBackgroundWorkers();
       });
     });
 
-    // Initialize layout DOM details at progress = 0
     updateStageDOM(0);
 
-    // 2. Scroll Listener (maps scroll progress to target index)
     const handleScroll = () => {
       const container = containerRef.current;
       if (!container) return;
@@ -294,7 +263,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    // 3. requestAnimationFrame render tick (smooth interpolation)
     let animId: number;
     let lastSortedFrame = -1;
     const tick = () => {
@@ -307,11 +275,9 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         const currentFrameRounded = Math.round(currentFrameRef.current);
         drawFrame(currentFrameRounded);
         
-        // Calculate progress corresponding to currentFrameRef
         const interpolatedProgress = (currentFrameRef.current - 1) / (totalFrames - 1);
         updateStageDOM(interpolatedProgress);
 
-        // Re-prioritize queue on frame transitions
         if (currentFrameRounded !== lastSortedFrame) {
           lastSortedFrame = currentFrameRounded;
           prioritizeQueue(currentFrameRounded);
@@ -322,7 +288,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     };
     animId = requestAnimationFrame(tick);
 
-    // 4. Optimized Resize Handler (filters out mobile address-bar triggers)
     let lastWidth = window.innerWidth;
     const handleResize = () => {
       if (window.innerWidth !== lastWidth) {
@@ -339,110 +304,110 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     };
   }, []);
 
+  // Formatted counter 000% → 100%
+  const formattedProgress = String(loadingProgress).padStart(3, "0");
+
   return (
-    <div id="home" ref={containerRef} className="relative w-full h-[500vh] bg-brand-black">
+    <div id="home" ref={containerRef} className="relative w-full h-[450vh] bg-brand-black">
       {/* Sticky Viewport Container */}
       <div className="sticky top-0 left-0 w-full h-screen overflow-hidden">
         
         {/* HTML5 Canvas Frame Renderer */}
         <canvas ref={canvasRef} className="w-full h-full block" />
 
-        {/* Ambient Dark Overlay to protect typography readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-black/95 via-brand-black/55 to-transparent z-1 pointer-events-none" />
+        {/* Dark Vignette Overlay for Readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-black/95 via-brand-black/60 to-transparent z-1 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 z-1 pointer-events-none" />
 
         {/* Text Content Overlays */}
         <div className="absolute inset-0 z-10 pointer-events-none flex items-center">
           <div className="max-w-7xl mx-auto px-6 md:px-12 w-full relative h-[60%] flex items-center">
             
-            {/* Stage 1 (0% to 28% scroll progress) */}
+            {/* Stage 1 */}
             <div
               ref={stage1Ref}
-              className="absolute max-w-xl flex flex-col"
+              className="absolute max-w-2xl flex flex-col"
               style={{ opacity: 1 }}
             >
-              <span className="text-xs font-semibold tracking-[0.4em] text-brand-warm-cream uppercase mb-4">
-                More than just a tattoo
+              <span className="font-sans text-[11px] font-semibold tracking-[0.45em] text-brand-warm-cream uppercase mb-4 flex items-center gap-2">
+                <Sparkles size={12} className="text-brand-warm-cream" />
+                PREMIUM CUSTOM TATTOO STUDIO
               </span>
-              <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-off-white mb-6 uppercase">
-                Your Story.<br />
-                <span className="italic font-light text-brand-warm-cream">Our Ink.</span>
+              <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[1.05] text-brand-off-white mb-6 uppercase">
+                ART<br />
+                <span className="italic font-light text-brand-warm-cream">ETCHED</span><br />
+                INTO SKIN.
               </h1>
-              <p className="text-brand-off-white/70 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-10 max-w-md">
-                At Zeus Tattoo Studio, we turn your ideas into art. Our artists, hygiene standards, and creative custom designs make every tattoo unique.
+              <p className="text-brand-off-white/75 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-8 max-w-md">
+                Zeus Tattoo Studio brings editorial custom skin art, sterile precision, and master craftsmanship to Koramangala, Bangalore.
               </p>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-4">
                 <button
                   onClick={onOpenBooking}
-                  className="group px-6 py-3 bg-brand-off-white hover:bg-brand-warm-cream text-brand-black font-sans text-[10px] font-bold tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer flex items-center gap-1.5"
+                  className="group px-7 py-4 bg-brand-off-white hover:bg-brand-warm-cream text-brand-black font-sans text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-auto cursor-pointer flex items-center gap-2 shadow-xl hover:shadow-brand-warm-cream/10"
                 >
-                  Book Session
-                  <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+                  BOOK A CONSULTATION
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button
                   onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
-                  className="px-6 py-3 border border-brand-off-white/20 hover:border-brand-warm-cream text-brand-off-white hover:text-brand-warm-cream font-sans text-[10px] font-bold tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer"
+                  className="px-7 py-4 border border-brand-off-white/20 hover:border-brand-warm-cream text-brand-off-white hover:text-brand-warm-cream font-sans text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-auto cursor-pointer backdrop-blur-xs"
                 >
-                  View Works
+                  VIEW PORTFOLIO
                 </button>
               </div>
             </div>
 
-            {/* Stage 2 (35% to 63% scroll progress) */}
+            {/* Stage 2 */}
             <div
               ref={stage2Ref}
-              className="absolute max-w-xl flex flex-col"
+              className="absolute max-w-2xl flex flex-col"
               style={{ opacity: 0, transform: "translateY(30px)" }}
             >
-              <span className="text-xs font-semibold tracking-[0.4em] text-brand-warm-cream uppercase mb-4">
-                Master Artistry
+              <span className="font-sans text-[11px] font-semibold tracking-[0.45em] text-brand-warm-cream uppercase mb-4">
+                MASTER ARTISTRY & STYLES
               </span>
-              <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-off-white mb-6 uppercase">
-                Creative<br />
-                <span className="italic font-light text-brand-warm-cream">Precision.</span>
+              <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[1.05] text-brand-off-white mb-6 uppercase">
+                CREATIVE<br />
+                <span className="italic font-light text-brand-warm-cream">PRECISION.</span>
               </h2>
-              <p className="text-brand-off-white/70 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-10 max-w-md">
-                From photorealistic sleeve designs to elegant minimalist line work, our select specialists create unique custom illustrations tailored to your anatomy.
+              <p className="text-brand-off-white/75 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-8 max-w-md">
+                From high-contrast photorealism to delicate fine line illustrations and custom sleeve artwork designed for your body flow.
               </p>
               <div className="flex gap-4">
                 <button
                   onClick={() => document.getElementById("artists")?.scrollIntoView({ behavior: "smooth" })}
-                  className="group px-6 py-3 bg-brand-off-white hover:bg-brand-warm-cream text-brand-black font-sans text-[10px] font-bold tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer flex items-center gap-1.5"
+                  className="group px-7 py-4 bg-brand-off-white hover:bg-brand-warm-cream text-brand-black font-sans text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-auto cursor-pointer flex items-center gap-2"
                 >
-                  Meet Artists
-                  <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+                  MEET ARTISTS
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
 
-            {/* Stage 3 (70% to 95% scroll progress) */}
+            {/* Stage 3 */}
             <div
               ref={stage3Ref}
-              className="absolute max-w-xl flex flex-col"
+              className="absolute max-w-2xl flex flex-col"
               style={{ opacity: 0, transform: "translateY(30px)" }}
             >
-              <span className="text-xs font-semibold tracking-[0.4em] text-brand-warm-cream uppercase mb-4">
-                Hygiene & Safety
+              <span className="font-sans text-[11px] font-semibold tracking-[0.45em] text-brand-warm-cream uppercase mb-4">
+                HOSPITAL-GRADE STERILIZATION
               </span>
-              <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-off-white mb-6 uppercase">
-                Your Comfort.<br />
-                <span className="italic font-light text-brand-warm-cream">Secured.</span>
+              <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[1.05] text-brand-off-white mb-6 uppercase">
+                UNCOMPROMISED<br />
+                <span className="italic font-light text-brand-warm-cream">SAFETY.</span>
               </h2>
-              <p className="text-brand-off-white/70 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-10 max-w-md">
-                We employ autoclave sterilization, medical-grade environments, and organic pigments because your safety is our ultimate promise.
+              <p className="text-brand-off-white/75 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-8 max-w-md">
+                Single-use blister pack needles, autoclave sterilization, and organic vegan inks ensure your comfort and peace of mind.
               </p>
               <div className="flex gap-4">
                 <button
                   onClick={onOpenBooking}
-                  className="group px-6 py-3 bg-brand-off-white hover:bg-brand-warm-cream text-brand-black font-sans text-[10px] font-bold tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer flex items-center gap-1.5"
+                  className="group px-7 py-4 bg-brand-off-white hover:bg-brand-warm-cream text-brand-black font-sans text-xs font-bold tracking-widest uppercase transition-all duration-300 pointer-events-auto cursor-pointer flex items-center gap-2"
                 >
-                  Book Appointment
-                  <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-                </button>
-                <button
-                  onClick={() => document.getElementById("styles")?.scrollIntoView({ behavior: "smooth" })}
-                  className="px-6 py-3 border border-brand-off-white/20 hover:border-brand-warm-cream text-brand-off-white hover:text-brand-warm-cream font-sans text-[10px] font-bold tracking-widest uppercase transition-colors pointer-events-auto cursor-pointer"
-                >
-                  Explore Styles
+                  RESERVE YOUR SESSION
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </div>
@@ -450,16 +415,16 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           </div>
         </div>
 
-        {/* Scroll Indicator (Fades out when user starts scrolling) */}
+        {/* Scroll Indicator */}
         <div
           ref={scrollIndicatorRef}
-          className="absolute right-8 md:right-12 bottom-12 z-20 flex flex-col items-center gap-6"
+          className="absolute right-8 md:right-12 bottom-10 z-20 flex flex-col items-center gap-6"
           style={{ opacity: 1 }}
         >
-          <span className="font-sans text-[10px] tracking-[0.3em] text-brand-off-white/40 uppercase rotate-90 origin-right translate-x-3 mt-4">
-            Scroll Down
+          <span className="font-sans text-[10px] tracking-[0.35em] text-brand-off-white/40 uppercase rotate-90 origin-right translate-x-3 mt-4">
+            SCROLL TO EXPLORE
           </span>
-          <div className="w-[1px] h-20 bg-brand-off-white/10 relative overflow-hidden mt-6">
+          <div className="w-[1px] h-16 bg-brand-off-white/10 relative overflow-hidden mt-6">
             <div className="absolute top-0 left-0 w-full h-1/2 bg-brand-warm-cream animate-bounce" />
           </div>
         </div>
@@ -472,42 +437,42 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
+            transition={{ duration: 0.9, ease: [0.25, 1, 0.5, 1] }}
             className="fixed inset-0 z-50 bg-brand-black flex flex-col items-center justify-center pointer-events-auto"
           >
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center max-w-md px-6 text-center">
               {/* Rotating Logo Mark */}
               <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="w-16 h-16 border border-brand-warm-cream/30 flex items-center justify-center mb-8"
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="w-16 h-16 border border-brand-warm-cream/30 flex items-center justify-center mb-8 bg-brand-charcoal/50"
               >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E8DFD1" strokeWidth="1">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E8DFD1" strokeWidth="1">
                   <path d="M12 2L4 10H20L12 2Z" />
                   <path d="M12 22L4 14H20L12 22Z" />
                   <circle cx="12" cy="12" r="2" fill="#E8DFD1" />
                 </svg>
               </motion.div>
 
-              {/* Editorial Texts */}
-              <span className="font-serif text-3xl md:text-4xl tracking-[0.25em] text-brand-off-white uppercase">
-                ZEUS
+              {/* Studio Name */}
+              <span className="font-serif text-3xl md:text-5xl tracking-[0.25em] text-brand-off-white uppercase font-medium">
+                ZEUS TATTOO
               </span>
-              <span className="text-[9px] tracking-[0.4em] text-brand-warm-cream/70 font-sans uppercase mt-2">
-                Preloading Cinematic Artistry
+              <span className="text-[9px] tracking-[0.45em] text-brand-warm-cream/70 font-sans uppercase mt-3">
+                PREMIUM CUSTOM STUDIO • BANGALORE
               </span>
 
-              {/* Progress Line */}
-              <div className="w-56 h-[1px] bg-brand-off-white/10 mt-10 relative overflow-hidden">
+              {/* Progress Line Bar */}
+              <div className="w-64 h-[1px] bg-brand-off-white/10 mt-10 relative overflow-hidden">
                 <div
                   className="h-full bg-brand-warm-cream transition-all duration-300 ease-out"
                   style={{ width: `${loadingProgress}%` }}
                 />
               </div>
 
-              {/* Percent text */}
-              <span className="font-serif italic text-lg text-brand-warm-cream/90 mt-4 tracking-widest">
-                {loadingProgress}%
+              {/* Percentage Counter (000% → 100%) */}
+              <span className="font-serif italic text-2xl text-brand-warm-cream mt-5 tracking-[0.2em] font-light">
+                {formattedProgress}%
               </span>
             </div>
           </motion.div>

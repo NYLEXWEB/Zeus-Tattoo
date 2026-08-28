@@ -10,32 +10,32 @@ interface FAQItem {
 }
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const faqItems: FAQItem[] = [
     {
-      question: "How do I book an appointment?",
-      answer: "Click on any 'Book Now' or 'Book Appointment' button on our website. This will open our formal inquiry form. Fill in your contact info, artist choice, design placement, size, and date preferences. We will review your details and respond with availability and next steps within 24 hours.",
+      question: "How do I book an appointment at Zeus Tattoo Studio?",
+      answer: "Click on any 'Book Appointment' or 'Book a Consultation' button on our website. Complete our short consultation inquiry form with your contact info, artist choice, design placement, size, and date preferences. Our studio team will review your project and respond within 24 hours.",
     },
     {
       question: "How much will my tattoo cost?",
-      answer: "Our studio minimum is $150, which covers setups for small, simple tattoos. For larger, custom pieces, we charge an hourly rate of $200. We offer complimentary consultations to review your references and design size, which allows us to provide a reliable price estimate prior to booking.",
+      answer: "Our studio minimum is ₹3,500 ($150), which covers full sterile setups for small minimalist pieces. For larger custom tattoos and sleeve work, we charge an hourly rate of ₹5,000/hr ($200/hr). We provide complimentary consultations to give you an accurate price estimate prior to booking.",
     },
     {
-      question: "Does it hurt? What can I do to prepare?",
-      answer: "Tattooing involves some discomfort, which varies depending on individual pain tolerance and placement (ribs and feet tend to be more sensitive than arms or legs). To prepare, we recommend getting a good night's sleep, eating a full meal beforehand, and staying hydrated. Please avoid alcohol for 24 hours prior to your session.",
+      question: "Does getting a tattoo hurt? How should I prepare?",
+      answer: "Tattooing involves manageable discomfort depending on placement (ribs and ankles tend to be more sensitive than forearms or thighs). To prepare, get a solid night's sleep, eat a nutritious meal beforehand, stay hydrated, and refrain from alcohol for 24 hours prior to your session.",
     },
     {
       question: "Can I bring my own design or reference ideas?",
-      answer: "Absolutely! We encourage you to upload reference images when booking. However, our artists specialize in custom, bespoke artwork. We will use your references as inspiration to draw a unique piece tailored to your anatomy. We do not copy exact tattoos from other artists to maintain creative authenticity.",
+      answer: "Yes! We encourage you to bring or upload reference photos. However, our resident artists specialize in 100% custom artwork. We use your references as creative inspiration to draw a unique piece tailored to your body flow rather than directly copying existing tattoos.",
     },
     {
-      question: "How long does a tattoo take to heal?",
-      answer: "The surface layer of a tattoo typically heals in 2 to 3 weeks, while the deeper layers can take up to 2 months. We provide comprehensive written aftercare instructions and protective films to optimize this process. Proper care during this window is vital to ensuring crisp lines and vibrant color saturation.",
+      question: "How long does a tattoo take to heal completely?",
+      answer: "The outer skin surface typically heals in 2 to 3 weeks, while deeper skin layers settle over 2 months. We provide medical-grade protective dermal films and comprehensive written aftercare guidelines to optimize healing and color retention.",
     },
     {
       question: "What is your deposit and cancellation policy?",
-      answer: "We require a $100 deposit to secure your appointment booking date. Deposits are non-refundable but are fully credited toward the final cost of your tattoo. If you need to reschedule, we require at least 48 hours notice to carry your deposit over to a new date.",
+      answer: "We require a ₹2,000 ($100) deposit to secure your appointment booking date. Deposits are non-refundable but are fully credited toward the final cost of your tattoo session. We require 48 hours notice to reschedule your date while preserving your deposit.",
     },
   ];
 
@@ -44,18 +44,17 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="bg-brand-black py-24 md:py-32 overflow-hidden border-b border-brand-off-white/5">
+    <section id="faq" className="bg-brand-black py-28 md:py-36 overflow-hidden border-b border-brand-off-white/5 text-brand-off-white">
       <div className="max-w-4xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="text-center mb-16 md:mb-20">
-          <span className="font-sans text-xs font-semibold tracking-[0.4em] text-brand-warm-cream uppercase mb-4 block">
-            Common Questions
+          <span className="font-sans text-xs font-semibold tracking-[0.45em] text-brand-warm-cream uppercase mb-4 block">
+            COMMON QUESTIONS
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight text-brand-off-white uppercase">
-            Frequently
-            <br />
-            <span className="italic font-light text-brand-warm-cream">Asked Questions</span>
+          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-off-white uppercase">
+            FREQUENTLY<br />
+            <span className="italic font-light text-brand-warm-cream">ASKED QUESTIONS</span>
           </h2>
         </div>
 
@@ -70,12 +69,16 @@ export default function FAQ() {
               >
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full py-6 flex items-center justify-between text-left focus:outline-none group cursor-pointer"
+                  className="w-full py-6 md:py-8 flex items-center justify-between text-left focus:outline-none group cursor-pointer"
                 >
-                  <span className="font-serif text-lg md:text-xl text-brand-off-white group-hover:text-brand-warm-cream transition-colors duration-300 pr-4">
+                  <span className="font-serif text-lg md:text-2xl text-brand-off-white group-hover:text-brand-warm-cream transition-colors duration-300 pr-6">
                     {item.question}
                   </span>
-                  <div className="w-8 h-8 rounded-full border border-brand-off-white/10 flex items-center justify-center flex-shrink-0 text-brand-off-white/60 group-hover:text-brand-warm-cream group-hover:border-brand-warm-cream transition-all duration-300">
+                  <div className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                    isOpen
+                      ? "border-brand-warm-cream text-brand-warm-cream bg-brand-warm-cream/10 rotate-180"
+                      : "border-brand-off-white/20 text-brand-off-white/60 group-hover:text-brand-warm-cream group-hover:border-brand-warm-cream"
+                  }`}>
                     {isOpen ? <Minus size={14} /> : <Plus size={14} />}
                   </div>
                 </button>
@@ -89,7 +92,7 @@ export default function FAQ() {
                       transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="pb-8 pr-12 text-xs md:text-sm text-brand-off-white/60 font-sans leading-relaxed tracking-wide">
+                      <div className="pb-8 pr-12 text-xs md:text-sm text-brand-off-white/70 font-sans leading-relaxed tracking-wide">
                         {item.answer}
                       </div>
                     </motion.div>

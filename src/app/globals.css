@@ -8,6 +8,7 @@
   --color-brand-charcoal: #111111;
   --color-brand-off-white: #F2EEE6;
   --color-brand-warm-cream: #E8DFD1;
+  --color-brand-gold-accent: #C5A880;
 }
 
 :root {
@@ -15,9 +16,14 @@
   color: #F2EEE6;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Custom Minimal Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -25,12 +31,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #222222;
-  border-radius: 3px;
+  background: #252525;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: #E8DFD1;
 }
 
 /* Selection Color */
@@ -46,4 +52,24 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Custom Modal Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 2px;
+}
+
+.writing-mode-vertical {
+  writing-mode: vertical-rl;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(232, 223, 209, 0.5);
 }

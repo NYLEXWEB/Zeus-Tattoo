@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 
 interface Testimonial {
   id: number;
   text: string;
   name: string;
+  location: string;
   role: string;
   rating: number;
   image: string;
@@ -19,25 +20,28 @@ export default function Testimonials() {
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      text: "Absolutely loved the experience. The artist understood exactly what I wanted and delivered something beyond my expectations.",
-      name: "Anjali S.",
-      role: "Client (Fine Line Tattoo)",
+      text: "Zeus Tattoo Studio in Koramangala is on a whole different level. Rahul created a realism sleeve that literally leaves people speechless. Clinical cleanliness, extreme comfort, and legendary artwork.",
+      name: "Anjali Sharma",
+      location: "Bengaluru",
+      role: "Client (Hyper-Realism Sleeve)",
       rating: 5,
       image: "/images/testimonial_anjali.jpg",
     },
     {
       id: 2,
-      text: "Clean studio, friendly staff and incredible work. The attention to detail on my sleeve tattoo is just mind-blowing. Highly recommend!",
-      name: "Rohit K.",
-      role: "Client (Black & Grey Sleeve)",
+      text: "Meera's fine line work is micro-precision perfection. She took my rough ideas and transformed them into a breathtaking single-needle floral composition. Cleanest studio experience I have ever had.",
+      name: "Rohit Kapoor",
+      location: "Bengaluru",
+      role: "Client (Fine Line Floral)",
       rating: 5,
       image: "/images/testimonial_rohit.jpg",
     },
     {
       id: 3,
-      text: "One of the best tattoo studios in town. Extremely professional, creative, and they take safety/hygiene very seriously. Flawless healing process.",
-      name: "Neha P.",
-      role: "Client (Sacred Geometry)",
+      text: "The cover-up work done by Sahana was magic. My old faded shoulder tattoo is completely gone, replaced by a geometric mandala with mind-blowing stipple detail. Truly world-class tattoo studio.",
+      name: "Neha Patel",
+      location: "Bengaluru",
+      role: "Client (Geometric Cover-Up)",
       rating: 5,
       image: "/images/testimonial_neha.jpg",
     },
@@ -51,82 +55,49 @@ export default function Testimonials() {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
   };
 
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? 300 : -300,
-      opacity: 0,
-    }),
-  };
-
-  const [direction, setDirection] = useState(0);
-
-  const setSlide = (newIndex: number) => {
-    setDirection(newIndex > currentIndex ? 1 : -1);
-    setCurrentIndex(newIndex);
-  };
-
-  const nextSlide = () => {
-    setDirection(1);
-    handleNext();
-  };
-
-  const prevSlide = () => {
-    setDirection(-1);
-    handlePrev();
-  };
-
   return (
-    <section id="testimonials" className="bg-brand-off-white py-24 md:py-32 overflow-hidden border-b border-brand-charcoal/5">
+    <section id="testimonials" className="bg-brand-black py-28 md:py-36 overflow-hidden border-b border-brand-off-white/5 text-brand-off-white">
       <div className="max-w-5xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="font-sans text-xs font-semibold tracking-[0.4em] text-brand-charcoal/60 uppercase mb-4 block">
-            Testimonials
+          <span className="font-sans text-xs font-semibold tracking-[0.45em] text-brand-warm-cream uppercase mb-4 block">
+            CLIENT TESTIMONIALS
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl tracking-tight leading-tight text-brand-black uppercase">
-            What Our
-            <br />
-            <span className="italic font-light text-brand-black">Clients Say</span>
+          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-off-white uppercase">
+            WHAT OUR<br />
+            <span className="italic font-light text-brand-warm-cream">CLIENTS SAY</span>
           </h2>
         </div>
 
-        {/* Carousel Container */}
-        <div className="relative min-h-[300px] flex items-center justify-center">
-          <AnimatePresence initial={false} custom={direction} mode="wait">
+        {/* Carousel Viewport */}
+        <div className="relative min-h-[320px] flex items-center justify-center bg-brand-charcoal/50 border border-brand-off-white/10 p-8 md:p-14 rounded-[3px] shadow-2xl">
+          <Quote size={40} className="absolute top-6 left-6 text-brand-warm-cream/15 pointer-events-none" />
+          
+          <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
-              custom={direction}
-              variants={variants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
-              className="w-full text-center flex flex-col items-center max-w-3xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+              className="w-full text-center flex flex-col items-center max-w-3xl z-10"
             >
-              {/* Gold Stars */}
-              <div className="flex gap-1 justify-center mb-6">
+              {/* 5 Stars */}
+              <div className="flex gap-1.5 justify-center mb-6">
                 {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
-                  <Star key={i} size={16} className="fill-brand-charcoal stroke-none" />
+                  <Star key={i} size={18} className="fill-brand-warm-cream stroke-none" />
                 ))}
               </div>
 
-              {/* Review Text */}
-              <blockquote className="font-serif text-xl md:text-2xl lg:text-3xl text-brand-black leading-relaxed italic mb-8 max-w-2xl">
+              {/* Review Quote */}
+              <blockquote className="font-serif text-xl md:text-2xl lg:text-3xl text-brand-off-white leading-relaxed italic mb-8 max-w-2xl">
                 "{testimonials[currentIndex].text}"
               </blockquote>
 
               {/* Client Info */}
               <div className="flex items-center gap-4 text-left">
-                <div className="w-12 h-12 rounded-full overflow-hidden border border-brand-charcoal/10 bg-brand-charcoal/5">
+                <div className="w-12 h-12 rounded-full overflow-hidden border border-brand-warm-cream/40 bg-brand-black">
                   <img
                     src={testimonials[currentIndex].image}
                     alt={testimonials[currentIndex].name}
@@ -134,11 +105,11 @@ export default function Testimonials() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-sans text-sm font-semibold tracking-wider text-brand-black uppercase">
+                  <span className="font-sans text-sm font-semibold tracking-wider text-brand-off-white uppercase">
                     {testimonials[currentIndex].name}
                   </span>
-                  <span className="text-[10px] tracking-widest text-brand-charcoal/50 font-sans uppercase mt-0.5">
-                    {testimonials[currentIndex].role}
+                  <span className="text-[10px] tracking-widest text-brand-warm-cream/70 font-sans uppercase mt-0.5">
+                    {testimonials[currentIndex].role} • {testimonials[currentIndex].location}
                   </span>
                 </div>
               </div>
@@ -146,23 +117,24 @@ export default function Testimonials() {
           </AnimatePresence>
         </div>
 
-        {/* Navigation Dots & Buttons */}
-        <div className="flex items-center justify-between mt-12 border-t border-brand-charcoal/10 pt-6 max-w-xs mx-auto">
+        {/* Carousel Navigation Bar */}
+        <div className="flex items-center justify-between mt-10 max-w-xs mx-auto">
           <button
-            onClick={prevSlide}
-            className="w-10 h-10 border border-brand-charcoal/10 hover:border-brand-black rounded-full flex items-center justify-center text-brand-charcoal hover:text-brand-black transition-all cursor-pointer"
+            onClick={handlePrev}
+            className="w-10 h-10 border border-brand-off-white/20 hover:border-brand-warm-cream rounded-full flex items-center justify-center text-brand-off-white hover:text-brand-warm-cream transition-all cursor-pointer"
             aria-label="Previous Testimonial"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={18} />
           </button>
           
+          {/* Pagination Dots */}
           <div className="flex gap-2">
             {testimonials.map((_, idx) => (
               <button
                 key={idx}
-                onClick={() => setSlide(idx)}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                  currentIndex === idx ? "bg-brand-black w-6" : "bg-brand-charcoal/20"
+                onClick={() => setCurrentIndex(idx)}
+                className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                  currentIndex === idx ? "bg-brand-warm-cream w-6" : "bg-brand-off-white/20 w-1.5"
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
               />
@@ -170,11 +142,11 @@ export default function Testimonials() {
           </div>
 
           <button
-            onClick={nextSlide}
-            className="w-10 h-10 border border-brand-charcoal/10 hover:border-brand-black rounded-full flex items-center justify-center text-brand-charcoal hover:text-brand-black transition-all cursor-pointer"
+            onClick={handleNext}
+            className="w-10 h-10 border border-brand-off-white/20 hover:border-brand-warm-cream rounded-full flex items-center justify-center text-brand-off-white hover:text-brand-warm-cream transition-all cursor-pointer"
             aria-label="Next Testimonial"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={18} />
           </button>
         </div>
 
