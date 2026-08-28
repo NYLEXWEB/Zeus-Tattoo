@@ -22,22 +22,27 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   // Preloading progress states
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
   
-  // Cache of loaded image elements (keyed by frame index 1 to 300)
+  // Cache and queue refs
   const imagesCache = useRef<{ [key: number]: HTMLImageElement }>({});
+  const isMobileRef = useRef(false);
+  const loadingStatus = useRef<{ [key: number]: 'unloaded' | 'loading' | 'loaded' }>({});
+  const loadQueue = useRef<number[]>([]);
   
   // Animation state refs (prevents triggering React re-renders)
   const targetFrameRef = useRef(1);
   const currentFrameRef = useRef(1);
 
-  // Pad numbers with leading zeros (e.g. 1 -> "001")
+  // Pad numbers with leading zeros (e.g. 1 -> "0001")
   const getFramePath = (index: number) => {
     const pad = (num: number, size: number) => {
       let s = num.toString();
       while (s.length < size) s = "0" + s;
       return s;
     };
-    return `/animations/ezgif-frame-${pad(index, 3)}.png`;
+    const deviceSubdir = isMobileRef.current ? "mobile" : "desktop";
+    return `/frames/${deviceSubdir}/frame-${pad(index, 4)}.webp`;
   };
 
   // Canvas drawing function
@@ -166,23 +171,48 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   };
 
   useEffect(() => {
-    const criticalCount = 60; // Block the screen until first 60 frames load
+    // Detect mobile viewport and initialize loading states
+    const isMobile = window.innerWidth < 768;
+    setIsMobileDevice(isMobile);
+    isMobileRef.current = isMobile;
+
+    for (let i = 1; i <= totalFrames; i++) {
+      loadingStatus.current[i] = 'unloaded';
+    }
+
+    const criticalCount = 30; // Block the screen until first 30 frames load
     let loadedCritical = 0;
 
-    // Image Loader with critical progress hook
+    // Image Loader with caching states
     const loadFrame = (index: number, isCritical = false) => {
-      if (imagesCache.current[index]) {
+      if (loadingStatus.current[index] === 'loaded') {
         if (isCritical) {
           loadedCritical++;
           setLoadingProgress(Math.round((loadedCritical / criticalCount) * 100));
         }
         return Promise.resolve(imagesCache.current[index]);
       }
+      
+      if (loadingStatus.current[index] === 'loading') {
+        return new Promise<HTMLImageElement>((resolve) => {
+          const checkStatus = () => {
+            if (loadingStatus.current[index] === 'loaded') {
+              resolve(imagesCache.current[index]);
+            } else {
+              setTimeout(checkStatus, 50);
+            }
+          };
+          checkStatus();
+        });
+      }
+
+      loadingStatus.current[index] = 'loading';
       return new Promise<HTMLImageElement>((resolve) => {
         const img = new Image();
         img.src = getFramePath(index);
         img.onload = () => {
           imagesCache.current[index] = img;
+          loadingStatus.current[index] = 'loaded';
           
           if (isCritical) {
             loadedCritical++;
@@ -195,6 +225,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           resolve(img);
         };
         img.onerror = () => {
+          loadingStatus.current[index] = 'unloaded'; // allow retry
           if (isCritical) {
             loadedCritical++;
             setLoadingProgress(Math.round((loadedCritical / criticalCount) * 100));
@@ -204,9 +235,33 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       });
     };
 
+    // Prioritization function
+    const prioritizeQueue = (currentFrameIndex: number) => {
+      loadQueue.current.sort((a, b) => Math.abs(a - currentFrameIndex) - Math.abs(b - currentFrameIndex));
+    };
+
+    // Background workers to load the remaining frames
+    const runWorker = async () => {
+      if (loadQueue.current.length === 0) return;
+      const nextFrame = loadQueue.current.shift();
+      if (nextFrame) {
+        if (loadingStatus.current[nextFrame] === 'unloaded') {
+          await loadFrame(nextFrame, false);
+        }
+      }
+      setTimeout(runWorker, 10);
+    };
+
+    const startBackgroundWorkers = () => {
+      const numWorkers = 4;
+      for (let i = 0; i < numWorkers; i++) {
+        runWorker();
+      }
+    };
+
     // Load first frame immediately
     loadFrame(1, true).then(() => {
-      // Load critical batch (2 to 60)
+      // Load critical batch (2 to 30)
       const criticalBatch = Array.from({ length: criticalCount - 1 }, (_, i) => i + 2);
       Promise.all(criticalBatch.map(idx => loadFrame(idx, true))).then(() => {
         // Once the critical batch is cached, fade out the loading screen after a small delay
@@ -214,15 +269,9 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           setIsLoading(false);
         }, 500);
 
-        // Stream remaining frames asynchronously in background chunks
-        const remainingFrames = Array.from({ length: totalFrames }, (_, i) => i + 1).filter(f => f > criticalCount);
-        const loadRemainingChunks = async (frames: number[], chunkSize: number) => {
-          for (let i = 0; i < frames.length; i += chunkSize) {
-            const chunk = frames.slice(i, i + chunkSize);
-            await Promise.all(chunk.map(idx => loadFrame(idx, false)));
-          }
-        };
-        loadRemainingChunks(remainingFrames, 15);
+        // Queue remaining frames and start background workers
+        loadQueue.current = Array.from({ length: totalFrames - criticalCount }, (_, i) => i + criticalCount + 1);
+        startBackgroundWorkers();
       });
     });
 
@@ -247,6 +296,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
 
     // 3. requestAnimationFrame render tick (smooth interpolation)
     let animId: number;
+    let lastSortedFrame = -1;
     const tick = () => {
       const target = targetFrameRef.current;
       const current = currentFrameRef.current;
@@ -260,6 +310,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         // Calculate progress corresponding to currentFrameRef
         const interpolatedProgress = (currentFrameRef.current - 1) / (totalFrames - 1);
         updateStageDOM(interpolatedProgress);
+
+        // Re-prioritize queue on frame transitions
+        if (currentFrameRounded !== lastSortedFrame) {
+          lastSortedFrame = currentFrameRounded;
+          prioritizeQueue(currentFrameRounded);
+        }
       }
 
       animId = requestAnimationFrame(tick);
