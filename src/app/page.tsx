@@ -7,7 +7,9 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
+import PinnedStorySection from "@/components/PinnedStorySection";
 import Portfolio from "@/components/Portfolio";
+import SharedImageTransition from "@/components/SharedImageTransition";
 import TattooSculpture3D from "@/components/TattooSculpture3D";
 import PiercingSanctuary from "@/components/PiercingSanctuary";
 import Artists from "@/components/Artists";
@@ -30,36 +32,42 @@ export default function Home() {
   return (
     <SmoothScroll>
       <div className="bg-[#0b0d12] text-[#F2EEE6] font-sans selection:bg-[#e58c38] selection:text-black relative min-h-screen">
-        {/* State-aware Custom Cursor */}
+        {/* State-aware Luxury Custom Cursor */}
         <CustomCursor />
 
-        {/* Sticky Dynamic Glassmorphic Navbar */}
+        {/* Sticky Glassmorphic Navigation */}
         <Navbar onOpenBooking={openBooking} />
 
-        {/* Main Storytelling Experience */}
+        {/* Main Experience Flow */}
         <main>
-          {/* Approved Hero Section (Preserved canvas-scrubbing) */}
+          {/* Approved Hero Section (LOCKED - 300 WebP Canvas Scrubbing) */}
           <Hero onOpenBooking={openBooking} />
 
-          {/* Neoclassical Studio Sanctuary Narrative */}
+          {/* Neoclassical Studio Sanctuary Story */}
           <About onOpenBooking={openBooking} />
 
           {/* Interactive Expandable Services Grid */}
           <Services onOpenBooking={openBooking} />
 
-          {/* Editorial Asymmetric Tattoo Gallery */}
+          {/* WOW 2: GSAP ScrollTrigger Pinned Narrative Experience */}
+          <PinnedStorySection onOpenBooking={openBooking} />
+
+          {/* Editorial Asymmetric Tattoo Gallery with Lightbox */}
           <Portfolio />
 
-          {/* 3D WebGL Torus Knot & Particle Field */}
+          {/* WOW 3: Shared Visual Element Image Transition */}
+          <SharedImageTransition />
+
+          {/* WOW 1: Three.js 3D WebGL TorusKnot & Swirling Particles */}
           <TattooSculpture3D />
 
-          {/* Dedicated Piercing Sanctuary */}
+          {/* Dedicated Clinical Piercing Sanctuary */}
           <PiercingSanctuary onOpenBooking={openBooking} />
 
           {/* Master Resident Artists Profiles */}
           <Artists />
 
-          {/* Clinical Hygiene & Hospital Protocol */}
+          {/* Clinical Hygiene & Hospital Protocols */}
           <StudioHygiene />
 
           {/* 3-Step Client Journey */}
@@ -68,7 +76,7 @@ export default function Home() {
           {/* Standalone Healing Aftercare Protocol (Price Guide Removed) */}
           <Aftercare />
 
-          {/* Collector Testimonials */}
+          {/* Collector Reviews & Testimonials */}
           <Testimonials />
 
           {/* Frequently Asked Questions */}
@@ -84,7 +92,7 @@ export default function Home() {
         {/* Interactive Masterpiece Footer */}
         <Footer />
 
-        {/* Booking Form Modal Overlay */}
+        {/* Booking Consultation Modal Overlay */}
         <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
       </div>
     </SmoothScroll>
