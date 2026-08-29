@@ -15,7 +15,7 @@ export default function FAQ() {
   const faqItems: FAQItem[] = [
     {
       question: "How do I book an appointment at Zeus Tattoo Studio?",
-      answer: "Click on any 'Book Appointment' or 'Book a Consultation' button on our website. Complete our short consultation inquiry form with your contact info, artist choice, design placement, size, and date preferences. Our studio team will review your project and respond within 24 hours.",
+      answer: "Click on any 'Book Consultation' button on our website. Complete our short consultation form with your contact info, artist choice, design placement, size, and date preferences. Our studio team will review your project and respond within 24 hours.",
     },
     {
       question: "How much will my tattoo cost?",
@@ -44,40 +44,40 @@ export default function FAQ() {
   };
 
   return (
-    <section id="faq" className="bg-brand-black py-28 md:py-36 overflow-hidden border-b border-brand-off-white/5 text-brand-off-white">
+    <section id="faq" className="bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white">
       <div className="max-w-4xl mx-auto px-6 md:px-12">
         
         {/* Section Header */}
         <div className="text-center mb-16 md:mb-20">
-          <span className="font-sans text-xs font-semibold tracking-[0.45em] text-brand-warm-cream uppercase mb-4 block">
+          <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-2 block">
             COMMON QUESTIONS
           </span>
-          <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-off-white uppercase">
-            FREQUENTLY<br />
-            <span className="italic font-light text-brand-warm-cream">ASKED QUESTIONS</span>
+          <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wider text-white uppercase">
+            FREQUENTLY ASKED QUESTIONS
           </h2>
+          <div className="w-12 h-[3px] bg-[#e58c38] mt-3 rounded-full mx-auto" />
         </div>
 
         {/* Accordions List */}
-        <div className="flex flex-col border-t border-brand-off-white/10">
+        <div className="flex flex-col border-t border-white/10">
           {faqItems.map((item, index) => {
             const isOpen = openIndex === index;
             return (
               <div
                 key={index}
-                className="border-b border-brand-off-white/10"
+                className="border-b border-white/10"
               >
                 <button
                   onClick={() => toggleFAQ(index)}
                   className="w-full py-6 md:py-8 flex items-center justify-between text-left focus:outline-none group cursor-pointer"
                 >
-                  <span className="font-serif text-lg md:text-2xl text-brand-off-white group-hover:text-brand-warm-cream transition-colors duration-300 pr-6">
+                  <span className="font-sans text-lg md:text-xl font-bold text-white group-hover:text-[#e58c38] transition-colors duration-300 pr-6">
                     {item.question}
                   </span>
                   <div className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                     isOpen
-                      ? "border-brand-warm-cream text-brand-warm-cream bg-brand-warm-cream/10 rotate-180"
-                      : "border-brand-off-white/20 text-brand-off-white/60 group-hover:text-brand-warm-cream group-hover:border-brand-warm-cream"
+                      ? "border-[#e58c38] text-[#e58c38] bg-[#e58c38]/10 rotate-180"
+                      : "border-white/20 text-white/60 group-hover:text-[#e58c38] group-hover:border-[#e58c38]"
                   }`}>
                     {isOpen ? <Minus size={14} /> : <Plus size={14} />}
                   </div>
@@ -92,7 +92,7 @@ export default function FAQ() {
                       transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="pb-8 pr-12 text-xs md:text-sm text-brand-off-white/70 font-sans leading-relaxed tracking-wide">
+                      <div className="pb-8 pr-12 text-xs md:text-sm text-gray-300 font-sans leading-relaxed tracking-wide">
                         {item.answer}
                       </div>
                     </motion.div>

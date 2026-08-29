@@ -131,39 +131,37 @@ export default function Portfolio() {
   const currentLightboxItem = lightboxIndex !== null ? filteredItems[lightboxIndex] : null;
 
   return (
-    <section id="portfolio" className="bg-brand-off-white py-28 md:py-36 overflow-hidden border-b border-brand-charcoal/5 text-brand-black">
+    <section id="portfolio" className="bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         
-        {/* Top Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end mb-16">
-          
-          {/* Left Text Column */}
+        {/* Section Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
-            className="lg:col-span-5 flex flex-col items-start"
+            transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
+            className="flex flex-col items-start"
           >
-            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-brand-charcoal/60 uppercase mb-4">
+            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-2 block">
               EDITORIAL GALLERY
             </span>
-            <h2 className="font-serif text-4xl md:text-6xl lg:text-7xl tracking-tight leading-[1.1] text-brand-black uppercase">
-              SELECTED<br />
-              <span className="italic font-light text-brand-black">WORKS</span>
+            <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wider text-white uppercase">
+              SELECTED WORKS
             </h2>
+            <div className="w-12 h-[3px] bg-[#e58c38] mt-3 rounded-full" />
           </motion.div>
 
-          {/* Right Category Filter list */}
-          <div className="lg:col-span-7 flex flex-wrap gap-2 lg:justify-end">
+          {/* Filter Category Pills */}
+          <div className="flex flex-wrap gap-2.5">
             {filters.map((filter) => (
               <button
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value)}
-                className={`px-5 py-2.5 text-[10px] tracking-[0.2em] uppercase transition-all duration-300 font-sans font-semibold cursor-pointer border ${
+                className={`px-5 py-2.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition-all duration-300 font-sans font-extrabold cursor-pointer border ${
                   activeFilter === filter.value
-                    ? "bg-brand-black text-brand-off-white border-brand-black shadow-md"
-                    : "bg-transparent text-brand-charcoal/60 border-brand-charcoal/15 hover:text-brand-black hover:border-brand-black/40"
+                    ? "bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black border-[#e58c38] shadow-[0_0_15px_rgba(229,140,56,0.3)]"
+                    : "bg-[#121620] text-gray-400 border-white/10 hover:text-white hover:border-[#e58c38]/40"
                 }`}
               >
                 {filter.label}
@@ -172,7 +170,7 @@ export default function Portfolio() {
           </div>
         </div>
 
-        {/* Masonry / Asymmetric Gallery Grid */}
+        {/* Gallery Grid */}
         <motion.div 
           layout
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
@@ -182,34 +180,34 @@ export default function Portfolio() {
               <motion.div
                 key={item.id}
                 layout
-                initial={{ opacity: 0, scale: 0.92 }}
+                initial={{ opacity: 0, scale: 0.94 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.92 }}
+                exit={{ opacity: 0, scale: 0.94 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 onClick={() => setLightboxIndex(index)}
-                className={`relative overflow-hidden group cursor-pointer bg-brand-black rounded-[3px] border border-brand-black/10 shadow-lg ${item.sizeClass}`}
+                className={`relative overflow-hidden group cursor-pointer bg-[#121620] rounded-2xl border border-white/10 hover:border-[#e58c38]/40 shadow-xl transition-all duration-500 ${item.sizeClass}`}
               >
-                {/* Image */}
+                {/* Artwork Image */}
                 <img
                   src={item.image}
                   alt={item.title}
-                  className="w-full h-full object-cover grayscale brightness-95 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
+                  className="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700"
                   loading="lazy"
                 />
 
-                {/* Dark Hover Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-brand-black/90 via-brand-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-400 flex flex-col justify-between p-6">
+                {/* Dark Amber Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12]/95 via-[#0b0d12]/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-400 flex flex-col justify-between p-6">
                   <div className="flex justify-end">
-                    <div className="w-10 h-10 rounded-full border border-brand-off-white/30 flex items-center justify-center text-brand-off-white bg-brand-black/40 backdrop-blur-xs">
+                    <div className="w-10 h-10 rounded-full border border-[#e58c38]/40 flex items-center justify-center text-[#e58c38] bg-[#0b0d12]/70 backdrop-blur-xs">
                       <Eye size={16} />
                     </div>
                   </div>
 
                   <div className="flex flex-col">
-                    <span className="font-sans text-[9px] tracking-[0.3em] font-semibold text-brand-warm-cream uppercase">
+                    <span className="font-sans text-[9px] tracking-[0.3em] font-extrabold text-[#e58c38] uppercase">
                       {item.category} • BY {item.artist}
                     </span>
-                    <h3 className="font-serif text-xl text-brand-off-white uppercase mt-1">
+                    <h3 className="font-sans text-xl font-bold text-white uppercase mt-1">
                       {item.title}
                     </h3>
                   </div>
@@ -231,7 +229,7 @@ export default function Portfolio() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setLightboxIndex(null)}
-              className="absolute inset-0 bg-brand-black/95 backdrop-blur-md cursor-pointer"
+              className="absolute inset-0 bg-[#0b0d12]/95 backdrop-blur-md cursor-pointer"
             />
 
             {/* Modal Dialog Card */}
@@ -240,71 +238,71 @@ export default function Portfolio() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-              className="relative z-10 w-full max-w-5xl bg-brand-charcoal border border-brand-off-white/10 rounded-[4px] shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 max-h-[90vh]"
+              className="relative z-10 w-full max-w-5xl bg-[#121620] border border-[#e58c38]/30 rounded-2xl shadow-[0_0_40px_rgba(229,140,56,0.2)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 max-h-[90vh]"
             >
               {/* Close Button */}
               <button
                 onClick={() => setLightboxIndex(null)}
-                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-brand-black/70 border border-brand-off-white/20 flex items-center justify-center text-brand-off-white hover:text-brand-warm-cream hover:border-brand-warm-cream transition-colors cursor-pointer"
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#0b0d12]/80 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
                 aria-label="Close Lightbox"
               >
                 <X size={18} />
               </button>
 
               {/* Left Image Viewport */}
-              <div className="lg:col-span-7 bg-brand-black relative flex items-center justify-center min-h-[350px] lg:min-h-[550px] overflow-hidden">
+              <div className="lg:col-span-7 bg-[#0b0d12] relative flex items-center justify-center min-h-[350px] lg:min-h-[550px] overflow-hidden">
                 <img
                   src={currentLightboxItem.image}
                   alt={currentLightboxItem.title}
                   className="w-full h-full object-contain max-h-[70vh]"
                 />
 
-                {/* Prev / Next Floating Arrows */}
+                {/* Prev / Next Arrows */}
                 <button
                   onClick={(e) => { e.stopPropagation(); handlePrevLightbox(); }}
-                  className="absolute left-4 w-10 h-10 rounded-full bg-brand-black/60 border border-brand-off-white/20 flex items-center justify-center text-brand-off-white hover:text-brand-warm-cream transition-colors cursor-pointer"
+                  className="absolute left-4 w-10 h-10 rounded-full bg-[#0b0d12]/70 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
                   aria-label="Previous Work"
                 >
                   <ChevronLeft size={20} />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleNextLightbox(); }}
-                  className="absolute right-4 w-10 h-10 rounded-full bg-brand-black/60 border border-brand-off-white/20 flex items-center justify-center text-brand-off-white hover:text-brand-warm-cream transition-colors cursor-pointer"
+                  className="absolute right-4 w-10 h-10 rounded-full bg-[#0b0d12]/70 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
                   aria-label="Next Work"
                 >
                   <ChevronRight size={20} />
                 </button>
               </div>
 
-              {/* Right Content Details */}
-              <div className="lg:col-span-5 p-8 md:p-12 flex flex-col justify-between text-brand-off-white bg-brand-charcoal overflow-y-auto">
+              {/* Right Details */}
+              <div className="lg:col-span-5 p-8 md:p-12 flex flex-col justify-between text-white bg-[#121620] overflow-y-auto">
                 <div className="flex flex-col">
-                  <span className="font-sans text-[10px] tracking-[0.4em] text-brand-warm-cream uppercase mb-2 flex items-center gap-1.5">
+                  <span className="font-sans text-[10px] tracking-[0.4em] text-[#e58c38] uppercase mb-2 flex items-center gap-1.5 font-extrabold">
                     <Sparkles size={12} />
                     {currentLightboxItem.category}
                   </span>
-                  <h3 className="font-serif text-3xl md:text-4xl uppercase text-brand-off-white mb-4">
+                  <h3 className="font-sans text-3xl md:text-4xl font-extrabold uppercase text-white mb-4">
                     {currentLightboxItem.title}
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-brand-off-white/60 font-sans uppercase tracking-widest pb-6 mb-6 border-b border-brand-off-white/10">
+                  <div className="flex items-center gap-2 text-xs text-gray-400 font-sans uppercase tracking-widest pb-6 mb-6 border-b border-white/10">
                     <span>Artist:</span>
-                    <strong className="text-brand-warm-cream">{currentLightboxItem.artist}</strong>
+                    <strong className="text-[#e58c38]">{currentLightboxItem.artist}</strong>
                   </div>
-                  <p className="text-xs md:text-sm text-brand-off-white/75 font-sans leading-relaxed tracking-wide mb-8">
+                  <p className="text-xs md:text-sm text-gray-300 font-sans leading-relaxed tracking-wide mb-8">
                     {currentLightboxItem.description}
                   </p>
                 </div>
 
-                <div className="flex flex-col gap-4 border-t border-brand-off-white/10 pt-6">
+                <div className="flex flex-col gap-4 border-t border-white/10 pt-6">
                   <a
                     href="#contact"
                     onClick={() => setLightboxIndex(null)}
-                    className="w-full py-4 bg-brand-off-white hover:bg-brand-warm-cream text-brand-black font-sans text-xs font-bold tracking-widest uppercase transition-colors text-center cursor-pointer shadow-lg"
+                    className="w-full py-4 bg-gradient-to-r from-[#e58c38] to-[#d97706] hover:from-[#f39c12] hover:to-[#e67e22] text-black font-sans text-xs font-extrabold tracking-widest uppercase rounded-full transition-all text-center cursor-pointer shadow-[0_0_20px_rgba(229,140,56,0.35)]"
                   >
                     Request Similar Tattoo
                   </a>
-                  <span className="text-[10px] text-brand-off-white/40 font-sans tracking-widest text-center uppercase">
-                    Zeus Tattoo Studio • Koramangala
+                  <span className="text-[10px] text-gray-400 font-sans tracking-widest text-center uppercase">
+                    Zeus Tattoo Studio • Sanctuary Collectibles
                   </span>
                 </div>
               </div>
