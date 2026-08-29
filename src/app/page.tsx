@@ -10,7 +10,6 @@ import Services from "@/components/Services";
 import PinnedStorySection from "@/components/PinnedStorySection";
 import Portfolio from "@/components/Portfolio";
 import SharedImageTransition from "@/components/SharedImageTransition";
-import TattooSculpture3D from "@/components/TattooSculpture3D";
 import PiercingSanctuary from "@/components/PiercingSanctuary";
 import Artists from "@/components/Artists";
 import StudioHygiene from "@/components/StudioHygiene";
@@ -57,9 +56,6 @@ export default function Home() {
 
           {/* WOW 3: Shared Visual Element Image Transition */}
           <SharedImageTransition />
-
-          {/* WOW 1: Three.js 3D WebGL TorusKnot & Swirling Particles */}
-          <TattooSculpture3D />
 
           {/* Dedicated Clinical Piercing Sanctuary */}
           <PiercingSanctuary onOpenBooking={openBooking} />
