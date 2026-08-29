@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShieldCheck, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Sparkles, ArrowRight, CheckCircle2, Eye } from "lucide-react";
 
 interface PiercingSanctuaryProps {
     onOpenBooking?: () => void;
@@ -18,27 +18,44 @@ export default function PiercingSanctuary({ onOpenBooking }: PiercingSanctuaryPr
             healing: "6 - 12 Weeks",
             hardware: "Implant-Grade ASTM F-136 Titanium / 18k Gold",
             desc: "Anatomical mapping designed specifically for your ear curvature. Customized stud clusters, delicate hoops, and precision alignment.",
-            image: "/images/service_piercing.jpg",
+            image: "/images/piercing/IMG_20260829_213245_583.jpg",
             points: ["No piercing guns used—surgical needle only", "Autoclave sterile sealed pouches", "Personalized placement mapping"],
         },
         {
             id: "FACIAL",
-            name: "Facial & Nostril Precision",
+            name: "Facial & Septum Precision",
             healing: "4 - 8 Weeks",
             hardware: "Bezel-set Swarovski / Opal / Gold Studs",
             desc: "Subtle micro-piercings placed with golden ratio facial symmetry. Ultra-gentle procedure with topical soothing cooling.",
-            image: "/images/service_lip.jpg",
+            image: "/images/piercing/IMG_20260829_213245_633.jpg",
             points: ["Micro-gauge surgical needles", "Hypoallergenic titanium hardware", "Detailed post-procedure healing care"],
         },
         {
-            id: "NAVET",
-            name: "Body & Septum Articulation",
+            id: "BODY",
+            name: "Body & Navel Articulation",
             healing: "8 - 14 Weeks",
             hardware: "Internal Threaded Titanium Barbells & Clickers",
             desc: "High-precision body placement aligned with torso posture and natural skin movement for minimal friction during healing.",
-            image: "/images/portfolio_butterfly_fineline.jpg",
+            image: "/images/piercing/IMG_20260829_213245_714.jpg",
             points: ["Internal thread technology to protect tissue", "Zero nickel content", "Free follow-up sizing check"],
         },
+        {
+            id: "MICRO",
+            name: "Micro-Dermal Anchor",
+            healing: "10 - 16 Weeks",
+            hardware: "ASTM F-136 Implant-Grade Titanium Foot",
+            desc: "Single-point dermal anchor placement executed with surgical accuracy for collarbone, chest, or cheek highlights.",
+            image: "/images/piercing/IMG_20260829_213245_723.jpg",
+            points: ["Single-point surgical punch technique", "Ultra-low profile titanium base", "Clinical pressure dressing"],
+        },
+    ];
+
+    const galleryImages = [
+        { src: "/images/piercing/IMG_20260829_213245_869.jpg", title: "Dual Conch Titanium Hoop" },
+        { src: "/images/piercing/IMG_20260829_213245_929.jpg", title: "Forward Helix Triple Stud" },
+        { src: "/images/piercing/IMG_20260829_213246_274.jpg", title: "Gold Septum Clicker" },
+        { src: "/images/piercing/IMG_20260829_213246_293.jpg", title: "Anatomical Ear Curation" },
+        { src: "/images/piercing/IMG_20260829_213246_313.jpg", title: "Precision Nostril Bezel" },
     ];
 
     const currentPlacement = placements.find((p) => p.id === selectedPlacement) || placements[0];
@@ -70,8 +87,8 @@ export default function PiercingSanctuary({ onOpenBooking }: PiercingSanctuaryPr
                             key={p.id}
                             onClick={() => setSelectedPlacement(p.id)}
                             className={`px-6 py-3 rounded-full text-xs font-sans font-extrabold tracking-[0.2em] uppercase transition-all duration-300 cursor-pointer border ${selectedPlacement === p.id
-                                    ? "bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black border-[#e58c38] shadow-[0_0_20px_rgba(229,140,56,0.3)]"
-                                    : "bg-[#121620] text-gray-300 border-white/10 hover:border-[#e58c38]/50 hover:text-white"
+                                ? "bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black border-[#e58c38] shadow-[0_0_20px_rgba(229,140,56,0.3)]"
+                                : "bg-[#121620] text-gray-300 border-white/10 hover:border-[#e58c38]/50 hover:text-white"
                                 }`}
                         >
                             {p.name.split(" ")[0]} {p.name.split(" ")[1]}
@@ -79,8 +96,8 @@ export default function PiercingSanctuary({ onOpenBooking }: PiercingSanctuaryPr
                     ))}
                 </div>
 
-                {/* Display Card */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-[#121620] border border-white/10 rounded-2xl overflow-hidden shadow-2xl p-8 lg:p-12">
+                {/* Main Interactive Display Card */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center bg-[#121620] border border-white/10 rounded-2xl overflow-hidden shadow-2xl p-8 lg:p-12 mb-16">
 
                     {/* Left Feature Image with Gold Frame */}
                     <div className="lg:col-span-6 relative aspect-[4/3] rounded-xl overflow-hidden border border-[#e58c38]/30 group">
@@ -101,7 +118,7 @@ export default function PiercingSanctuary({ onOpenBooking }: PiercingSanctuaryPr
                         <div className="absolute bottom-6 left-6 z-10 bg-[#0b0d12]/80 backdrop-blur-md border border-[#e58c38]/40 px-4 py-2 rounded-lg flex items-center gap-2">
                             <ShieldCheck size={16} className="text-[#e58c38]" />
                             <span className="text-[10px] tracking-[0.2em] font-sans text-white uppercase font-extrabold">
-                                100% NEEDLE PRECISION
+                                100% SURGICAL NEEDLE PRECISION
                             </span>
                         </div>
                     </div>
@@ -121,7 +138,7 @@ export default function PiercingSanctuary({ onOpenBooking }: PiercingSanctuaryPr
 
                             <div className="bg-[#0b0d12] p-4 rounded-xl border border-white/5 mb-6">
                                 <span className="text-[10px] tracking-widest text-[#e58c38] font-sans font-bold uppercase block mb-1">
-                                    IMPLANT HARDWARE:
+                                    IMPLANT HARDWARE SPEC:
                                 </span>
                                 <span className="text-xs text-white font-sans font-medium">
                                     {currentPlacement.hardware}
@@ -149,6 +166,32 @@ export default function PiercingSanctuary({ onOpenBooking }: PiercingSanctuaryPr
                         </div>
                     </div>
 
+                </div>
+
+                {/* Additional Piercing Studio Gallery Grid */}
+                <div className="flex flex-col mb-8">
+                    <span className="text-xs font-sans font-bold tracking-[0.3em] text-[#e58c38] uppercase mb-4 block">
+                        REAL STUDIO PIERCING ARTWORK ARCHIVE
+                    </span>
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        {galleryImages.map((gImg, gIdx) => (
+                            <div
+                                key={gIdx}
+                                className="group relative aspect-square rounded-xl overflow-hidden border border-white/10 hover:border-[#e58c38] transition-all duration-500 bg-[#121620]"
+                            >
+                                <img
+                                    src={gImg.src}
+                                    alt={gImg.title}
+                                    className="w-full h-full object-cover grayscale brightness-90 group-hover:scale-105 group-hover:grayscale-0 transition-all duration-700"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end">
+                                    <span className="text-[9px] font-sans font-bold tracking-widest text-[#e58c38] uppercase">
+                                        {gImg.title}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
             </div>

@@ -39,11 +39,11 @@ export default function Portfolio() {
     },
     {
       id: 2,
-      title: "Botanical Fine Line",
-      category: "FINE LINE",
-      artist: "Meera Nair",
-      description: "Single-needle wildflowers and delicate organic stemwork flowing seamlessly along the forearm.",
-      image: "/images/portfolio_floral_fineline.jpg",
+      title: "Real Studio Masterwork",
+      category: "REALISM",
+      artist: "Rahul Sharma",
+      description: "Custom high-resolution studio tattoo artwork captured live inside our Koramangala sanctuary.",
+      image: "/images/IMG_20260829_212716_292.jpg",
       sizeClass: "col-span-1 row-span-1 aspect-square",
     },
     {
@@ -57,47 +57,83 @@ export default function Portfolio() {
     },
     {
       id: 4,
+      title: "Studio Fine Line Composition",
+      category: "FINE LINE",
+      artist: "Meera Nair",
+      description: "Delicate single-needle linework with mathematical precision and zero pigment bleed.",
+      image: "/images/IMG_20260829_212719_574.jpg",
+      sizeClass: "col-span-1 md:col-span-2 row-span-2 aspect-[4/5]",
+    },
+    {
+      id: 5,
+      title: "Chiseled Blackwork Concept",
+      category: "BLACK & GREY",
+      artist: "Arjun Verma",
+      description: "High-contrast blackwork with stipple shading and sharp edge saturation.",
+      image: "/images/IMG_20260829_212727_311.jpg",
+      sizeClass: "col-span-1 row-span-1 aspect-square",
+    },
+    {
+      id: 6,
       title: "Sacred Geometry Mandala",
       category: "TRADITIONAL",
       artist: "Sahana Rao",
       description: "Pinpoint geometric symmetry and stipple shading forming a balanced centered backpiece.",
       image: "/images/portfolio_geometric_mandala.jpg",
-      sizeClass: "col-span-1 md:col-span-2 row-span-2 aspect-[4/5]",
-    },
-    {
-      id: 5,
-      title: "Hyper-Realist Eye",
-      category: "REALISM",
-      artist: "Rahul Sharma",
-      description: "Photorealistic macro eye study capturing iris reflections and tear duct highlights.",
-      image: "/images/portfolio_realistic_eye.jpg",
-      sizeClass: "col-span-1 row-span-1 aspect-square",
-    },
-    {
-      id: 6,
-      title: "Neo Dragon Concept",
-      category: "COVER UPS",
-      artist: "Arjun Verma",
-      description: "Custom heavy-contrast Japanese dragon linework designed to conceal old shoulder script.",
-      image: "/images/portfolio_japanese_dragon.jpg",
       sizeClass: "col-span-1 row-span-1 aspect-square",
     },
     {
       id: 7,
-      title: "Monarch Butterfly Line",
-      category: "FINE LINE",
-      artist: "Meera Nair",
-      description: "Whisper-thin wing symmetry with delicate dotted flight trailing across the collarbone.",
-      image: "/images/portfolio_butterfly_fineline.jpg",
+      title: "Neo Realism Custom Sleeve",
+      category: "REALISM",
+      artist: "Rahul Sharma",
+      description: "Anatomical realism piece composed specifically to follow shoulder and triceps muscle contours.",
+      image: "/images/IMG_20260829_212734_480.jpg",
       sizeClass: "col-span-1 row-span-1 aspect-square",
     },
     {
       id: 8,
-      title: "Monochrome Portrait",
+      title: "Botanical Fine Line Flora",
+      category: "FINE LINE",
+      artist: "Meera Nair",
+      description: "Whisper-thin floral stems and delicate leaves flowing along the forearm.",
+      image: "/images/IMG_20260829_212754_172.jpg",
+      sizeClass: "col-span-1 row-span-1 aspect-square",
+    },
+    {
+      id: 9,
+      title: "Studio Mythological Shading",
+      category: "BLACK & GREY",
+      artist: "Arjun Verma",
+      description: "Classical Greco-Roman mythology portraiture rendered with multi-pass grey washes.",
+      image: "/images/IMG_20260829_212801_249.jpg",
+      sizeClass: "col-span-1 row-span-1 aspect-square",
+    },
+    {
+      id: 10,
+      title: "Hyper-Realist Shading Study",
+      category: "REALISM",
+      artist: "Rahul Sharma",
+      description: "Photorealistic textural study capturing light reflections and skin depth.",
+      image: "/images/IMG_20260829_212804_956.jpg",
+      sizeClass: "col-span-1 row-span-1 aspect-square",
+    },
+    {
+      id: 11,
+      title: "Cover-Up Restoration Art",
+      category: "COVER UPS",
+      artist: "Arjun Verma",
+      description: "High-density pigment saturation engineered to conceal legacy tattoos with modern mastery.",
+      image: "/images/IMG_20260829_212809_269.jpg",
+      sizeClass: "col-span-1 row-span-1 aspect-square",
+    },
+    {
+      id: 12,
+      title: "Monochrome Studio Portrait",
       category: "BLACK & GREY",
       artist: "Rahul Sharma",
-      description: "Cinematic human facial portraiture emphasizing shadow play, depth, and smooth skin tones.",
-      image: "/images/portfolio_monochrome_portrait.jpg",
+      description: "Cinematic portraiture emphasizing shadow play, depth, and smooth tonal gradients.",
+      image: "/images/IMG_20260829_212818_860.jpg",
       sizeClass: "col-span-1 row-span-1 aspect-square",
     },
   ];
@@ -159,8 +195,8 @@ export default function Portfolio() {
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value)}
                 className={`px-5 py-2.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition-all duration-300 font-sans font-extrabold cursor-pointer border ${activeFilter === filter.value
-                    ? "bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black border-[#e58c38] shadow-[0_0_20px_rgba(229,140,56,0.35)]"
-                    : "bg-[#121620] text-gray-300 border-white/10 hover:text-white hover:border-[#e58c38]/40"
+                  ? "bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black border-[#e58c38] shadow-[0_0_20px_rgba(229,140,56,0.35)]"
+                  : "bg-[#121620] text-gray-300 border-white/10 hover:text-white hover:border-[#e58c38]/40"
                   }`}
               >
                 {filter.label}
