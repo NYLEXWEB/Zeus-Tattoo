@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 
 interface Artist {
   name: string;
@@ -59,9 +59,9 @@ export default function Artists() {
   ];
 
   return (
-    <section id="artists" className="bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        
+    <section id="artists" className="bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white relative">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-20">
           <motion.div
@@ -71,13 +71,14 @@ export default function Artists() {
             transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
             className="max-w-xl"
           >
-            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-2 block">
+            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-2 flex items-center gap-2">
+              <Sparkles size={13} />
               THE MASTERS BEHIND THE CRAFT
             </span>
             <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wider text-white uppercase">
               RESIDENT ARTISTS
             </h2>
-            <div className="w-12 h-[3px] bg-[#e58c38] mt-3 rounded-full" />
+            <div className="w-16 h-[3px] bg-gradient-to-r from-[#e58c38] to-[#d97706] mt-3 rounded-full shadow-[0_0_10px_#e58c38]" />
           </motion.div>
 
           <motion.p
@@ -85,7 +86,7 @@ export default function Artists() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 1 }}
-            className="text-gray-400 font-sans text-xs md:text-sm leading-relaxed tracking-wide max-w-md"
+            className="text-gray-300 font-sans text-xs md:text-sm leading-relaxed tracking-wide max-w-md"
           >
             Our resident artists bring decades of collective artistic mastery, specializing in distinct genres to deliver unrivaled skin artwork.
           </motion.p>
@@ -100,7 +101,8 @@ export default function Artists() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
-              className="group flex flex-col bg-[#121620] border border-white/10 rounded-2xl overflow-hidden hover:border-[#e58c38]/40 hover:shadow-[0_0_30px_rgba(229,140,56,0.15)] transition-all duration-500 shadow-xl"
+              data-cursor="ARTIST"
+              className="group flex flex-col bg-[#121620] border border-white/10 rounded-2xl overflow-hidden hover:border-[#e58c38]/50 hover:shadow-[0_0_30px_rgba(229,140,56,0.2)] transition-all duration-500 shadow-xl"
             >
               {/* Image Frame */}
               <div className="relative aspect-[4/5] overflow-hidden bg-[#0b0d12]">
@@ -111,9 +113,9 @@ export default function Artists() {
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#121620] via-transparent to-transparent opacity-80" />
-                
-                {/* Experience Pill Badge */}
-                <span className="absolute top-4 right-4 bg-[#0b0d12]/80 backdrop-blur-xs border border-[#e58c38]/40 text-[#e58c38] text-[9px] tracking-[0.2em] uppercase px-3 py-1 rounded-full font-sans font-extrabold">
+
+                {/* Experience Badge */}
+                <span className="absolute top-4 right-4 bg-[#0b0d12]/90 backdrop-blur-xs border border-[#e58c38]/40 text-[#e58c38] text-[9px] tracking-[0.2em] uppercase px-3 py-1 rounded-full font-sans font-extrabold shadow-[0_0_10px_#e58c38]">
                   {artist.experience}
                 </span>
               </div>
@@ -124,19 +126,19 @@ export default function Artists() {
                   <span className="text-[10px] tracking-[0.3em] font-sans font-extrabold text-[#e58c38] uppercase">
                     {artist.role}
                   </span>
-                  <h3 className="font-sans text-2xl font-bold text-white uppercase mt-1 mb-3">
+                  <h3 className="font-sans text-2xl font-extrabold text-white uppercase mt-1 mb-3">
                     {artist.name}
                   </h3>
-                  <p className="text-xs text-gray-400 font-sans leading-relaxed tracking-wide mb-6">
+                  <p className="text-xs text-gray-300 font-sans leading-relaxed tracking-wide mb-6">
                     {artist.bio}
                   </p>
                 </div>
 
-                {/* Details Footer */}
+                {/* Footer Details */}
                 <div className="border-t border-white/10 pt-4 mt-auto flex flex-col gap-2">
-                  <div className="flex justify-between items-center text-[10px] tracking-wider text-gray-400 font-sans uppercase">
+                  <div className="flex justify-between items-center text-[10px] tracking-wider text-gray-300 font-sans uppercase">
                     <span>Style:</span>
-                    <strong className="text-white">{artist.signatureStyle}</strong>
+                    <strong className="text-[#e58c38] font-extrabold">{artist.signatureStyle}</strong>
                   </div>
 
                   <a
@@ -146,7 +148,7 @@ export default function Artists() {
                     className="mt-3 flex items-center justify-between text-xs font-sans font-extrabold tracking-widest text-[#e58c38] hover:text-white transition-colors group/link"
                   >
                     <span className="flex items-center gap-1.5 uppercase text-[10px]">
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                         <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>

@@ -35,7 +35,7 @@ export default function Portfolio() {
       artist: "Rahul Sharma",
       description: "High-contrast lion portrait featuring micro-textural fur shading and sharp light catch in the eyes.",
       image: "/images/portfolio_lion_realism.jpg",
-      sizeClass: "col-span-1 row-span-2 aspect-[3/4]",
+      sizeClass: "col-span-1 md:col-span-2 row-span-2 aspect-[4/5]",
     },
     {
       id: 2,
@@ -62,7 +62,7 @@ export default function Portfolio() {
       artist: "Sahana Rao",
       description: "Pinpoint geometric symmetry and stipple shading forming a balanced centered backpiece.",
       image: "/images/portfolio_geometric_mandala.jpg",
-      sizeClass: "col-span-1 row-span-2 aspect-[3/4]",
+      sizeClass: "col-span-1 md:col-span-2 row-span-2 aspect-[4/5]",
     },
     {
       id: 5,
@@ -102,11 +102,10 @@ export default function Portfolio() {
     },
   ];
 
-  const filteredItems = activeFilter === "ALL" 
-    ? items 
+  const filteredItems = activeFilter === "ALL"
+    ? items
     : items.filter(item => item.category === activeFilter);
 
-  // Lightbox keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (lightboxIndex === null) return;
@@ -133,7 +132,7 @@ export default function Portfolio() {
   return (
     <section id="portfolio" className="bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        
+
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
           <motion.div
@@ -143,26 +142,26 @@ export default function Portfolio() {
             transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
             className="flex flex-col items-start"
           >
-            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-2 block">
+            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-2 flex items-center gap-2">
+              <Sparkles size={13} />
               EDITORIAL GALLERY
             </span>
             <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wider text-white uppercase">
               SELECTED WORKS
             </h2>
-            <div className="w-12 h-[3px] bg-[#e58c38] mt-3 rounded-full" />
+            <div className="w-16 h-[3px] bg-gradient-to-r from-[#e58c38] to-[#d97706] mt-3 rounded-full shadow-[0_0_10px_#e58c38]" />
           </motion.div>
 
-          {/* Filter Category Pills */}
+          {/* Filter Pills */}
           <div className="flex flex-wrap gap-2.5">
             {filters.map((filter) => (
               <button
                 key={filter.value}
                 onClick={() => setActiveFilter(filter.value)}
-                className={`px-5 py-2.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition-all duration-300 font-sans font-extrabold cursor-pointer border ${
-                  activeFilter === filter.value
-                    ? "bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black border-[#e58c38] shadow-[0_0_15px_rgba(229,140,56,0.3)]"
-                    : "bg-[#121620] text-gray-400 border-white/10 hover:text-white hover:border-[#e58c38]/40"
-                }`}
+                className={`px-5 py-2.5 rounded-full text-[10px] tracking-[0.2em] uppercase transition-all duration-300 font-sans font-extrabold cursor-pointer border ${activeFilter === filter.value
+                    ? "bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black border-[#e58c38] shadow-[0_0_20px_rgba(229,140,56,0.35)]"
+                    : "bg-[#121620] text-gray-300 border-white/10 hover:text-white hover:border-[#e58c38]/40"
+                  }`}
               >
                 {filter.label}
               </button>
@@ -171,9 +170,9 @@ export default function Portfolio() {
         </div>
 
         {/* Gallery Grid */}
-        <motion.div 
+        <motion.div
           layout
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+          className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item, index) => (
@@ -185,7 +184,8 @@ export default function Portfolio() {
                 exit={{ opacity: 0, scale: 0.94 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
                 onClick={() => setLightboxIndex(index)}
-                className={`relative overflow-hidden group cursor-pointer bg-[#121620] rounded-2xl border border-white/10 hover:border-[#e58c38]/40 shadow-xl transition-all duration-500 ${item.sizeClass}`}
+                data-cursor="EXPLORE"
+                className={`relative overflow-hidden group cursor-pointer bg-[#121620] rounded-2xl border border-white/10 hover:border-[#e58c38]/50 shadow-xl transition-all duration-500 hover:shadow-[0_0_30px_rgba(229,140,56,0.2)] ${item.sizeClass}`}
               >
                 {/* Artwork Image */}
                 <img
@@ -198,8 +198,8 @@ export default function Portfolio() {
                 {/* Dark Amber Hover Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12]/95 via-[#0b0d12]/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-400 flex flex-col justify-between p-6">
                   <div className="flex justify-end">
-                    <div className="w-10 h-10 rounded-full border border-[#e58c38]/40 flex items-center justify-center text-[#e58c38] bg-[#0b0d12]/70 backdrop-blur-xs">
-                      <Eye size={16} />
+                    <div className="w-10 h-10 rounded-full border border-[#e58c38]/50 flex items-center justify-center text-[#e58c38] bg-[#0b0d12]/80 backdrop-blur-xs shadow-[0_0_15px_#e58c38]">
+                      <Eye size={18} />
                     </div>
                   </div>
 
@@ -207,7 +207,7 @@ export default function Portfolio() {
                     <span className="font-sans text-[9px] tracking-[0.3em] font-extrabold text-[#e58c38] uppercase">
                       {item.category} • BY {item.artist}
                     </span>
-                    <h3 className="font-sans text-xl font-bold text-white uppercase mt-1">
+                    <h3 className="font-sans text-xl font-extrabold text-white uppercase mt-1">
                       {item.title}
                     </h3>
                   </div>
@@ -232,24 +232,24 @@ export default function Portfolio() {
               className="absolute inset-0 bg-[#0b0d12]/95 backdrop-blur-md cursor-pointer"
             />
 
-            {/* Modal Dialog Card */}
+            {/* Modal Card */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-              className="relative z-10 w-full max-w-5xl bg-[#121620] border border-[#e58c38]/30 rounded-2xl shadow-[0_0_40px_rgba(229,140,56,0.2)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 max-h-[90vh]"
+              className="relative z-10 w-full max-w-5xl bg-[#121620] border border-[#e58c38]/40 rounded-2xl shadow-[0_0_50px_rgba(229,140,56,0.25)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 max-h-[90vh]"
             >
               {/* Close Button */}
               <button
                 onClick={() => setLightboxIndex(null)}
-                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#0b0d12]/80 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-[#0b0d12]/80 border border-[#e58c38]/40 flex items-center justify-center text-white hover:text-[#e58c38] transition-colors cursor-pointer"
                 aria-label="Close Lightbox"
               >
                 <X size={18} />
               </button>
 
-              {/* Left Image Viewport */}
+              {/* Left Viewport */}
               <div className="lg:col-span-7 bg-[#0b0d12] relative flex items-center justify-center min-h-[350px] lg:min-h-[550px] overflow-hidden">
                 <img
                   src={currentLightboxItem.image}
@@ -257,24 +257,22 @@ export default function Portfolio() {
                   className="w-full h-full object-contain max-h-[70vh]"
                 />
 
-                {/* Prev / Next Arrows */}
+                {/* Arrows */}
                 <button
                   onClick={(e) => { e.stopPropagation(); handlePrevLightbox(); }}
-                  className="absolute left-4 w-10 h-10 rounded-full bg-[#0b0d12]/70 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
-                  aria-label="Previous Work"
+                  className="absolute left-4 w-10 h-10 rounded-full bg-[#0b0d12]/80 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
                 >
                   <ChevronLeft size={20} />
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleNextLightbox(); }}
-                  className="absolute right-4 w-10 h-10 rounded-full bg-[#0b0d12]/70 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
-                  aria-label="Next Work"
+                  className="absolute right-4 w-10 h-10 rounded-full bg-[#0b0d12]/80 border border-white/20 flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
                 >
                   <ChevronRight size={20} />
                 </button>
               </div>
 
-              {/* Right Details */}
+              {/* Right Content */}
               <div className="lg:col-span-5 p-8 md:p-12 flex flex-col justify-between text-white bg-[#121620] overflow-y-auto">
                 <div className="flex flex-col">
                   <span className="font-sans text-[10px] tracking-[0.4em] text-[#e58c38] uppercase mb-2 flex items-center gap-1.5 font-extrabold">
@@ -285,7 +283,7 @@ export default function Portfolio() {
                     {currentLightboxItem.title}
                   </h3>
                   <div className="flex items-center gap-2 text-xs text-gray-400 font-sans uppercase tracking-widest pb-6 mb-6 border-b border-white/10">
-                    <span>Artist:</span>
+                    <span>Master Artist:</span>
                     <strong className="text-[#e58c38]">{currentLightboxItem.artist}</strong>
                   </div>
                   <p className="text-xs md:text-sm text-gray-300 font-sans leading-relaxed tracking-wide mb-8">
@@ -299,10 +297,10 @@ export default function Portfolio() {
                     onClick={() => setLightboxIndex(null)}
                     className="w-full py-4 bg-gradient-to-r from-[#e58c38] to-[#d97706] hover:from-[#f39c12] hover:to-[#e67e22] text-black font-sans text-xs font-extrabold tracking-widest uppercase rounded-full transition-all text-center cursor-pointer shadow-[0_0_20px_rgba(229,140,56,0.35)]"
                   >
-                    Request Similar Tattoo
+                    REQUEST SIMILAR CUSTOM WORK
                   </a>
                   <span className="text-[10px] text-gray-400 font-sans tracking-widest text-center uppercase">
-                    Zeus Tattoo Studio • Sanctuary Collectibles
+                    ZEUS TATTOO STUDIO • BANGALORE
                   </span>
                 </div>
               </div>

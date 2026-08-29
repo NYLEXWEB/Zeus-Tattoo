@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 
 export default function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
+  const [cursorText, setCursorText] = useState("");
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
-    // Check if touch device
     if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
       setIsTouchDevice(true);
       return;
@@ -28,22 +28,29 @@ export default function CustomCursor() {
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
 
-    // Event delegation for hover states
     const handleOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
+      if (!target) return;
+
+      const cursorData = target.closest("[data-cursor]")?.getAttribute("data-cursor");
+      if (cursorData) {
+        setCursorText(cursorData);
+        setIsHovered(true);
+        return;
+      }
+
       if (
-        target &&
-        (target.tagName === "BUTTON" ||
-          target.tagName === "A" ||
-          target.tagName === "INPUT" ||
-          target.tagName === "TEXTAREA" ||
-          target.tagName === "SELECT" ||
-          target.closest("button") ||
-          target.closest("a") ||
-          target.classList.contains("cursor-pointer"))
+        target.tagName === "BUTTON" ||
+        target.tagName === "A" ||
+        target.tagName === "INPUT" ||
+        target.closest("button") ||
+        target.closest("a") ||
+        target.classList.contains("cursor-pointer")
       ) {
+        setCursorText("");
         setIsHovered(true);
       } else {
+        setCursorText("");
         setIsHovered(false);
       }
     };
@@ -60,29 +67,44 @@ export default function CustomCursor() {
 
   if (isTouchDevice || !isVisible) return null;
 
+  const hasText = cursorText.length > 0;
+
   return (
     <>
-      {/* Inner Dot */}
+      {/* Inner Glowing Center Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 bg-brand-warm-cream rounded-full pointer-events-none z-50 mix-blend-difference"
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-[#e58c38] rounded-full pointer-events-none z-50 shadow-[0_0_10px_#e58c38]"
         animate={{
-          x: mousePosition.x - 4,
-          y: mousePosition.y - 4,
-          scale: isHovered ? 2.5 : 1,
+          x: mousePosition.x - 5,
+          y: mousePosition.y - 5,
+          scale: hasText ? 0 : isHovered ? 2 : 1,
+          opacity: hasText ? 0 : 1,
         }}
-        transition={{ type: "spring", stiffness: 800, damping: 35, mass: 0.1 }}
+        transition={{ type: "spring", stiffness: 900, damping: 35, mass: 0.1 }}
       />
-      {/* Outer Smooth Follower Ring */}
+      {/* Outer Luxury Ring / Pill with Text */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-brand-warm-cream/40 rounded-full pointer-events-none z-50"
+        className="fixed top-0 left-0 border border-[#e58c38]/60 bg-[#0b0d12]/80 backdrop-blur-xs rounded-full pointer-events-none z-50 flex items-center justify-center text-[10px] font-sans font-bold tracking-widest text-[#e58c38] uppercase shadow-[0_0_20px_rgba(229,140,56,0.2)] overflow-hidden"
         animate={{
-          x: mousePosition.x - 16,
-          y: mousePosition.y - 16,
-          scale: isHovered ? 1.8 : 1,
-          borderColor: isHovered ? "rgba(232, 223, 209, 0.9)" : "rgba(232, 223, 209, 0.3)",
+          x: mousePosition.x - (hasText ? 36 : 18),
+          y: mousePosition.y - (hasText ? 36 : 18),
+          width: hasText ? 72 : 36,
+          height: hasText ? 72 : 36,
+          scale: isHovered && !hasText ? 1.6 : 1,
+          borderColor: isHovered ? "rgba(229, 140, 56, 0.9)" : "rgba(229, 140, 56, 0.35)",
         }}
-        transition={{ type: "spring", stiffness: 250, damping: 25, mass: 0.5 }}
-      />
+        transition={{ type: "spring", stiffness: 300, damping: 26, mass: 0.4 }}
+      >
+        {hasText && (
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="px-2 text-center leading-none"
+          >
+            {cursorText}
+          </motion.span>
+        )}
+      </motion.div>
     </>
   );
 }

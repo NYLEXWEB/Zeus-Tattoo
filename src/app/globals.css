@@ -3,17 +3,18 @@
 @theme {
   --font-sans: var(--font-inter), sans-serif;
   --font-serif: var(--font-cormorant), serif;
-  
-  --color-brand-black: #080808;
-  --color-brand-charcoal: #111111;
+
+  --color-brand-black: #0b0d12;
+  --color-brand-charcoal: #121620;
   --color-brand-off-white: #F2EEE6;
-  --color-brand-warm-cream: #E8DFD1;
-  --color-brand-gold-accent: #C5A880;
+  --color-brand-warm-cream: #e58c38;
+  --color-brand-gold-accent: #e58c38;
 }
 
 :root {
-  background-color: #080808;
+  background-color: #0b0d12;
   color: #F2EEE6;
+  --accent-gold: #e58c38;
 }
 
 html {
@@ -49,6 +50,7 @@ html {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -58,9 +60,11 @@ html {
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.02);
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #333333;
   border-radius: 2px;
