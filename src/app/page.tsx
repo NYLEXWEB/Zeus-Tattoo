@@ -14,9 +14,7 @@ import PiercingSanctuary from "@/components/PiercingSanctuary";
 import Artists from "@/components/Artists";
 import StudioHygiene from "@/components/StudioHygiene";
 import Process from "@/components/Process";
-import Aftercare from "@/components/Aftercare";
 import Testimonials from "@/components/Testimonials";
-import FAQ from "@/components/FAQ";
 import ContactLocation from "@/components/ContactLocation";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
@@ -48,13 +46,13 @@ export default function Home() {
           {/* Interactive Expandable Services Grid */}
           <Services onOpenBooking={openBooking} />
 
-          {/* WOW 2: GSAP ScrollTrigger Pinned Narrative Experience */}
+          {/* GSAP ScrollTrigger Pinned Narrative Experience */}
           <PinnedStorySection onOpenBooking={openBooking} />
 
           {/* Editorial Asymmetric Tattoo Gallery with Lightbox */}
           <Portfolio />
 
-          {/* WOW 3: Shared Visual Element Image Transition */}
+          {/* Shared Visual Element Image Transition */}
           <SharedImageTransition />
 
           {/* Dedicated Clinical Piercing Sanctuary */}
@@ -69,14 +67,8 @@ export default function Home() {
           {/* 3-Step Client Journey */}
           <Process onOpenBooking={openBooking} />
 
-          {/* Standalone Healing Aftercare Protocol (Price Guide Removed) */}
-          <Aftercare />
-
           {/* Collector Reviews & Testimonials */}
           <Testimonials />
-
-          {/* Frequently Asked Questions */}
-          <FAQ />
 
           {/* Studio Location & Map */}
           <ContactLocation onOpenBooking={openBooking} />

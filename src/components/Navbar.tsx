@@ -27,7 +27,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
         return;
       }
 
-      const sections = ["home", "about", "services", "portfolio", "aftercare", "piercing", "artists", "hygiene", "process", "testimonials", "contact"];
+      const sections = ["home", "about", "services", "portfolio", "piercing", "artists", "hygiene", "process", "testimonials", "contact"];
       const scrollPos = window.scrollY + 200;
 
       for (const section of sections) {
@@ -53,7 +53,6 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
     { name: "Sanctuary", href: "#about" },
     { name: "Services", href: "#services" },
     { name: "Gallery", href: "#portfolio" },
-    { name: "Aftercare", href: "#aftercare" },
     { name: "Piercing", href: "#piercing" },
     { name: "Artists", href: "#artists" },
     { name: "Hygiene", href: "#hygiene" },
