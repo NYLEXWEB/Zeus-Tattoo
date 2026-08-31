@@ -136,7 +136,7 @@ export default function PinnedStorySection({ onOpenBooking }: PinnedStoryProps) 
                             className="absolute inset-0 rounded-2xl overflow-hidden border border-[#e58c38]/40 bg-[#121620] shadow-[0_0_35px_rgba(229,140,56,0.2)] scale-90"
                         >
                             <img
-                                src="/images/portfolio_lion_realism.jpg"
+                                src="/images/IMG_20260829_212801_249.jpg"
                                 alt="Master Tattoo Articulation"
                                 className="w-full h-full object-cover grayscale brightness-95 hover:grayscale-0 transition-all duration-700"
                             />
@@ -153,7 +153,7 @@ export default function PinnedStorySection({ onOpenBooking }: PinnedStoryProps) 
                             className="absolute inset-4 rounded-2xl overflow-hidden border border-white/20 bg-[#121620] shadow-[0_0_40px_rgba(0,0,0,0.8)] scale-90"
                         >
                             <img
-                                src="/images/portfolio_sleeve_work.jpg"
+                                src="/images/IMG_20260829_212809_269.jpg"
                                 alt="Master Tattoo Linework"
                                 className="w-full h-full object-cover brightness-90 hover:brightness-100 transition-all duration-700"
                             />

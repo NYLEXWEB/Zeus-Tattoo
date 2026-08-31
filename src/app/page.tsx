@@ -59,7 +59,7 @@ export default function Home() {
           <PiercingSanctuary onOpenBooking={openBooking} />
 
           {/* Master Resident Artists Profiles */}
-          <Artists />
+          <Artists onOpenBooking={openBooking} />
 
           {/* Clinical Hygiene & Hospital Protocols */}
           <StudioHygiene />
