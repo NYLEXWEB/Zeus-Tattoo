@@ -40,7 +40,7 @@ export default function Testimonials() {
       desc: "Zeus Tattoo Studio is on a whole different level. The attention to anatomical muscle flow and micro-shading is unmatched across South India.",
       rating: 5,
       avatar: "/images/testimonial_anjali.jpg",
-      artwork: "/images/portfolio_lion_realism.jpg",
+      artwork: "/images/IMG_20260829_212716_292.jpg",
       tag: "REALISM STORY • ANJALI",
     },
     {
@@ -52,7 +52,7 @@ export default function Testimonials() {
       desc: "She took my rough ideas and transformed them into delicate botanical art. Cleanest, most gentle studio experience I have ever had.",
       rating: 5,
       avatar: "/images/testimonial_rohit.jpg",
-      artwork: "/images/portfolio_floral_fineline.jpg",
+      artwork: "/images/IMG_20260829_212719_574.jpg",
       tag: "FINE LINE STORY • ROHIT",
     },
     {
@@ -64,7 +64,7 @@ export default function Testimonials() {
       desc: "Mind-blowing stipple detail and total visual concealment. Truly a world-class neoclassical body art sanctuary.",
       rating: 5,
       avatar: "/images/testimonial_neha.jpg",
-      artwork: "/images/portfolio_geometric_mandala.jpg",
+      artwork: "/images/IMG_20260829_212734_480.jpg",
       tag: "COVER-UP STORY • NEHA",
     },
   ];
@@ -376,8 +376,8 @@ export default function Testimonials() {
                 onMouseEnter={() => setHoveredClient(idx)}
                 onMouseLeave={() => setHoveredClient(null)}
                 className={`px-4 py-2 rounded-full text-[10px] font-sans font-extrabold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer border ${activeStory === idx
-                    ? "bg-[#e58c38] text-black border-[#e58c38] shadow-[0_0_15px_#e58c38]"
-                    : "bg-[#121620] text-gray-300 border-white/10 hover:border-[#e58c38]/40 hover:text-white"
+                  ? "bg-[#e58c38] text-black border-[#e58c38] shadow-[0_0_15px_#e58c38]"
+                  : "bg-[#121620] text-gray-300 border-white/10 hover:border-[#e58c38]/40 hover:text-white"
                   }`}
               >
                 <span>{story.id}</span>
@@ -391,7 +391,6 @@ export default function Testimonials() {
             className="group px-7 py-3 bg-gradient-to-r from-[#e58c38] to-[#d97706] hover:from-[#f39c12] hover:to-[#e67e22] text-black font-sans text-xs font-extrabold tracking-widest uppercase rounded-full transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(229,140,56,0.35)]"
           >
             BECOME OUR NEXT STORY
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
 

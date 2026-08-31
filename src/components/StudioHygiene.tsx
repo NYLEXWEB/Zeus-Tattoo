@@ -24,10 +24,10 @@ export default function StudioHygiene() {
   ];
 
   return (
-    <section id="studio" className="bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white">
+    <section id="hygiene" className="bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-center">
-          
+
           {/* Left Text Column */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -79,7 +79,7 @@ export default function StudioHygiene() {
           >
             <div className="relative aspect-[4/3] bg-[#121620] border border-white/15 overflow-hidden shadow-2xl rounded-2xl group">
               <img
-                src="/images/safety_sterilization.jpg"
+                src="/images/about_workspace.jpg"
                 alt="Zeus Tattoo Studio Sterile Station"
                 className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                 loading="lazy"

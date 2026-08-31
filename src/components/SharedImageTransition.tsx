@@ -110,7 +110,7 @@ export default function SharedImageTransition() {
                             <Sparkles size={13} />
                             SECTION A: THE STUDIO MASTERPIECE
                         </span>
-                        <h2 className="font-sans text-2xl md:text-3xl font-extrabold uppercase tracking-wide text-white">
+                        <h2 className="font-sans text-2xl md:text-3xl font-extrabold uppercase tracking-wide text-[#F2EEE6]">
                             CONTINUOUS ARTWORK STORYTELLING
                         </h2>
                     </div>
@@ -122,7 +122,7 @@ export default function SharedImageTransition() {
                         className="w-full max-w-3xl aspect-[16/9] overflow-hidden border-2 border-[#e58c38] bg-[#121620] shadow-[0_0_60px_rgba(229,140,56,0.3)] relative group cursor-pointer transition-shadow duration-500 scale-90 -rotate-2"
                     >
                         <img
-                            src="/images/portfolio_lion_realism.jpg"
+                            src="/images/IMG_20260829_212716_292.jpg"
                             alt="Shared Artwork Continuum (Lion Realism)"
                             className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
                         />

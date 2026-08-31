@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ArrowUpRight, Clock, ShieldCheck, Sparkles } from "lucide-react";
 
@@ -22,7 +22,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
       title: "BESPOKE REALISM & PORTRAITS",
       subtitle: "Hyper-detailed anatomical portraiture & realism",
       desc: "Our signature discipline. Utilizing ultra-fine single needle techniques to translate high-resolution portraiture, wildlife, and classical sculptures onto living skin with photorealistic depth.",
-      image: "/images/portfolio_lion_realism.jpg",
+      image: "/images/IMG_20260829_212716_292.jpg",
       duration: "4 - 8 Hours / Session",
       hygiene: "100% Single-Use Sterile Needle Cartridge",
       features: ["Custom Digital Composition", "3D Muscle Mapping", "Multi-Pass Shading"],
@@ -32,7 +32,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
       title: "BLACK & GREY FINE LINE",
       subtitle: "Micro-precision linework & delicate botanical art",
       desc: "Architectural precision linework engineered with zero bleeding. Delicate geometric motifs, ornate flora, and script typography designed with mathematical symmetry.",
-      image: "/images/portfolio_floral_fineline.jpg",
+      image: "/images/IMG_20260829_212719_574.jpg",
       duration: "2 - 5 Hours / Session",
       hygiene: "EU Certified Heavy-Metal-Free Vegan Inks",
       features: ["Single-Needle Precision", "Zero Bleed Linework", "Custom Typography"],
@@ -42,7 +42,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
       title: "FULL SLEEVE COMPOSITIONS",
       subtitle: "Multi-session large scale body transformations",
       desc: "Comprehensive storytelling across full arms, backs, and torsos. We map continuous narratives that dynamically flow with joint articulation and muscle flex.",
-      image: "/images/portfolio_sleeve_work.jpg",
+      image: "/images/IMG_20260829_212727_311.jpg",
       duration: "Multi-Session Project",
       hygiene: "Full Sterile Barrier Wrapping",
       features: ["Comprehensive Body Mapping", "Seamless Flow Design", "Priority Studio Scheduling"],
@@ -52,7 +52,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
       title: "CLINICAL PIERCING SANCTUARY",
       subtitle: "Implant-grade titanium body & facial piercing",
       desc: "Executed inside a hospital-grade sterile environment using exclusively ASTM F-136 Implant-Grade Titanium hardware. Gentle, precise, and fast healing guaranteed.",
-      image: "/images/service_piercing.jpg",
+      image: "/images/piercing/IMG_20260829_213245_583.jpg",
       duration: "15 - 30 Minutes",
       hygiene: "Hospital Autoclave Sterilized Hardware",
       features: ["Internal Threaded Titanium", "Clinical Antiseptic Protocol", "30-Day Aftercare Support"],

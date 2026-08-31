@@ -34,7 +34,7 @@ export default function Portfolio() {
       category: "REALISM",
       artist: "Rahul Sharma",
       description: "High-contrast lion portrait featuring micro-textural fur shading and sharp light catch in the eyes.",
-      image: "/images/portfolio_lion_realism.jpg",
+      image: "/images/IMG_20260829_212716_292.jpg",
       sizeClass: "col-span-1 md:col-span-2 row-span-2 aspect-[4/5]",
     },
     {
@@ -42,7 +42,7 @@ export default function Portfolio() {
       title: "Real Studio Masterwork",
       category: "REALISM",
       artist: "Rahul Sharma",
-      description: "Custom high-resolution studio tattoo artwork captured live inside our Koramangala sanctuary.",
+      description: "Custom high-resolution studio tattoo artwork captured live inside our sanctuary.",
       image: "/images/IMG_20260829_212716_292.jpg",
       sizeClass: "col-span-1 row-span-1 aspect-square",
     },
@@ -52,7 +52,7 @@ export default function Portfolio() {
       category: "BLACK & GREY",
       artist: "Arjun Verma",
       description: "Full outer arm sleeve work combining classical myth imagery and smooth grey-wash gradients.",
-      image: "/images/portfolio_sleeve_work.jpg",
+      image: "/images/IMG_20260829_212727_311.jpg",
       sizeClass: "col-span-1 row-span-1 aspect-square",
     },
     {
@@ -79,7 +79,7 @@ export default function Portfolio() {
       category: "TRADITIONAL",
       artist: "Sahana Rao",
       description: "Pinpoint geometric symmetry and stipple shading forming a balanced centered backpiece.",
-      image: "/images/portfolio_geometric_mandala.jpg",
+      image: "/images/IMG_20260829_212734_480.jpg",
       sizeClass: "col-span-1 row-span-1 aspect-square",
     },
     {
@@ -336,7 +336,7 @@ export default function Portfolio() {
                     REQUEST SIMILAR CUSTOM WORK
                   </a>
                   <span className="text-[10px] text-gray-400 font-sans tracking-widest text-center uppercase">
-                    ZEUS TATTOO STUDIO • BANGALORE
+                    ZEUS TATTOO STUDIO
                   </span>
                 </div>
               </div>

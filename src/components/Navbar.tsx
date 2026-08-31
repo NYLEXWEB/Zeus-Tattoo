@@ -12,12 +12,22 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [isFaqPage, setIsFaqPage] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsFaqPage(window.location.pathname === "/faq");
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      const sections = ["home", "about", "services", "portfolio", "piercing", "artists", "hygiene", "process", "aftercare", "contact"];
+      if (window.location.pathname === "/faq") {
+        setActiveSection("faq");
+        return;
+      }
+
+      const sections = ["home", "about", "services", "portfolio", "aftercare", "piercing", "artists", "hygiene", "process", "testimonials", "contact"];
       const scrollPos = window.scrollY + 200;
 
       for (const section of sections) {
@@ -43,19 +53,38 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
     { name: "Sanctuary", href: "#about" },
     { name: "Services", href: "#services" },
     { name: "Gallery", href: "#portfolio" },
+    { name: "Aftercare", href: "#aftercare" },
     { name: "Piercing", href: "#piercing" },
     { name: "Artists", href: "#artists" },
     { name: "Hygiene", href: "#hygiene" },
     { name: "Process", href: "#process" },
-    { name: "Aftercare", href: "#aftercare" },
+    { name: "FAQ", href: "/faq" },
+    { name: "Contact", href: "#contact" },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
     setIsMobileMenuOpen(false);
-    const targetElement = document.querySelector(href);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+
+    if (href === "/faq") {
+      if (typeof window !== "undefined" && window.location.pathname === "/faq") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      return;
+    }
+
+    // Anchor links starting with #
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      if (typeof window !== "undefined" && window.location.pathname !== "/") {
+        window.location.href = "/" + href;
+        return;
+      }
+
+      const targetElement = document.querySelector(href);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -63,15 +92,15 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-700 ${isScrolled
-            ? "bg-[#0b0d12]/85 backdrop-blur-xl border-b border-[#e58c38]/15 py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
-            : "bg-transparent py-6"
+          ? "bg-[#0b0d12]/85 backdrop-blur-xl border-b border-[#e58c38]/15 py-3.5 shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
+          : "bg-transparent py-6"
           }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
 
           {/* Logo Mark & Title */}
           <a
-            href="#home"
+            href="/#home"
             className="flex items-center gap-3.5 group"
             onClick={(e) => handleLinkClick(e, "#home")}
           >
@@ -101,17 +130,18 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
           </a>
 
           {/* Desktop Links Stack */}
-          <div className="hidden xl:flex items-center gap-6 bg-[#121620]/40 backdrop-blur-md px-6 py-2 border border-white/5 rounded-full shadow-lg">
+          <div className="hidden xl:flex items-center gap-5 bg-[#121620]/40 backdrop-blur-md px-6 py-2 border border-white/5 rounded-full shadow-lg">
             {navLinks.map((link) => {
+              const isFaqLink = link.href === "/faq";
               const sectionId = link.href.replace("#", "");
-              const isActive = activeSection === sectionId;
+              const isActive = isFaqPage ? isFaqLink : activeSection === sectionId;
 
               return (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className={`font-sans text-[11px] font-bold tracking-[0.2em] uppercase transition-all duration-300 relative py-1 px-1.5 ${isActive ? "text-[#e58c38]" : "text-gray-300 hover:text-white"
+                  className={`font-sans text-[11px] font-bold tracking-[0.18em] uppercase transition-all duration-300 relative py-1 px-1.5 ${isActive ? "text-[#e58c38]" : "text-gray-300 hover:text-white"
                     }`}
                 >
                   {link.name}

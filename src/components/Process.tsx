@@ -49,7 +49,7 @@ export default function Process({ onOpenBooking }: ProcessProps) {
       subtitle: "Anatomical Digital Rendering",
       desc: "Your master artist composes custom digital artwork sculpted directly over your body 3D geometry. We map linework flow so your tattoo dynamically flexes with muscle flex.",
       icon: <Palette size={18} className="text-[#e58c38]" />,
-      image: "/images/portfolio_sleeve_work.jpg",
+      image: "/images/IMG_20260829_212727_311.jpg",
       tag: "PHASE 02 • COMPOSITION",
     },
     {
@@ -58,8 +58,8 @@ export default function Process({ onOpenBooking }: ProcessProps) {
       subtitle: "120Hz Micro-Needle Saturation",
       desc: "Relax in our private sterile suite. Operating at 120 micro-vibrations per second with hospital-grade single-use needles, your piece is chiseled onto skin with zero bleed.",
       icon: <Zap size={18} className="text-[#e58c38]" />,
-      image: "/images/portfolio_lion_realism.jpg",
-      tag: "PHASE 03 • EXECUTION (WOW MOMENT)",
+      image: "/images/IMG_20260829_212716_292.jpg",
+      tag: "PHASE 03 • EXECUTION",
     },
     {
       num: "04",
@@ -67,7 +67,7 @@ export default function Process({ onOpenBooking }: ProcessProps) {
       subtitle: "Medical Barrier & 30-Day Support",
       desc: "Wrapped in breathable medical barrier film. Receive custom healing ointment and direct 30-day WhatsApp consultation with your master artist for flawless longevity.",
       icon: <ShieldCheck size={18} className="text-[#e58c38]" />,
-      image: "/images/safety_sterilization.jpg",
+      image: "/images/about_workspace.jpg",
       tag: "PHASE 04 • HEALING PROTOCOL",
     },
   ];
@@ -113,7 +113,7 @@ export default function Process({ onOpenBooking }: ProcessProps) {
         .fromTo(step1Ref.current, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1 }, "<+=0.3")
         .fromTo(img1Ref.current, { opacity: 0, clipPath: "inset(100% 0% 0% 0%)" }, { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 1 }, "<");
 
-      // 3. Transition Step 02 -> Step 03 (MAJOR WOW MOMENT - Image Expands & Fills Frame)
+      // 3. Transition Step 02 -> Step 03
       tl.to(step1Ref.current, { opacity: 0, y: -40, duration: 1 })
         .to(img1Ref.current, { opacity: 0, scale: 0.9, duration: 1 }, "<")
         .fromTo(step2Ref.current, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 1.2 }, "<+=0.3")
@@ -203,7 +203,7 @@ export default function Process({ onOpenBooking }: ProcessProps) {
               </span>
             </div>
 
-            {/* Image Layer 03 (MAJOR WOW MOMENT) */}
+            {/* Image Layer 03 */}
             <div
               ref={img2Ref}
               className="absolute inset-0 rounded-2xl overflow-hidden border-2 border-[#e58c38] bg-[#121620] shadow-[0_0_50px_rgba(229,140,56,0.35)] opacity-0"
@@ -307,8 +307,8 @@ export default function Process({ onOpenBooking }: ProcessProps) {
               <div
                 key={s.num}
                 className={`px-3.5 py-1.5 rounded-full text-[10px] font-sans font-extrabold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 ${activeStep === idx
-                    ? "bg-[#e58c38] text-black shadow-[0_0_15px_#e58c38]"
-                    : "bg-[#121620] text-gray-400 border border-white/10"
+                  ? "bg-[#e58c38] text-black shadow-[0_0_15px_#e58c38]"
+                  : "bg-[#121620] text-gray-400 border border-white/10"
                   }`}
               >
                 <span>{s.num}</span>
