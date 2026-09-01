@@ -19,7 +19,6 @@ export default function PinnedStorySection({ onOpenBooking }: PinnedStoryProps) 
     const headingRef = useRef<HTMLHeadingElement>(null);
     const image1Ref = useRef<HTMLDivElement>(null);
     const image2Ref = useRef<HTMLDivElement>(null);
-    const cardRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const pinEl = pinRef.current;
@@ -31,56 +30,43 @@ export default function PinnedStorySection({ onOpenBooking }: PinnedStoryProps) 
                 scrollTrigger: {
                     trigger: pinEl,
                     start: "top top",
-                    end: "+=220%",
+                    end: "+=140%",
                     pin: true,
                     scrub: 1,
                     anticipatePin: 1,
                 },
             });
 
-            // 1. Scale Heading
+            // 1. Scale Heading & Letter Spacing
             tl.to(headingRef.current, {
-                scale: 1.1,
-                letterSpacing: "0.2em",
+                scale: 1.05,
+                letterSpacing: "0.15em",
                 duration: 1,
             });
 
-            // 2. Reveal Image 1 with Clip Path & Scale
+            // 2. Reveal Image 1 (Macro Drafting)
             tl.to(
                 image1Ref.current,
                 {
                     clipPath: "inset(0% 0% 0% 0%)",
                     scale: 1,
-                    duration: 1.5,
+                    duration: 1.2,
                     ease: "power2.inOut",
                 },
                 "-=0.5"
             );
 
-            // 3. Reveal Image 2 overlaying with Rotation
+            // 3. Reveal Image 2 (Shading & Saturation)
             tl.to(
                 image2Ref.current,
                 {
                     clipPath: "inset(0% 0% 0% 0%)",
                     scale: 1,
-                    rotate: -2,
-                    duration: 1.5,
+                    rotate: 0,
+                    duration: 1.2,
                     ease: "power2.inOut",
                 },
-                "-=0.8"
-            );
-
-            // 4. Reveal Final Card Statement
-            tl.to(
-                cardRef.current,
-                {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    duration: 1,
-                    ease: "back.out(1.4)",
-                },
-                "-=0.5"
+                "-=0.6"
             );
         }, containerEl);
 
@@ -88,9 +74,9 @@ export default function PinnedStorySection({ onOpenBooking }: PinnedStoryProps) 
     }, []);
 
     return (
-        <div ref={containerRef} className="relative bg-[#0b0d12] text-white">
+        <div ref={containerRef} className="relative bg-[#0b0d12] text-white z-20">
             {/* Pinned Viewport Container */}
-            <div ref={pinRef} className="h-screen w-full flex items-center justify-center relative overflow-hidden border-b border-white/5">
+            <div ref={pinRef} className="h-screen w-full flex items-center justify-center relative border-b border-white/5 overflow-hidden">
 
                 {/* Glow backdrop */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#e58c38]/5 rounded-full blur-[160px] pointer-events-none" />
@@ -150,7 +136,7 @@ export default function PinnedStorySection({ onOpenBooking }: PinnedStoryProps) 
                         <div
                             ref={image2Ref}
                             style={{ clipPath: "inset(0% 100% 0% 0%)" }}
-                            className="absolute inset-4 rounded-2xl overflow-hidden border border-white/20 bg-[#121620] shadow-[0_0_40px_rgba(0,0,0,0.8)] scale-90"
+                            className="absolute inset-4 rounded-2xl overflow-hidden border border-white/20 bg-[#121620] shadow-[0_0_40px_rgba(0,0,0,0.8)] scale-90 z-20"
                         >
                             <img
                                 src="/images/IMG_20260829_212809_269.jpg"
@@ -161,19 +147,6 @@ export default function PinnedStorySection({ onOpenBooking }: PinnedStoryProps) 
                             <span className="absolute bottom-4 left-4 text-[10px] tracking-[0.25em] text-[#e58c38] font-sans uppercase font-extrabold bg-[#0b0d12]/90 backdrop-blur-md border border-[#e58c38]/30 px-3 py-1 rounded-full">
                                 STAGE 02 • SHADING & SATURATION
                             </span>
-                        </div>
-
-                        {/* Floating Statement Card */}
-                        <div
-                            ref={cardRef}
-                            className="absolute bottom-4 right-4 z-20 bg-[#0b0d12]/95 backdrop-blur-xl border border-[#e58c38] p-5 rounded-2xl shadow-[0_0_30px_rgba(229,140,56,0.3)] max-w-xs opacity-0 translate-y-6 scale-95"
-                        >
-                            <span className="text-[10px] tracking-[0.3em] font-sans font-extrabold text-[#e58c38] uppercase block mb-1">
-                                PINNED CONTINUITY
-                            </span>
-                            <p className="text-xs text-white font-sans font-medium leading-normal">
-                                Seamless transition between pencil sketch, stencil application, and final skin saturation.
-                            </p>
                         </div>
 
                     </div>

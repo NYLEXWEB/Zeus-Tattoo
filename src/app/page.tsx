@@ -9,7 +9,6 @@ import About from "@/components/About";
 import Services from "@/components/Services";
 import PinnedStorySection from "@/components/PinnedStorySection";
 import Portfolio from "@/components/Portfolio";
-import SharedImageTransition from "@/components/SharedImageTransition";
 import PiercingSanctuary from "@/components/PiercingSanctuary";
 import Artists from "@/components/Artists";
 import StudioHygiene from "@/components/StudioHygiene";
@@ -51,9 +50,6 @@ export default function Home() {
 
           {/* Editorial Asymmetric Tattoo Gallery with Lightbox */}
           <Portfolio />
-
-          {/* Shared Visual Element Image Transition */}
-          <SharedImageTransition />
 
           {/* Dedicated Clinical Piercing Sanctuary */}
           <PiercingSanctuary onOpenBooking={openBooking} />
