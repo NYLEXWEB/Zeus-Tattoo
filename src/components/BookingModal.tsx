@@ -56,23 +56,23 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-            className="relative z-10 w-full max-w-3xl bg-[#121620] border border-[#e58c38]/40 rounded-2xl shadow-[0_0_50px_rgba(229,140,56,0.2)] overflow-hidden my-8"
+            className="relative z-10 w-full max-w-3xl bg-[#181A22] border border-[#FFA028]/40 rounded-2xl shadow-[0_0_50px_rgba(255,160,40,0.2)] overflow-hidden my-8"
           >
             {/* Modal Header */}
-            <div className="p-6 md:p-8 bg-[#0b0d12] border-b border-white/10 flex items-center justify-between">
+            <div className="p-6 md:p-8 bg-[#0C0D12] border-b border-white/10 flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="font-sans text-[10px] tracking-[0.4em] text-[#e58c38] font-extrabold uppercase flex items-center gap-1.5">
+                <span className="font-display text-[10px] tracking-[0.4em] text-[#FFA028] font-bold uppercase flex items-center gap-1.5">
                   <Sparkles size={12} />
-                  KOTTAYAM SANCTUARY
+                  ZEUS ATELIER
                 </span>
-                <h3 className="font-sans text-2xl md:text-3xl font-extrabold text-white uppercase tracking-tight mt-0.5">
+                <h3 className="font-display text-2xl md:text-3xl font-bold text-white uppercase tracking-wider mt-0.5">
                   BOOK CONSULTATION
                 </h3>
               </div>
 
               <button
                 onClick={onClose}
-                className="w-10 h-10 rounded-full border border-white/20 bg-[#121620] flex items-center justify-center text-white hover:text-[#e58c38] hover:border-[#e58c38] transition-colors cursor-pointer"
+                className="w-10 h-10 rounded-full border border-white/20 bg-[#0C0D12] flex items-center justify-center text-white hover:text-[#FFA028] hover:border-[#FFA028] transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -86,19 +86,19 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   className="py-12 flex flex-col items-center text-center"
                 >
-                  <div className="w-16 h-16 rounded-full bg-[#e58c38]/20 border border-[#e58c38] flex items-center justify-center text-[#e58c38] mb-6">
+                  <div className="w-16 h-16 rounded-full bg-[#FFA028]/20 border border-[#FFA028] flex items-center justify-center text-[#FFA028] mb-6">
                     <CheckCircle2 size={36} />
                   </div>
-                  <h4 className="font-sans text-3xl font-extrabold text-white uppercase mb-2">
+                  <h4 className="font-display text-3xl font-bold text-white uppercase mb-2">
                     REQUEST RECEIVED
                   </h4>
                   <p className="text-gray-300 font-sans text-xs md:text-sm max-w-md leading-relaxed mb-8">
-                    Thank you, <strong className="text-[#e58c38]">{formData.name}</strong>. Our studio manager and selected artist will review your design details and contact you within 24 hours.
+                    Thank you, <strong className="text-[#FFA028]">{formData.name}</strong>. Our studio manager and selected artist will review your design details and contact you within 24 hours.
                   </p>
 
                   <button
                     onClick={handleReset}
-                    className="px-8 py-3.5 bg-gradient-to-r from-[#e58c38] to-[#d97706] text-black font-sans text-xs font-extrabold tracking-widest uppercase rounded-full shadow-lg"
+                    className="px-8 py-3.5 bg-[#FFA028] text-[#0C0D12] font-display text-xs font-bold tracking-widest uppercase rounded shadow-lg"
                   >
                     CLOSE WINDOW
                   </button>
@@ -123,16 +123,16 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-sans font-extrabold tracking-widest text-[#e58c38] uppercase">
+                      <label className="text-[10px] font-sans font-extrabold tracking-widest text-[#FFA028] uppercase">
                         Phone / WhatsApp *
                       </label>
                       <input
                         type="tel"
                         required
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 87141 31748"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="bg-[#0b0d12] border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder:text-gray-600 focus:border-[#e58c38] outline-none transition-colors font-sans"
+                        className="bg-[#0b0d12] border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder:text-gray-600 focus:border-[#FFA028] outline-none transition-colors font-sans"
                       />
                     </div>
                   </div>
@@ -140,38 +140,39 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   {/* Artist & Style Selection */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-sans font-extrabold tracking-widest text-[#e58c38] uppercase">
+                      <label className="text-[10px] font-sans font-extrabold tracking-widest text-[#FFA028] uppercase">
                         Preferred Resident Artist
                       </label>
                       <select
                         value={formData.artist}
                         onChange={(e) => setFormData({ ...formData, artist: e.target.value })}
-                        className="bg-[#0b0d12] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:border-[#e58c38] outline-none transition-colors font-sans"
+                        className="bg-[#0b0d12] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:border-[#FFA028] outline-none transition-colors font-sans"
                       >
-                        <option>Any Resident Master</option>
+                        <option>Any Available Master Artist</option>
                         <option>Rahul Sharma (Realism & Portraits)</option>
-                        <option>Meera Nair (Fine Line & Micro)</option>
+                        <option>Meera Nair (Fine Line & Minimalist)</option>
                         <option>Arjun Verma (Black & Grey Sleeves)</option>
-                        <option>Sahana Rao (Geometry & Cover-Ups)</option>
+                        <option>Sahana Rao (Piercing & Cover-Ups)</option>
                       </select>
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[10px] font-sans font-extrabold tracking-widest text-[#e58c38] uppercase">
-                        Tattoo Genre / Style
+                      <label className="text-[10px] font-sans font-extrabold tracking-widest text-[#FFA028] uppercase">
+                        Service Category / Genre
                       </label>
                       <select
                         value={formData.style}
                         onChange={(e) => setFormData({ ...formData, style: e.target.value })}
-                        className="bg-[#0b0d12] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:border-[#e58c38] outline-none transition-colors font-sans"
+                        className="bg-[#0b0d12] border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:border-[#FFA028] outline-none transition-colors font-sans"
                       >
-                        <option>Bespoke Custom Tattoo</option>
-                        <option>Hyper Realism & Portrait</option>
-                        <option>Single-Needle Fine Line</option>
-                        <option>Black & Grey Wash</option>
-                        <option>Cover-Up Re-Imagining</option>
-                        <option>Clinical Piercing</option>
-                        <option>Microblading / Cosmetic</option>
+                        <option>Custom Tattoo Design</option>
+                        <option>Fine Line & Minimalist Tattoo</option>
+                        <option>Ear Piercing (Lobe, Helix, Tragus)</option>
+                        <option>Nose & Bugadi Piercing</option>
+                        <option>Hyper Realism & Portrait Tattoo</option>
+                        <option>Black & Grey Wash Sleeve</option>
+                        <option>Cover-Up Tattoo Restoration</option>
+                        <option>Body Piercing & Dermal Anchors</option>
                       </select>
                     </div>
                   </div>

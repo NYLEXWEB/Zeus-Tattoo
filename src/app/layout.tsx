@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Oswald, Inter, Caveat, Playfair_Display, Cinzel } from "next/font/google";
 import "./globals.css";
 
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const oswald = Oswald({
+  variable: "--font-oswald",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const inter = Inter({
@@ -15,33 +14,57 @@ const inter = Inter({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const caveat = Caveat({
+  variable: "--font-script",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-serif",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+});
+
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "ZEUS TATTOO STUDIO | Luxury Custom Tattoo Studio in Bangalore",
-  description: "Experience luxury custom tattooing at Zeus Tattoo Studio in Koramangala, Bengaluru. Elite artists specializing in Realism, Fine Line, Black & Grey, and bespoke cover-ups in a sterile, hospital-grade environment.",
+  title: "Zeus Tattoo Kottayam | Tattoo & Piercing Studio in Kottayam, Kerala",
+  description: "Zeus Tattoo Studio Kottayam (5.0★ 210+ Google reviews). Welcoming tattoo & piercing shop featuring professional artists and a clean, comfortable studio. Specializing in custom tattoos, fine line work, minimalist designs, and nose, helix, bugadi & ear piercings at Manorama Junction, Kottayam.",
   keywords: [
-    "Bangalore tattoo studio",
-    "best tattoo artist in Bangalore",
-    "tattoo studio in Koramangala",
-    "custom tattoo Bangalore",
-    "realism tattoo Bangalore",
-    "fine line tattoo Bangalore",
-    "black and grey tattoo Bangalore",
-    "luxury tattoo studio Bengaluru",
-    "tattoo studio near me"
+    "Zeus Tattoo Kottayam",
+    "tattoo studio in Kottayam",
+    "piercing shop in Kottayam",
+    "best tattoo studio Kottayam",
+    "tattoo artist Kottayam Kerala",
+    "ear piercing Kottayam",
+    "nose piercing Kottayam",
+    "bugadi piercing Kottayam",
+    "helix piercing Kottayam",
+    "custom tattoo Kottayam",
+    "fine line tattoo Kottayam",
+    "minimalist tattoo Kottayam",
+    "Manorama Junction tattoo studio",
+    "tattoo shop near me Kottayam"
   ],
-  authors: [{ name: "Zeus Tattoo Studio" }],
+  authors: [{ name: "Zeus Tattoo Studio Kottayam" }],
   openGraph: {
-    title: "ZEUS TATTOO STUDIO | Premium & Luxury Tattoo Studio",
-    description: "Where skin becomes a canvas. Custom tattoos, photorealism, fine line, and sterile safety standards in Koramangala, Bengaluru.",
-    url: "https://zeustattoo.com",
-    siteName: "Zeus Tattoo Studio",
+    title: "Zeus Tattoo Kottayam | 5.0★ Tattoo & Piercing Studio",
+    description: "Welcoming tattoo & piercing shop in Kottayam, Kerala featuring professional artists, clean hospital-grade studio, custom tattoos, fine line, minimalist art, and piercings.",
+    url: "https://zeustattoo.in/",
+    siteName: "Zeus Tattoo Kottayam",
     locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ZEUS TATTOO STUDIO | Luxury Custom Tattoo Studio",
-    description: "Custom tattoos, photorealism, fine line, and hospital-grade hygiene in Koramangala, Bengaluru.",
+    title: "Zeus Tattoo Kottayam | 5.0★ Tattoo & Piercing Studio",
+    description: "Top-rated tattoo and piercing shop in Kottayam, Kerala (5.0★ 210+ Google reviews). Custom tattoos, fine line, minimalist designs, and professional piercings.",
   },
   robots: {
     index: true,
@@ -52,36 +75,43 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "TattooParlor",
-  "name": "Zeus Tattoo Studio",
-  "image": "https://zeustattoo.com/images/about_workspace.jpg",
-  "@id": "https://zeustattoo.com",
-  "url": "https://zeustattoo.com",
-  "telephone": "+919876543210",
-  "priceRange": "$$$",
+  "name": "Zeus Tattoo Kottayam",
+  "image": "https://zeustattoo.in/images/about_story.jpg",
+  "@id": "https://zeustattoo.in",
+  "url": "https://zeustattoo.in/",
+  "telephone": "087141 31748",
+  "priceRange": "₹₹",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5.0",
+    "reviewCount": "210",
+    "bestRating": "5",
+    "worstRating": "1"
+  },
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "#42, 100 Feet Road, 5th Block, Koramangala",
-    "addressLocality": "Bengaluru",
-    "addressRegion": "Karnataka",
-    "postalCode": "560095",
+    "streetAddress": "2nd floor, Manorama Junction, roji's arch, Erayilkadavu Rd, Eerayil Kadavu",
+    "addressLocality": "Kottayam",
+    "addressRegion": "Kerala",
+    "postalCode": "686001",
     "addressCountry": "IN"
   },
   "geo": {
     "@type": "GeoCoordinates",
-    "latitude": 12.9352,
-    "longitude": 77.6245
+    "latitude": 9.5878,
+    "longitude": 76.5244
   },
   "openingHoursSpecification": [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "opens": "11:00",
-      "closes": "20:30"
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "10:00",
+      "closes": "20:00"
     }
   ],
   "sameAs": [
-    "https://instagram.com/zeustattoo",
-    "https://facebook.com/zeustattoo"
+    "https://zeustattoo.in/",
+    "https://instagram.com/zeustattoo"
   ]
 };
 
@@ -93,7 +123,7 @@ export default function RootLayout({ children }: LayoutProps) {
   return (
     <html
       lang="en"
-      className={`${cormorantGaramond.variable} ${inter.variable} antialiased scroll-smooth`}
+      className={`${oswald.variable} ${inter.variable} ${caveat.variable} ${playfair.variable} ${cinzel.variable} antialiased scroll-smooth`}
     >
       <head>
         <script

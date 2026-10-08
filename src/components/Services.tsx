@@ -1,265 +1,184 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ArrowUpRight, Clock, ShieldCheck, Sparkles } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import SectionFlourish from "./SectionFlourish";
+import TornPaperDivider from "./TornPaperDivider";
 
 interface ServicesProps {
   onOpenBooking: () => void;
 }
 
 export default function Services({ onOpenBooking }: ServicesProps) {
-  const [activeService, setActiveService] = useState<number | null>(0);
-  const [hoveredService, setHoveredService] = useState<number | null>(null);
+  const [selectedService, setSelectedService] = useState(0);
 
-  // Cursor tracking for floating preview
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const services = [
+  const servicesList = [
     {
       id: "01",
-      title: "BESPOKE REALISM & PORTRAITS",
-      subtitle: "Hyper-detailed anatomical portraiture & realism",
-      desc: "Our signature discipline. Utilizing ultra-fine single needle techniques to translate high-resolution portraiture, wildlife, and classical sculptures onto living skin with photorealistic depth.",
+      name: "Custom Tattoo",
+      title: "CUSTOM TATTOOS",
+      desc: "Bespoke custom designs, high-contrast photorealism, and portraiture crafted with micro-needle precision and premium inks. From lifelike wildlife and mythology to heirloom custom concepts tailored to your body contours.",
       image: "/images/IMG_20260829_212716_292.jpg",
-      duration: "4 - 8 Hours / Session",
-      hygiene: "100% Single-Use Sterile Needle Cartridge",
-      features: ["Custom Digital Composition", "3D Muscle Mapping", "Multi-Pass Shading"],
+      icon: "/images/IMG_20260829_212801_249.jpg",
     },
     {
       id: "02",
-      title: "BLACK & GREY FINE LINE",
-      subtitle: "Micro-precision linework & delicate botanical art",
-      desc: "Architectural precision linework engineered with zero bleeding. Delicate geometric motifs, ornate flora, and script typography designed with mathematical symmetry.",
+      name: "Fine Line / Minimalist",
+      title: "FINE LINE & MINIMALIST",
+      desc: "Delicate single-needle linework, minimalist designs, calligraphy scripts, and botanical art. Whisper-thin execution with zero pigment bleed and razor-sharp clarity that lasts a lifetime.",
       image: "/images/IMG_20260829_212719_574.jpg",
-      duration: "2 - 5 Hours / Session",
-      hygiene: "EU Certified Heavy-Metal-Free Vegan Inks",
-      features: ["Single-Needle Precision", "Zero Bleed Linework", "Custom Typography"],
+      icon: "/images/IMG_20260829_212754_172.jpg",
     },
     {
       id: "03",
-      title: "FULL SLEEVE COMPOSITIONS",
-      subtitle: "Multi-session large scale body transformations",
-      desc: "Comprehensive storytelling across full arms, backs, and torsos. We map continuous narratives that dynamically flow with joint articulation and muscle flex.",
-      image: "/images/IMG_20260829_212727_311.jpg",
-      duration: "Multi-Session Project",
-      hygiene: "Full Sterile Barrier Wrapping",
-      features: ["Comprehensive Body Mapping", "Seamless Flow Design", "Priority Studio Scheduling"],
+      name: "Ear & Helix Piercing",
+      title: "EAR & HELIX PIERCING",
+      desc: "Expert clinical piercing for earlobes, helix, tragus, conch, and curated ear stacks. Performed with sterile single-use needles and ASTM F-136 Implant-Grade Titanium jewelry.",
+      image: "/images/piercing/IMG_20260829_213245_583.jpg",
+      icon: "/images/piercing/IMG_20260829_213245_633.jpg",
     },
     {
       id: "04",
-      title: "CLINICAL PIERCING SANCTUARY",
-      subtitle: "Implant-grade titanium body & facial piercing",
-      desc: "Executed inside a hospital-grade sterile environment using exclusively ASTM F-136 Implant-Grade Titanium hardware. Gentle, precise, and fast healing guaranteed.",
-      image: "/images/piercing/IMG_20260829_213245_583.jpg",
-      duration: "15 - 30 Minutes",
-      hygiene: "Hospital Autoclave Sterilized Hardware",
-      features: ["Internal Threaded Titanium", "Clinical Antiseptic Protocol", "30-Day Aftercare Support"],
+      name: "Nose & Bugadi",
+      title: "NOSE & BUGADI PIERCING",
+      desc: "Specialized nose, nostril studs, septum, and traditional bugadi piercings with precision anatomical alignment and gentle, rapid-healing techniques.",
+      image: "/images/piercing/IMG_20260829_213245_714.jpg",
+      icon: "/images/piercing/IMG_20260829_213245_723.jpg",
     },
     {
       id: "05",
-      title: "COVER-UPS & RESTORATION",
-      subtitle: "Transform legacy tattoos into high-end art",
-      desc: "Specialized pigment saturation techniques designed to completely conceal, rebuild, or elevate old tattoos into modern masterpieces without laser trauma.",
-      image: "/images/about_story.jpg",
-      duration: "Custom Project Basis",
-      hygiene: "Medical-Grade Skin Preparation",
-      features: ["Pigment Analysis Consultation", "Opaque Shading Technique", "Complete Visual Concealment"],
+      name: "Tribal & Blackwork",
+      title: "TRIBAL & GEOMETRIC",
+      desc: "Sacred geometry, Polynesian patterns, and bold blackwork designed to flow with anatomical posture. Deep pigment saturation and sharp geometric edges.",
+      image: "/images/IMG_20260829_212727_311.jpg",
+      icon: "/images/IMG_20260829_212727_311.jpg",
+    },
+    {
+      id: "06",
+      name: "Cover-Up Tattoo",
+      title: "CUSTOM COVER-UPS",
+      desc: "Advanced pigment restructuring and layered shading to completely transform faded, unwanted tattoos into stunning modern masterworks without laser scarring.",
+      image: "/images/IMG_20260829_212734_480.jpg",
+      icon: "/images/about_story.jpg",
     },
   ];
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    setCursorPos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+  const current = servicesList[selectedService];
+
+  const handleNext = () => {
+    setSelectedService((prev) => (prev + 1) % servicesList.length);
+  };
+
+  const handlePrev = () => {
+    setSelectedService((prev) => (prev - 1 + servicesList.length) % servicesList.length);
   };
 
   return (
-    <section
-      id="services"
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      className="relative bg-[#0b0d12] py-28 md:py-36 border-b border-white/5 text-white overflow-hidden"
-    >
-      {/* Dynamic Cursor-Following Image Preview Frame (Desktop Only) */}
-      <AnimatePresence>
-        {hoveredService !== null && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: -4 }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              rotate: 0,
-              x: cursorPos.x + 30,
-              y: cursorPos.y - 120,
-            }}
-            exit={{ opacity: 0, scale: 0.8, rotate: 4 }}
-            transition={{ type: "spring", stiffness: 250, damping: 22 }}
-            className="pointer-events-none absolute top-0 left-0 z-30 hidden lg:block w-72 h-44 rounded-2xl overflow-hidden border-2 border-[#e58c38] shadow-[0_0_35px_rgba(229,140,56,0.3)] bg-[#121620]"
-          >
-            <img
-              src={services[hoveredService].image}
-              alt={services[hoveredService].title}
-              className="w-full h-full object-cover grayscale brightness-90"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12] via-transparent to-transparent" />
-            <div className="absolute bottom-2.5 left-3 right-3 flex items-center justify-between">
-              <span className="text-[10px] tracking-[0.2em] font-sans font-extrabold text-[#e58c38] uppercase">
-                {services[hoveredService].id} • PREVIEW
-              </span>
-              <span className="text-[9px] font-sans text-gray-300 font-semibold uppercase bg-[#0b0d12]/80 backdrop-blur-md px-2 py-0.5 rounded">
-                ZEUS ARCHIVE
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+    <section id="services" className="relative bg-[#FFA028] text-[#0C0D12] pt-12 pb-24 md:pb-36 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
-            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-2 block flex items-center gap-2">
-              <Sparkles size={13} />
-              STUDIO SERVICES & DISCIPLINES
-            </span>
-            <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wider uppercase text-white">
-              CRAFTED DISCIPLINE.
-            </h2>
-            <div className="w-16 h-[3px] bg-[#e58c38] mt-3 rounded-full shadow-[0_0_10px_#e58c38]" />
-          </div>
-
-          <p className="text-gray-300 font-sans text-xs md:text-sm max-w-md leading-relaxed tracking-wide">
-            Hover to inspect live project previews. Every service includes private sterile studio setup, anatomical mapping, and 30-day clinical aftercare support.
-          </p>
+        <div className="text-center mb-12">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-wider text-[#0C0D12] uppercase"
+          >
+            OUR SERVICES
+          </motion.h2>
+          <SectionFlourish color="#0C0D12" />
         </div>
 
-        {/* Services Expandable List */}
-        <div className="flex flex-col border-t border-white/10">
-          {services.map((service, index) => {
-            const isOpen = activeService === index;
-
-            return (
-              <div
-                key={service.id}
-                onMouseEnter={() => setHoveredService(index)}
-                onMouseLeave={() => setHoveredService(null)}
-                className="border-b border-white/10 transition-colors duration-300"
-              >
-                {/* Header Row Trigger */}
-                <button
-                  onClick={() => setActiveService(isOpen ? null : index)}
-                  className="w-full py-8 text-left flex items-center justify-between gap-6 group cursor-pointer"
-                >
-                  <div className="flex items-center gap-6 md:gap-10">
-                    <span className="font-sans text-sm md:text-base font-extrabold text-[#e58c38] tracking-widest">
-                      {service.id}
-                    </span>
-                    <div className="flex flex-col">
-                      <h3 className="font-sans text-xl md:text-2xl lg:text-3xl font-bold tracking-wider text-white group-hover:text-[#e58c38] transition-colors duration-300 uppercase">
-                        {service.title}
-                      </h3>
-                      <span className="text-xs text-gray-400 font-sans tracking-wide mt-1">
-                        {service.subtitle}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    <span className="hidden sm:block text-[11px] font-sans font-bold tracking-widest text-[#e58c38] uppercase border border-[#e58c38]/30 px-3 py-1 rounded-full bg-[#121620]">
-                      {service.duration}
-                    </span>
-                    <div
-                      className={`w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:border-[#e58c38] group-hover:text-[#e58c38] transition-all duration-300 ${isOpen ? "rotate-180 bg-[#e58c38]/10 border-[#e58c38]" : ""
-                        }`}
-                    >
-                      <ChevronDown size={18} />
-                    </div>
-                  </div>
-                </button>
-
-                {/* Expanded Content Panel */}
-                <AnimatePresence>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.4, ease: [0.25, 1, 0.5, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pb-10 pt-2 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border-t border-white/5">
-
-                        {/* Image Preview Mobile & Fallback */}
-                        <div className="lg:col-span-5 relative aspect-[16/10] rounded-2xl overflow-hidden border border-white/15 bg-[#121620] shadow-xl group">
-                          <img
-                            src={service.image}
-                            alt={service.title}
-                            className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 transition-all duration-700"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12]/80 via-transparent to-transparent" />
-                        </div>
-
-                        {/* Specs & Description */}
-                        <div className="lg:col-span-7 flex flex-col items-start justify-center">
-                          <p className="text-gray-300 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-6">
-                            {service.desc}
-                          </p>
-
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full mb-8">
-                            <div className="flex items-center gap-3 bg-[#121620] p-3.5 rounded-xl border border-white/10">
-                              <Clock size={16} className="text-[#e58c38]" />
-                              <div className="flex flex-col">
-                                <span className="text-[10px] tracking-widest text-gray-400 font-sans uppercase">ESTIMATED TIME</span>
-                                <span className="text-xs font-bold text-white font-sans">{service.duration}</span>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-3 bg-[#121620] p-3.5 rounded-xl border border-white/10">
-                              <ShieldCheck size={16} className="text-[#e58c38]" />
-                              <div className="flex flex-col">
-                                <span className="text-[10px] tracking-widest text-gray-400 font-sans uppercase">HYGIENE PROTOCOL</span>
-                                <span className="text-xs font-bold text-white font-sans">{service.hygiene}</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Features Tags */}
-                          <div className="flex flex-wrap gap-2 mb-8">
-                            {service.features.map((feat, fIdx) => (
-                              <span
-                                key={fIdx}
-                                className="text-[10px] font-sans font-extrabold tracking-widest text-gray-300 uppercase bg-white/5 border border-white/10 px-3 py-1 rounded-full"
-                              >
-                                ✓ {feat}
-                              </span>
-                            ))}
-                          </div>
-
-                          <button
-                            onClick={onOpenBooking}
-                            className="group px-7 py-3 bg-gradient-to-r from-[#e58c38] to-[#d97706] hover:from-[#f39c12] hover:to-[#e67e22] text-black font-sans text-xs font-extrabold tracking-widest uppercase rounded-full transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(229,140,56,0.3)]"
-                          >
-                            BOOK {service.title.split(" ")[0]} CONSULTATION
-                            <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                          </button>
-                        </div>
-
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
+        {/* Top 6 Thumbnail Pills Row */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-14 max-w-5xl mx-auto">
+          {servicesList.map((service, idx) => (
+            <button
+              key={service.id}
+              onClick={() => setSelectedService(idx)}
+              className={`flex flex-col items-center gap-2 p-2 sm:p-3 rounded-lg transition-all duration-300 cursor-pointer ${
+                selectedService === idx
+                  ? "bg-[#0C0D12] text-white shadow-2xl scale-105"
+                  : "bg-white/40 hover:bg-white/70 text-[#0C0D12] border border-[#0C0D12]/15"
+              }`}
+            >
+              <div className="w-full aspect-[4/3] rounded overflow-hidden bg-black/20">
+                <img
+                  src={service.icon}
+                  alt={service.name}
+                  className="w-full h-full object-cover grayscale contrast-125"
+                />
               </div>
-            );
-          })}
+              <span className="font-display text-xs sm:text-sm font-bold tracking-wide uppercase text-center">
+                {service.name}
+              </span>
+            </button>
+          ))}
         </div>
 
+        {/* Center Featured Showcase Card with Slider Arrows */}
+        <div className="relative max-w-3xl mx-auto">
+          {/* Left Arrow Button */}
+          <button
+            onClick={handlePrev}
+            aria-label="Previous Service"
+            className="absolute -left-4 sm:-left-12 top-1/3 -translate-y-1/2 z-20 w-10 h-10 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] flex items-center justify-center rounded-full shadow-xl transition-all cursor-pointer"
+          >
+            <ChevronLeft size={22} />
+          </button>
+
+          {/* Right Arrow Button */}
+          <button
+            onClick={handleNext}
+            aria-label="Next Service"
+            className="absolute -right-4 sm:-right-12 top-1/3 -translate-y-1/2 z-20 w-10 h-10 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] flex items-center justify-center rounded-full shadow-xl transition-all cursor-pointer"
+          >
+            <ChevronRight size={22} />
+          </button>
+
+          {/* Card Content */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center text-center"
+            >
+              {/* White Framed Showcase Photo */}
+              <div className="w-full max-w-xl aspect-[16/10] bg-white p-3 sm:p-4 rounded shadow-2xl overflow-hidden mb-8 border-4 border-white">
+                <img
+                  src={current.image}
+                  alt={current.title}
+                  className="w-full h-full object-cover contrast-110"
+                />
+              </div>
+
+              {/* Title & Description */}
+              <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-wider text-[#0C0D12] uppercase mb-4">
+                {current.title}
+              </h3>
+
+              <p className="text-[#0C0D12]/80 font-sans text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mb-8">
+                {current.desc}
+              </p>
+
+              {/* Read More Button */}
+              <button
+                onClick={onOpenBooking}
+                className="px-8 py-3 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] font-display text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-xl cursor-pointer"
+              >
+                READ MORE
+              </button>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Torn Paper Edge at the Bottom transitioning to White Artists Section */}
+      <div className="absolute bottom-0 left-0 right-0 w-full z-20">
+        <TornPaperDivider fill="#FFFFFF" position="bottom" variant={3} />
       </div>
     </section>
   );

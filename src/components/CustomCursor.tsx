@@ -73,7 +73,7 @@ export default function CustomCursor() {
     <>
       {/* Inner Glowing Center Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2.5 h-2.5 bg-[#e58c38] rounded-full pointer-events-none z-50 shadow-[0_0_10px_#e58c38]"
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-[#FFA028] rounded-full pointer-events-none z-50 shadow-[0_0_10px_#FFA028]"
         animate={{
           x: mousePosition.x - 5,
           y: mousePosition.y - 5,
@@ -84,14 +84,14 @@ export default function CustomCursor() {
       />
       {/* Outer Luxury Ring / Pill with Text */}
       <motion.div
-        className="fixed top-0 left-0 border border-[#e58c38]/60 bg-[#0b0d12]/80 backdrop-blur-xs rounded-full pointer-events-none z-50 flex items-center justify-center text-[10px] font-sans font-bold tracking-widest text-[#e58c38] uppercase shadow-[0_0_20px_rgba(229,140,56,0.2)] overflow-hidden"
+        className="fixed top-0 left-0 border border-[#FFA028]/60 bg-[#0C0D12]/80 backdrop-blur-xs rounded-full pointer-events-none z-50 flex items-center justify-center text-[10px] font-display font-bold tracking-widest text-[#FFA028] uppercase shadow-[0_0_20px_rgba(255,160,40,0.2)] overflow-hidden"
         animate={{
           x: mousePosition.x - (hasText ? 36 : 18),
           y: mousePosition.y - (hasText ? 36 : 18),
           width: hasText ? 72 : 36,
           height: hasText ? 72 : 36,
           scale: isHovered && !hasText ? 1.6 : 1,
-          borderColor: isHovered ? "rgba(229, 140, 56, 0.9)" : "rgba(229, 140, 56, 0.35)",
+          borderColor: isHovered ? "rgba(255, 160, 40, 0.9)" : "rgba(255, 160, 40, 0.35)",
         }}
         transition={{ type: "spring", stiffness: 300, damping: 26, mass: 0.4 }}
       >

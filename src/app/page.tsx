@@ -2,22 +2,18 @@
 
 import { useState } from "react";
 import SmoothScroll from "@/components/SmoothScroll";
-import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
-import PinnedStorySection from "@/components/PinnedStorySection";
-import Portfolio from "@/components/Portfolio";
-import PiercingSanctuary from "@/components/PiercingSanctuary";
 import Artists from "@/components/Artists";
-import StudioHygiene from "@/components/StudioHygiene";
-import Process from "@/components/Process";
+import Portfolio from "@/components/Portfolio";
 import Testimonials from "@/components/Testimonials";
 import ContactLocation from "@/components/ContactLocation";
-import FinalCTA from "@/components/FinalCTA";
+import Newsletter from "@/components/Newsletter";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
+import CustomCursor from "@/components/CustomCursor";
 
 export default function Home() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
@@ -27,58 +23,46 @@ export default function Home() {
 
   return (
     <SmoothScroll>
-      <div className="bg-[#0b0d12] text-[#F2EEE6] font-sans selection:bg-[#e58c38] selection:text-black relative min-h-screen">
-        {/* State-aware Luxury Custom Cursor */}
-        <CustomCursor />
+      <div className="bg-[#0C0D12] text-white font-sans selection:bg-[#FFA028] selection:text-black relative min-h-screen">
+      {/* State-aware Custom Cursor */}
+      <CustomCursor />
 
-        {/* Sticky Glassmorphic Navigation */}
-        <Navbar onOpenBooking={openBooking} />
+      {/* Header & Sticky Navigation */}
+      <Navbar onOpenBooking={openBooking} />
 
-        {/* Main Experience Flow */}
-        <main>
-          {/* Approved Hero Section (LOCKED - 300 WebP Canvas Scrubbing) */}
-          <Hero onOpenBooking={openBooking} />
+      {/* Main Experience Flow matching the reference template 100% */}
+      <main>
+        {/* 1. Hero Section (Creating Great Tattoos For Over 25 Years) */}
+        <Hero onOpenBooking={openBooking} />
 
-          {/* Neoclassical Studio Sanctuary Story */}
-          <About onOpenBooking={openBooking} />
+        {/* 2. About Us Section (Perfection That Is Forever) */}
+        <About onOpenBooking={openBooking} />
 
-          {/* Interactive Expandable Services Grid */}
-          <Services onOpenBooking={openBooking} />
+        {/* 3. Our Services Section (Warm Gold Background with 6 Service Pills + Center Slider) */}
+        <Services onOpenBooking={openBooking} />
 
-          {/* GSAP ScrollTrigger Pinned Narrative Experience */}
-          <PinnedStorySection onOpenBooking={openBooking} />
+        {/* 4. Meet Our Artists Section (White Background with Torn-Edge Artist Card) */}
+        <Artists onOpenBooking={openBooking} />
 
-          {/* Editorial Asymmetric Tattoo Gallery with Lightbox */}
-          <Portfolio />
+        {/* 5. Tattoo Gallery Section (Dark Charcoal Background with 10-Item Photo Grid & Lightbox) */}
+        <Portfolio />
 
-          {/* Dedicated Clinical Piercing Sanctuary */}
-          <PiercingSanctuary onOpenBooking={openBooking} />
+        {/* 6. Our Customer Says Section (Warm Gold Background with Big Quotes & 5.0 Google Reviews) */}
+        <Testimonials />
 
-          {/* Master Resident Artists Profiles */}
-          <Artists onOpenBooking={openBooking} />
+        {/* 7. Studio & Location Section (Manorama Junction, Kottayam Map & Operating Hours) */}
+        <ContactLocation onOpenBooking={openBooking} />
 
-          {/* Clinical Hygiene & Hospital Protocols */}
-          <StudioHygiene />
+        {/* 8. Subscribe To Newsletter Section (White Background with Wings Watermark) */}
+        <Newsletter />
+      </main>
 
-          {/* 3-Step Client Journey */}
-          <Process onOpenBooking={openBooking} />
+      {/* 8. Circular Golden Emblem Footer */}
+      <Footer />
 
-          {/* Collector Reviews & Testimonials */}
-          <Testimonials />
-
-          {/* Studio Location & Map */}
-          <ContactLocation onOpenBooking={openBooking} />
-
-          {/* Cinematic Conversion CTA */}
-          <FinalCTA onOpenBooking={openBooking} />
-        </main>
-
-        {/* Interactive Masterpiece Footer */}
-        <Footer />
-
-        {/* Booking Consultation Modal Overlay */}
-        <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
-      </div>
+      {/* Booking Consultation Modal Overlay */}
+      <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
+    </div>
     </SmoothScroll>
   );
 }

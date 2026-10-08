@@ -1,400 +1,201 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Star, Sparkles, Quote, ArrowRight } from "lucide-react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { ChevronLeft, ChevronRight, Star, ExternalLink } from "lucide-react";
+import SectionFlourish from "./SectionFlourish";
+import TornPaperDivider from "./TornPaperDivider";
 
 export default function Testimonials() {
-  const pinRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const progressFillRef = useRef<HTMLDivElement>(null);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
-  // References for 3 client story content panels
-  const story0Ref = useRef<HTMLDivElement>(null);
-  const story1Ref = useRef<HTMLDivElement>(null);
-  const story2Ref = useRef<HTMLDivElement>(null);
-
-  // References for 3 visual artwork frames
-  const visual0Ref = useRef<HTMLDivElement>(null);
-  const visual1Ref = useRef<HTMLDivElement>(null);
-  const visual2Ref = useRef<HTMLDivElement>(null);
-
-  const [activeStory, setActiveStory] = useState(0);
-  const [hoveredClient, setHoveredClient] = useState<number | null>(null);
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-
-  const clientStories = [
+  const testimonials = [
     {
-      id: "01",
-      name: "Anjali Sharma",
-      location: "Kottayam",
-      role: "Hyper-Realism Sleeve Client",
-      quote: "RAHUL CREATED A REALISM SLEEVE THAT LITERALLY LEAVES PEOPLE SPEECHLESS. CLINICAL CLEANLINESS & LEGENDARY ARTWORK.",
-      desc: "Zeus Tattoo Studio is on a whole different level. The attention to anatomical muscle flow and micro-shading is unmatched across South India.",
-      rating: 5,
-      avatar: "/images/testimonial_anjali.jpg",
-      artwork: "/images/IMG_20260829_212716_292.jpg",
-      tag: "REALISM STORY • ANJALI",
+      id: 1,
+      name: "GOOGLE REVIEWER",
+      role: "Verified Google Review • 5.0 ★",
+      stars: 5,
+      quote:
+        "Very frndly service very clean and too comfy atmosphere budget frndly too♥️",
     },
     {
-      id: "02",
-      name: "Rohit Kapoor",
-      location: "Kochi",
-      role: "Fine Line Floral Client",
-      quote: "MEERA'S FINE LINE WORK IS MICRO-PRECISION PERFECTION. BREATHTAKING SINGLE-NEEDLE FLORAL COMPOSITION.",
-      desc: "She took my rough ideas and transformed them into delicate botanical art. Cleanest, most gentle studio experience I have ever had.",
-      rating: 5,
-      avatar: "/images/testimonial_rohit.jpg",
-      artwork: "/images/IMG_20260829_212719_574.jpg",
-      tag: "FINE LINE STORY • ROHIT",
+      id: 2,
+      name: "EAR PIERCING CLIENT",
+      role: "Verified Google Review • 5.0 ★",
+      stars: 5,
+      quote:
+        "Got my ear piercing done here — super clean, professional, and friendly staff.",
     },
     {
-      id: "03",
-      name: "Neha Patel",
-      location: "Bengaluru",
-      role: "Geometric Cover-Up Client",
-      quote: "THE COVER-UP WORK BY SAHANA WAS MAGIC. MY FADED TATTOO IS GONE, REPLACED BY A GEOMETRIC MANDALA MASTERPIECE.",
-      desc: "Mind-blowing stipple detail and total visual concealment. Truly a world-class neoclassical body art sanctuary.",
-      rating: 5,
-      avatar: "/images/testimonial_neha.jpg",
-      artwork: "/images/IMG_20260829_212734_480.jpg",
-      tag: "COVER-UP STORY • NEHA",
+      id: 3,
+      name: "HAPPY CLIENT",
+      role: "Verified Google Review • 5.0 ★",
+      stars: 5,
+      quote:
+        "Good work good quality great ambience and mainly GOOD people's",
+    },
+    {
+      id: 4,
+      name: "TATTOO COLLECTOR",
+      role: "Verified Google Review • 5.0 ★",
+      stars: 5,
+      quote:
+        "Zeus Tattoo Studio Kottayam is on an entirely different level. The attention to detail, fine-line precision, and clean atmosphere make it the best studio in Kottayam.",
     },
   ];
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    setCursorPos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+  const current = testimonials[currentTestimonial];
+
+  const handleNext = () => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
   };
 
-  useEffect(() => {
-    const pinEl = pinRef.current;
-    const containerEl = containerRef.current;
-    if (!pinEl || !containerEl) return;
+  const handlePrev = () => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: pinEl,
-          start: "top top",
-          end: "+=260%",
-          pin: true,
-          scrub: 1.2,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            const prog = self.progress;
-            if (progressFillRef.current) {
-              progressFillRef.current.style.width = `${prog * 100}%`;
-            }
-            const current = Math.min(2, Math.floor(prog * 3));
-            setActiveStory(current);
-          },
-        },
-      });
-
-      // 1. Entrance Heading
-      tl.to(headingRef.current, { y: -10, duration: 0.5 });
-
-      // 2. Story 01 -> Story 02 Transition
-      tl.to(story0Ref.current, { opacity: 0, y: -30, duration: 1 })
-        .to(visual0Ref.current, { opacity: 0, scale: 0.9, rotate: -2, duration: 1 }, "<")
-        .fromTo(story1Ref.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1 }, "<+=0.3")
-        .fromTo(
-          visual1Ref.current,
-          { opacity: 0, scale: 1.1, clipPath: "inset(100% 0% 0% 0%)" },
-          { opacity: 1, scale: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power2.out" },
-          "<"
-        );
-
-      // 3. Story 02 -> Story 03 Transition
-      tl.to(story1Ref.current, { opacity: 0, y: -30, duration: 1 })
-        .to(visual1Ref.current, { opacity: 0, scale: 0.9, duration: 1 }, "<")
-        .fromTo(story2Ref.current, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 1.2 }, "<+=0.3")
-        .fromTo(
-          visual2Ref.current,
-          { opacity: 0, scale: 1.2, rotate: 3 },
-          { opacity: 1, scale: 1, rotate: 0, duration: 1.2, ease: "power2.out" },
-          "<"
-        );
-
-    }, containerEl);
-
-    return () => ctx.revert();
-  }, []);
+  const googleReviewsUrl = "https://www.google.com/search?q=Zeus+Tattoo+Kottayam";
 
   return (
-    <div
-      ref={containerRef}
-      id="testimonials"
-      onMouseMove={handleMouseMove}
-      className="relative bg-[#0b0d12] text-white overflow-hidden"
-    >
-      {/* Dynamic Cursor-Following Client Avatar Preview (Desktop Only) */}
-      <AnimatePresence>
-        {hoveredClient !== null && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{
-              opacity: 1,
-              scale: 1,
-              x: cursorPos.x + 25,
-              y: cursorPos.y - 80,
-            }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ type: "spring", stiffness: 260, damping: 24 }}
-            className="pointer-events-none absolute top-0 left-0 z-40 hidden lg:flex items-center gap-3 bg-[#121620]/95 backdrop-blur-md border border-[#e58c38] px-4 py-2.5 rounded-full shadow-[0_0_30px_rgba(229,140,56,0.3)]"
+    <section id="testimonials" className="relative bg-[#FFA028] text-[#0C0D12] pt-12 pb-24 md:pb-36 overflow-hidden">
+      <div className="max-w-4xl mx-auto px-6 md:px-12 relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-8">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-wider text-[#0C0D12] uppercase"
           >
-            <img
-              src={clientStories[hoveredClient].avatar}
-              alt={clientStories[hoveredClient].name}
-              className="w-8 h-8 rounded-full object-cover border border-[#e58c38]"
-            />
-            <div className="flex flex-col">
-              <span className="text-xs font-bold text-white font-sans uppercase">
-                {clientStories[hoveredClient].name}
-              </span>
-              <span className="text-[9px] font-sans text-[#e58c38] font-semibold uppercase">
-                {clientStories[hoveredClient].location}
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Pinned Viewport Container */}
-      <div ref={pinRef} className="h-screen w-full flex flex-col justify-between py-12 px-6 md:px-12 relative overflow-hidden border-b border-white/5">
-
-        {/* Glow backdrop */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-[#e58c38]/10 rounded-full blur-[150px] pointer-events-none" />
-
-        {/* Top Header Bar & Progress Counter */}
-        <div className="max-w-7xl mx-auto w-full flex items-center justify-between z-20">
-          <div ref={headingRef} className="flex flex-col">
-            <span className="font-sans text-[10px] sm:text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase flex items-center gap-2 mb-1">
-              <Sparkles size={12} />
-              REAL PEOPLE • REAL STORIES • REAL INK
-            </span>
-            <h2 className="font-sans text-2xl sm:text-4xl font-extrabold uppercase tracking-wide text-white">
-              WHAT OUR CLIENTS SAY
-            </h2>
-          </div>
-
-          {/* Progress Counter */}
-          <div className="flex flex-col items-end">
-            <div className="flex items-center gap-2 mb-2 font-sans font-extrabold text-sm sm:text-base tracking-widest text-[#e58c38]">
-              <span>0{activeStory + 1}</span>
-              <span className="text-gray-500">/</span>
-              <span className="text-gray-400">03</span>
-            </div>
-
-            <div className="w-36 sm:w-48 h-1.5 bg-white/10 rounded-full overflow-hidden border border-white/10">
-              <div
-                ref={progressFillRef}
-                style={{ width: `${(activeStory + 1) * 33.3}%` }}
-                className="h-full bg-gradient-to-r from-[#e58c38] to-[#d97706] rounded-full transition-all duration-300 shadow-[0_0_10px_#e58c38]"
-              />
-            </div>
-          </div>
+            OUR CUSTOMER SAYS
+          </motion.h2>
+          <SectionFlourish color="#0C0D12" />
         </div>
 
-        {/* Center Canvas Layout: Left Oversized Quote Typography / Right Tattoo Artwork Frame */}
-        <div className="max-w-7xl mx-auto w-full my-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center relative z-20">
-
-          {/* Left Stack: 3 Client Quote Panels */}
-          <div className="lg:col-span-7 relative h-[320px] sm:h-[360px] w-full flex items-center">
-
-            {/* Story 01 Quote */}
-            <div ref={story0Ref} className="absolute inset-0 flex flex-col justify-center items-start">
-              <div className="flex items-center gap-2 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={15} className="fill-[#e58c38] stroke-none" />
-                ))}
-                <span className="text-[10px] tracking-[0.25em] font-sans text-gray-400 uppercase font-bold ml-2">
-                  VERIFIED CLIENT REVIEWS
-                </span>
-              </div>
-
-              <blockquote className="font-sans text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase leading-snug mb-6">
-                "{clientStories[0].quote}"
-              </blockquote>
-
-              <p className="text-xs sm:text-sm text-gray-300 font-sans leading-relaxed tracking-wide mb-6 max-w-xl">
-                {clientStories[0].desc}
-              </p>
-
-              <div className="flex items-center gap-4 border-t border-white/10 pt-4 w-full">
-                <img
-                  src={clientStories[0].avatar}
-                  alt={clientStories[0].name}
-                  className="w-11 h-11 rounded-full object-cover border border-[#e58c38]"
-                />
-                <div className="flex flex-col">
-                  <span className="font-sans text-sm font-extrabold text-white uppercase tracking-wider">
-                    {clientStories[0].name}
-                  </span>
-                  <span className="text-[10px] tracking-widest text-[#e58c38] font-sans uppercase font-bold">
-                    {clientStories[0].role} • {clientStories[0].location}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Story 02 Quote */}
-            <div ref={story1Ref} className="absolute inset-0 flex flex-col justify-center items-start opacity-0">
-              <div className="flex items-center gap-2 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={15} className="fill-[#e58c38] stroke-none" />
-                ))}
-                <span className="text-[10px] tracking-[0.25em] font-sans text-gray-400 uppercase font-bold ml-2">
-                  VERIFIED CLIENT REVIEWS
-                </span>
-              </div>
-
-              <blockquote className="font-sans text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase leading-snug mb-6">
-                "{clientStories[1].quote}"
-              </blockquote>
-
-              <p className="text-xs sm:text-sm text-gray-300 font-sans leading-relaxed tracking-wide mb-6 max-w-xl">
-                {clientStories[1].desc}
-              </p>
-
-              <div className="flex items-center gap-4 border-t border-white/10 pt-4 w-full">
-                <img
-                  src={clientStories[1].avatar}
-                  alt={clientStories[1].name}
-                  className="w-11 h-11 rounded-full object-cover border border-[#e58c38]"
-                />
-                <div className="flex flex-col">
-                  <span className="font-sans text-sm font-extrabold text-white uppercase tracking-wider">
-                    {clientStories[1].name}
-                  </span>
-                  <span className="text-[10px] tracking-widest text-[#e58c38] font-sans uppercase font-bold">
-                    {clientStories[1].role} • {clientStories[1].location}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Story 03 Quote */}
-            <div ref={story2Ref} className="absolute inset-0 flex flex-col justify-center items-start opacity-0">
-              <div className="flex items-center gap-2 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} size={15} className="fill-[#e58c38] stroke-none" />
-                ))}
-                <span className="text-[10px] tracking-[0.25em] font-sans text-gray-400 uppercase font-bold ml-2">
-                  VERIFIED CLIENT REVIEWS
-                </span>
-              </div>
-
-              <blockquote className="font-sans text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase leading-snug mb-6">
-                "{clientStories[2].quote}"
-              </blockquote>
-
-              <p className="text-xs sm:text-sm text-gray-300 font-sans leading-relaxed tracking-wide mb-6 max-w-xl">
-                {clientStories[2].desc}
-              </p>
-
-              <div className="flex items-center gap-4 border-t border-white/10 pt-4 w-full">
-                <img
-                  src={clientStories[2].avatar}
-                  alt={clientStories[2].name}
-                  className="w-11 h-11 rounded-full object-cover border border-[#e58c38]"
-                />
-                <div className="flex flex-col">
-                  <span className="font-sans text-sm font-extrabold text-white uppercase tracking-wider">
-                    {clientStories[2].name}
-                  </span>
-                  <span className="text-[10px] tracking-widest text-[#e58c38] font-sans uppercase font-bold">
-                    {clientStories[2].role} • {clientStories[2].location}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Right Stack: 3 Visual Artwork Frames */}
-          <div className="lg:col-span-5 relative h-[280px] sm:h-[380px] lg:h-[420px] w-full flex items-center justify-center">
-
-            {/* Visual 01 */}
-            <div
-              ref={visual0Ref}
-              className="absolute inset-0 rounded-2xl overflow-hidden border-2 border-[#e58c38] bg-[#121620] shadow-[0_0_45px_rgba(229,140,56,0.3)]"
-            >
-              <img src={clientStories[0].artwork} alt={clientStories[0].name} className="w-full h-full object-cover grayscale brightness-90" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12]/90 via-transparent to-transparent" />
-              <span className="absolute bottom-4 left-4 text-[10px] tracking-[0.25em] text-[#e58c38] font-sans uppercase font-extrabold bg-[#0b0d12]/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#e58c38]/40">
-                {clientStories[0].tag}
-              </span>
-            </div>
-
-            {/* Visual 02 */}
-            <div
-              ref={visual1Ref}
-              className="absolute inset-0 rounded-2xl overflow-hidden border-2 border-[#e58c38] bg-[#121620] shadow-[0_0_45px_rgba(229,140,56,0.3)] opacity-0"
-            >
-              <img src={clientStories[1].artwork} alt={clientStories[1].name} className="w-full h-full object-cover grayscale brightness-90" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12]/90 via-transparent to-transparent" />
-              <span className="absolute bottom-4 left-4 text-[10px] tracking-[0.25em] text-[#e58c38] font-sans uppercase font-extrabold bg-[#0b0d12]/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#e58c38]/40">
-                {clientStories[1].tag}
-              </span>
-            </div>
-
-            {/* Visual 03 */}
-            <div
-              ref={visual2Ref}
-              className="absolute inset-0 rounded-2xl overflow-hidden border-2 border-[#e58c38] bg-[#121620] shadow-[0_0_45px_rgba(229,140,56,0.3)] opacity-0"
-            >
-              <img src={clientStories[2].artwork} alt={clientStories[2].name} className="w-full h-full object-cover grayscale brightness-90" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0b0d12]/90 via-transparent to-transparent" />
-              <span className="absolute bottom-4 left-4 text-[10px] tracking-[0.25em] text-[#e58c38] font-sans uppercase font-extrabold bg-[#0b0d12]/90 backdrop-blur-md px-3 py-1 rounded-full border border-[#e58c38]/40">
-                {clientStories[2].tag}
-              </span>
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* Bottom Bar: Interactive Client Story Selector Pills */}
-        <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-6 z-20 border-t border-white/10 pt-6">
-          <div className="flex flex-wrap items-center gap-3">
-            {clientStories.map((story, idx) => (
-              <button
-                key={story.id}
-                onMouseEnter={() => setHoveredClient(idx)}
-                onMouseLeave={() => setHoveredClient(null)}
-                className={`px-4 py-2 rounded-full text-[10px] font-sans font-extrabold tracking-widest uppercase transition-all duration-300 flex items-center gap-2 cursor-pointer border ${activeStory === idx
-                  ? "bg-[#e58c38] text-black border-[#e58c38] shadow-[0_0_15px_#e58c38]"
-                  : "bg-[#121620] text-gray-300 border-white/10 hover:border-[#e58c38]/40 hover:text-white"
-                  }`}
-              >
-                <span>{story.id}</span>
-                <span>{story.name}</span>
-              </button>
-            ))}
-          </div>
-
+        {/* Google Reviews Trust Badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-10 text-center"
+        >
           <a
-            href="#contact"
-            className="group px-7 py-3 bg-gradient-to-r from-[#e58c38] to-[#d97706] hover:from-[#f39c12] hover:to-[#e67e22] text-black font-sans text-xs font-extrabold tracking-widest uppercase rounded-full transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-[0_0_20px_rgba(229,140,56,0.35)]"
+            href={googleReviewsUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-3 bg-[#0C0D12] text-white px-5 py-2 rounded-full hover:bg-black transition-all shadow-md group"
           >
-            BECOME OUR NEXT STORY
+            <div className="flex items-center gap-1 text-[#FFA028]">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={14} className="fill-[#FFA028] text-[#FFA028]" />
+              ))}
+            </div>
+            <span className="font-display text-xs font-bold tracking-wider uppercase">
+              5.0 RATING • 210 GOOGLE REVIEWS
+            </span>
+            <ExternalLink size={12} className="text-[#FFA028] group-hover:translate-x-0.5 transition-transform" />
           </a>
+        </motion.div>
+
+        {/* Testimonial Quote Box with Big Decorative Quotation Marks */}
+        <div className="relative py-6 px-4 sm:px-12 flex flex-col items-center text-center">
+          {/* Top Left Quote Mark */}
+          <span className="absolute -top-4 left-0 sm:left-4 font-serif text-6xl sm:text-8xl text-[#0C0D12]/20 select-none leading-none">
+            “
+          </span>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center"
+            >
+              {/* Star Rating for individual review */}
+              <div className="flex items-center gap-1 mb-4 text-[#0C0D12]">
+                {[...Array(current.stars)].map((_, i) => (
+                  <Star key={i} size={16} className="fill-[#0C0D12] text-[#0C0D12]" />
+                ))}
+              </div>
+
+              <p className="text-[#0C0D12] font-sans text-base sm:text-lg md:text-xl leading-relaxed font-semibold max-w-2xl mb-8 italic">
+                {current.quote}
+              </p>
+
+              <h4 className="font-display text-lg sm:text-xl font-bold tracking-wider text-[#0C0D12] uppercase">
+                {current.name}
+              </h4>
+              <span className="text-xs text-[#0C0D12]/75 font-sans uppercase font-bold tracking-widest mt-1">
+                {current.role}
+              </span>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Bottom Right Quote Mark */}
+          <span className="absolute -bottom-6 right-0 sm:right-4 font-serif text-6xl sm:text-8xl text-[#0C0D12]/20 select-none leading-none">
+            ”
+          </span>
         </div>
 
+        {/* Testimonial Carousel Controls & External Google Link */}
+        <div className="flex flex-col items-center gap-6 mt-8">
+          <div className="flex items-center justify-center gap-4">
+            <button
+              onClick={handlePrev}
+              aria-label="Previous Review"
+              className="w-9 h-9 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] rounded-full flex items-center justify-center transition-colors cursor-pointer shadow"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <div className="flex gap-2">
+              {testimonials.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentTestimonial(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`h-2 rounded-full transition-all ${
+                    currentTestimonial === idx ? "w-8 bg-[#0C0D12]" : "w-2 bg-[#0C0D12]/30"
+                  }`}
+                />
+              ))}
+            </div>
+            <button
+              onClick={handleNext}
+              aria-label="Next Review"
+              className="w-9 h-9 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] rounded-full flex items-center justify-center transition-colors cursor-pointer shadow"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <a
+              href={googleReviewsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="px-6 py-2.5 bg-[#0C0D12] text-white hover:bg-black font-display text-xs font-bold tracking-widest uppercase rounded shadow transition-all flex items-center gap-2"
+            >
+              VIEW ALL 210+ GOOGLE REVIEWS
+              <ExternalLink size={13} />
+            </a>
+            <a
+              href={googleReviewsUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="px-6 py-2.5 border-2 border-[#0C0D12] text-[#0C0D12] hover:bg-[#0C0D12] hover:text-white font-display text-xs font-bold tracking-widest uppercase rounded transition-all"
+            >
+              WRITE A REVIEW
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* Torn Paper Edge at the Bottom transitioning to Dark ContactLocation section */}
+      <div className="absolute bottom-0 left-0 right-0 w-full z-20">
+        <TornPaperDivider fill="#0b0d12" position="bottom" variant={3} />
+      </div>
+    </section>
   );
 }

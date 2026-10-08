@@ -1,7 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight } from "lucide-react";
+import SectionFlourish from "./SectionFlourish";
+import TornPaperDivider from "./TornPaperDivider";
+import TornPhotoCollage from "./TornPhotoCollage";
 
 interface AboutProps {
   onOpenBooking?: () => void;
@@ -9,115 +11,110 @@ interface AboutProps {
 
 export default function About({ onOpenBooking }: AboutProps) {
   return (
-    <section id="about" className="relative bg-[#0b0d12] py-24 md:py-36 overflow-hidden border-b border-white/5 text-white">
-      {/* Background Ambient Glow */}
-      <div className="absolute top-1/3 left-10 w-96 h-96 bg-[#e58c38]/5 rounded-full blur-[130px] pointer-events-none" />
-
+    <section id="about" className="relative bg-white text-[#0C0D12] pt-12 pb-24 md:pb-36 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        
+        {/* Section Title */}
+        <div className="text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-wider text-[#0C0D12] uppercase"
+          >
+            ABOUT US
+          </motion.h2>
+          <SectionFlourish color="#FFA028" />
+        </div>
 
-          {/* Left Frame */}
+        {/* 2-Column Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          
+          {/* Left Column: Torn-paper Collage of Photos */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
-            className="lg:col-span-5 relative flex justify-center"
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-6 relative flex flex-col items-center"
           >
-            <div className="relative w-full max-w-md aspect-[3/4] rounded-2xl overflow-hidden border border-[#e58c38]/30 bg-[#121620] shadow-[0_0_40px_rgba(229,140,56,0.15)] group">
-              <img
-                src="/images/about_story.jpg"
-                alt="Zeus Tattoo Master Artist Tattooing Client"
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 grayscale brightness-90 group-hover:grayscale-0"
-                loading="lazy"
-              />
-
-              {/* Bottom Badge */}
-              <div className="absolute bottom-5 right-5 z-10 bg-[#0b0d12]/90 backdrop-blur-md border border-[#e58c38]/40 rounded-xl p-4 flex flex-col items-center justify-center shadow-xl">
-                <span className="font-sans text-3xl font-extrabold text-[#e58c38] tracking-tight leading-none">
-                  10+
-                </span>
-                <span className="text-[9px] tracking-[0.2em] text-gray-300 font-sans uppercase font-extrabold mt-1">
-                  YEARS CRAFTING
-                </span>
-              </div>
-            </div>
+            <TornPhotoCollage
+              topImage="/images/about_story.jpg"
+              bottomImage="/images/about_workspace.jpg"
+            />
           </motion.div>
 
-          {/* Right Narrative Column */}
+          {/* Right Column: Heading, Narrative & CTA */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, ease: [0.25, 1, 0.5, 1] }}
-            className="lg:col-span-7 flex flex-col items-start"
+            transition={{ duration: 0.8 }}
+            className="lg:col-span-6 flex flex-col items-start"
           >
-            <span className="font-sans text-xs font-semibold tracking-[0.45em] text-[#e58c38] uppercase mb-3 flex items-center gap-2">
-              <Sparkles size={13} />
-              THE SANCTUARY
-            </span>
-
-            <div className="relative mb-6">
-              <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-wider text-white uppercase">
-                OUR STORY & CRAFT
-              </h2>
-              <div className="w-16 h-[3px] bg-gradient-to-r from-[#e58c38] to-[#d97706] mt-3 rounded-full shadow-[0_0_10px_#e58c38]" />
+            <div className="flex items-center gap-2 px-3 py-1 bg-[#FFA028]/15 border border-[#FFA028]/40 rounded-full mb-4">
+              <span className="text-[#0C0D12] text-xs font-bold font-sans uppercase tracking-wider flex items-center gap-1.5">
+                ★ 5.0 RATED ON GOOGLE (210+ REVIEWS)
+              </span>
             </div>
 
-            <p className="text-gray-200 font-sans text-sm md:text-base leading-relaxed tracking-wide mb-5">
-              Founded by master illustrator Rahul "Zeus" Sharma, Zeus Tattoo Studio is a neoclassical body art sanctuary in Koramangala, Bangalore, dedicated to permanent collectibles and bespoke custom skin art.
+            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#0C0D12] uppercase leading-tight mb-6">
+              PERFECTION THAT IS FOREVER
+            </h3>
+
+            <p className="text-gray-800 font-sans text-sm sm:text-base leading-relaxed mb-4">
+              At <strong className="text-[#0C0D12]">Zeus Tattoo Studio Kottayam</strong>, we transform your ideas into art that lasts a lifetime. Our skilled tattoo artists and professional piercers specialize in custom tattoos, fine line work, minimalist designs, and all types of piercings — nose, helix, bugadi, and ear.
             </p>
 
-            <p className="text-gray-400 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-5">
-              We believe body articulation is more than a service—it is a spiritual integration of geometry, myth, and anatomy. Each custom design is chiseled specifically to fit your posture and skeletal flow.
+            <p className="text-gray-600 font-sans text-xs sm:text-sm leading-relaxed mb-6">
+              Known as one of the best tattoo studios in Kottayam, we maintain the highest hygiene standards, use premium inks, and ensure a comfortable, safe, and creative experience. Whether you’re getting your first tattoo or a new piercing, Zeus Tattoo is your trusted space for self-expression and precision artistry.
             </p>
 
-            <p className="text-gray-400 font-sans text-xs md:text-sm leading-relaxed tracking-wide mb-10">
-              Operating under strict clinical guidelines, our studio maintains a sterile environment that exceeds hospital standards. Whether collecting a large neotraditional sleeve or curating an anatomical ear piercing, our sanctuary makes your journey unforgettable.
-            </p>
-
-            {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-6 sm:gap-10 border-t border-white/10 pt-8 mb-10 w-full">
-              <div className="flex flex-col">
-                <span className="font-sans text-3xl md:text-4xl font-extrabold text-[#e58c38] tracking-tight">
-                  100%
-                </span>
-                <span className="text-[10px] tracking-[0.2em] text-gray-400 font-sans uppercase font-bold mt-1">
-                  AUTOCLAVE STERILE
-                </span>
+            {/* Feature Highlights */}
+            <div className="grid grid-cols-2 gap-3 mb-8 w-full">
+              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">CUSTOM TATTOOS</span>
+                <span className="text-[11px] text-gray-500 font-sans">Fine line, minimalist & realism</span>
               </div>
-
-              <div className="flex flex-col">
-                <span className="font-sans text-3xl md:text-4xl font-extrabold text-[#e58c38] tracking-tight">
-                  5k+
-                </span>
-                <span className="text-[10px] tracking-[0.2em] text-gray-400 font-sans uppercase font-bold mt-1">
-                  SKINS ILLUSTRATED
-                </span>
+              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">EXPERT PIERCINGS</span>
+                <span className="text-[11px] text-gray-500 font-sans">Nose, helix, bugadi & ear</span>
               </div>
-
-              <div className="flex flex-col">
-                <span className="font-sans text-3xl md:text-4xl font-extrabold text-[#e58c38] tracking-tight">
-                  15+
-                </span>
-                <span className="text-[10px] tracking-[0.2em] text-gray-400 font-sans uppercase font-bold mt-1">
-                  DESIGN AWARDS
-                </span>
+              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">HOSPITAL HYGIENE</span>
+                <span className="text-[11px] text-gray-500 font-sans">100% sterile single-use gear</span>
+              </div>
+              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">KOTTAYAM LOCATION</span>
+                <span className="text-[11px] text-gray-500 font-sans">Manorama Junction, 2nd Flr</span>
               </div>
             </div>
 
-            {/* CTA Button */}
-            <button
-              onClick={onOpenBooking}
-              className="group px-8 py-4 bg-gradient-to-r from-[#e58c38] to-[#d97706] hover:from-[#f39c12] hover:to-[#e67e22] text-black font-sans text-xs font-extrabold tracking-widest uppercase rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(229,140,56,0.35)] hover:shadow-[0_0_30px_rgba(229,140,56,0.6)] cursor-pointer flex items-center gap-2"
-            >
-              REQUEST CONSULTATION
-              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center gap-4 w-full border-t border-gray-200 pt-6">
+              <button
+                onClick={onOpenBooking}
+                className="px-8 py-3.5 bg-[#0C0D12] hover:bg-[#FFA028] text-white hover:text-[#0C0D12] font-display text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer rounded"
+              >
+                DISCOVER MORE
+              </button>
+              <a
+                href="https://zeustattoo.in/"
+                target="_blank"
+                rel="noreferrer"
+                className="px-6 py-3.5 border border-gray-300 hover:border-[#0C0D12] text-gray-700 hover:text-[#0C0D12] font-display text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 rounded"
+              >
+                OFFICIAL WEBSITE
+              </a>
+            </div>
 
           </motion.div>
-
         </div>
+      </div>
+
+      {/* Torn Paper Edge at the Bottom transitioning to Orange Services Section */}
+      <div className="absolute bottom-0 left-0 right-0 w-full z-20">
+        <TornPaperDivider fill="#FFA028" position="bottom" variant={2} />
       </div>
     </section>
   );
