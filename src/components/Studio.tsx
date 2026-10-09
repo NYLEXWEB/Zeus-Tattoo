@@ -14,7 +14,25 @@ export default function Studio() {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [isInView, setIsInView] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Viewport observer
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { rootMargin: "100px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const startAutoPlay = () => {
     stopAutoPlay();
@@ -31,26 +49,30 @@ export default function Studio() {
   };
 
   useEffect(() => {
-    startAutoPlay();
+    if (isInView && !isHovered) {
+      startAutoPlay();
+    } else {
+      stopAutoPlay();
+    }
     return () => stopAutoPlay();
-  }, []);
+  }, [isInView, isHovered]);
 
   const handlePrev = () => {
     stopAutoPlay();
     setCurrentIndex(
       (prev) => (prev - 1 + studioImages.length) % studioImages.length
     );
-    startAutoPlay();
+    if (isInView && !isHovered) startAutoPlay();
   };
 
   const handleNext = () => {
     stopAutoPlay();
     setCurrentIndex((prev) => (prev + 1) % studioImages.length);
-    startAutoPlay();
+    if (isInView && !isHovered) startAutoPlay();
   };
 
   return (
-    <section id="studio" className="studio-section">
+    <section id="studio" ref={sectionRef} className="studio-section">
       <div className="container">
         <div className="studio-grid">
           <div className="studio-info">
