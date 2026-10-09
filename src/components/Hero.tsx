@@ -523,41 +523,40 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           }
         }
 
-        /* MOBILE STATIC MODE: Original Static Hero with Original Background Image */
-        .mobile-static-mode {
-          position: relative;
-          height: 100vh;
-          height: 100dvh;
-          min-height: 560px;
-          background-color: #07090e;
-          background-image: linear-gradient(
-              180deg,
-              rgba(7, 9, 14, 0.88) 0%,
-              rgba(7, 9, 14, 0.94) 100%
-            ),
-            url(/assets/hero-bg.jpg);
-          background-position: center right;
-          background-repeat: no-repeat;
-          background-size: cover;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding-top: 80px;
-          padding-bottom: 30px;
-          overflow: hidden;
+        /* MOBILE SCROLL MODE: Portrait Video & Cinematic Layout */
+        .mobile-scroll-mode .hero-vignette {
+          background: linear-gradient(
+            180deg,
+            rgba(7, 9, 14, 0.88) 0%,
+            rgba(7, 9, 14, 0.45) 25%,
+            rgba(7, 9, 14, 0.40) 70%,
+            rgba(7, 9, 14, 0.92) 100%
+          ),
+          radial-gradient(
+            ellipse at center,
+            rgba(7, 9, 14, 0.15) 0%,
+            rgba(7, 9, 14, 0.65) 100%
+          );
         }
 
-        .hero-mobile-static-wrapper {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        .mobile-scroll-mode .hero-ambient-glow {
+          width: 320px;
+          height: 320px;
+          top: 15%;
+          left: 50%;
+          transform: translateX(-50%);
+          opacity: 0.18;
+        }
+
+        .mobile-scroll-mode .scroll-indicator-container {
+          bottom: 1.25rem;
         }
 
         .hero-mobile-container {
           text-align: center;
-          padding: 0 1.5rem;
-          max-width: 600px;
+          padding: 0 1.25rem;
+          max-width: 580px;
+          margin: 0 auto;
         }
 
         .hero-mobile-container .hero-badge {
@@ -568,37 +567,41 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         .hero-mobile-container .hero-description {
           margin-left: auto;
           margin-right: auto;
-          font-size: 0.88rem;
-          margin-bottom: 1.4rem;
+          font-size: clamp(0.82rem, 2.5vw, 0.92rem);
+          line-height: 1.5;
+          margin-bottom: 1.2rem;
+          color: #cbd5e1;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
         }
 
         .hero-mobile-container .hero-title {
-          font-size: clamp(2rem, 6.5vw, 2.6rem);
-          margin-bottom: 0.85rem;
+          font-size: clamp(1.85rem, 6.2vw, 2.45rem);
+          margin-bottom: 0.75rem;
         }
 
         .hero-mobile-container .hero-actions {
           justify-content: center;
-          margin-bottom: 1.6rem;
-          gap: 0.8rem;
+          margin-bottom: 1.4rem;
+          gap: 0.75rem;
         }
 
         .hero-mobile-container .hero-stats {
           justify-content: center;
-          gap: 1.2rem;
+          gap: 1.1rem;
         }
 
         .hero-mobile-container .stat-number {
-          font-size: 1.45rem;
+          font-size: 1.35rem;
         }
 
         .hero-mobile-container .stat-label {
-          font-size: 0.65rem;
+          font-size: 0.62rem;
         }
 
         /* Accessibility: Respect Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
-          .desktop-scroll-mode {
+          .desktop-scroll-mode,
+          .mobile-scroll-mode {
             height: 100vh;
           }
           .scroll-indicator-container {
