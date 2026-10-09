@@ -11,10 +11,10 @@ export const residentArtists: ArtistItemData[] = [
   {
     id: "artist-1",
     image: "/images/artist_arjun.jpg",
-    name: "ETHAN BLAKE",
+    name: "ARYAN 'ZEUS'",
     role: "FOUNDER & MASTER ARTIST",
-    styles: "Realism • High-Contrast Portraiture • Mythology",
-    experience: "12+ Years Experience • 15 Design Awards",
+    styles: "Realism • Mythology • Neoclassical Art",
+    experience: "10+ Years Experience • Master Illustrator",
     description:
       "Internationally acclaimed realism specialist dedicated to rendering high-contrast portraiture, mythical iconography, and anatomically precise wildlife imagery chiseled with clinical precision.",
   },

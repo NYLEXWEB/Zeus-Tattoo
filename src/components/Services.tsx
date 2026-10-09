@@ -11,130 +11,48 @@ const servicesData = [
     id: 1,
     title: "Bespoke Tattoos",
     subtitle: "Custom & Flash Artistry",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-      </svg>
-    ),
     description:
-      "From micro-realism to large mythological backpieces, our resident artists compose digital mockups of custom designs, chiseled to fit your anatomy.",
-    duration: "Depends on design complexity",
-    bullets: [
-      "100% sterile, single-use needle setups",
-      "Neotraditional, Realism & Fine-line Art",
-      "Complimentary touch-ups for 30 days",
-      "Medical-grade protective healing wraps",
-    ],
+      "High-contrast realism, sacred geometry, and mythological compositions chiseled with single-use sterile precision.",
+    tags: ["Realism & Fine-Line", "Custom Anatomy Fit", "Single-Use Sterile"],
     image: "/assets/tattoo-ganesha.jpg",
   },
   {
     id: 2,
     title: "Clinical Piercings",
     subtitle: "Precision Body Articulation",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <circle cx="12" cy="12" r="4" />
-        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-      </svg>
-    ),
     description:
-      "Expertly curated ear, facial, and body placement using hospital-grade sterilization, autoclave checks, and premium titanium and gold hardware.",
-    duration: "15 - 30 minutes",
-    bullets: [
-      "Implant-grade ASTM F-136 Titanium",
-      "Autoclave sterile-indicator pouches",
-      "No piercing guns—needle-only precision",
-      "Detailed custom anatomical curations",
-    ],
+      "Precision anatomical ear, facial, and body articulation utilizing implant-grade ASTM F-136 Titanium.",
+    tags: ["Implant-Grade Titanium", "Needle-Only Precision", "Autoclave Sterilized"],
     image: "/assets/piercing-2.jpg",
   },
   {
     id: 3,
     title: "Microblading",
     subtitle: "Semi-Permanent Brow Artistry",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M12 20h9" />
-        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-      </svg>
-    ),
     description:
-      "Transform your brows with hyper-realistic, individual strokes mimicking natural hair growth or smooth ombre powder shading.",
-    duration: "2 - 3 hours",
-    bullets: [
-      "Anatomy-based brow measurements",
-      "Hypoallergenic organic pigment ranges",
-      "Initial shaping consultation included",
-      "Includes follow-up check in 6 weeks",
-    ],
+      "Hyper-realistic individual hair strokes and soft ombre shading tailored to your natural brow anatomy.",
+    tags: ["Natural Hair Strokes", "Organic Pigments", "Custom Facial Mapping"],
     image: "/assets/service-microblading.jpg",
   },
   {
     id: 4,
     title: "Lip Pigmentation",
     subtitle: "Blush & Color Correction",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z" />
-        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-      </svg>
-    ),
     description:
-      "Enhance your natural lip shape and color with permanent lip blushing, defining borders, correcting symmetry, and adding a lasting, healthy tint.",
-    duration: "2 - 2.5 hours",
-    bullets: [
-      "Custom shade-matching pigment tests",
-      "Symmetry mapping & correction mapping",
-      "Hypoallergenic, organic lip pigments",
-      "Quick healing process (~5 days)",
-    ],
+      "Semi-permanent lip blushing and border symmetry definition crafted with hypoallergenic mineral pigments.",
+    tags: ["Custom Shade Matching", "Natural Lip Blush", "Hypoallergenic Minerals"],
     image: "/assets/service-lip.jpg",
   },
 ];
 
 export default function Services({ onOpenBooking }: ServicesProps) {
   const [activePanel, setActivePanel] = useState(1);
+
+  const handlePanelHover = (id: number) => {
+    if (activePanel !== id) {
+      setActivePanel(id);
+    }
+  };
 
   const handleBookingClick = (e: React.MouseEvent) => {
     if (onOpenBooking) {
@@ -156,8 +74,8 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             return (
               <div
                 key={item.id}
-                onMouseEnter={() => setActivePanel(item.id)}
-                onClick={() => setActivePanel(item.id)}
+                onMouseEnter={() => handlePanelHover(item.id)}
+                onClick={() => handlePanelHover(item.id)}
                 className={`service-panel ${isExpanded ? "expanded" : ""}`}
               >
                 <div
@@ -177,35 +95,13 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                     </span>
                     <h3 className="panel-title-expanded">{item.title}</h3>
                     <p className="panel-desc">{item.description}</p>
-                    <div className="panel-duration">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        style={{
-                          color: "var(--accent-peach)",
-                          marginRight: "0.5rem",
-                        }}
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12 6 12 12 16 14" />
-                      </svg>
-                      <span>Estimated Duration: {item.duration}</span>
-                    </div>
-                    <ul className="panel-bullets-list">
-                      {item.bullets.map((bullet, idx) => (
-                        <li key={idx} className="panel-bullet-item">
-                          <span className="panel-bullet-dot" />
-                          <span>{bullet}</span>
-                        </li>
+                    <div className="panel-tags">
+                      {item.tags.map((tag, idx) => (
+                        <span key={idx} className="panel-tag-chip">
+                          {tag}
+                        </span>
                       ))}
-                    </ul>
+                    </div>
                     <div className="panel-action">
                       <a
                         href="#booking"
@@ -249,56 +145,63 @@ export default function Services({ onOpenBooking }: ServicesProps) {
         }
         .service-panel {
           cursor: pointer;
-          will-change: flex-grow;
           border: 1px solid #ffa8520d;
           border-radius: 20px;
           flex-direction: column;
           width: 100%;
-          transition: flex-grow 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-            border-color 0.4s, box-shadow 0.4s;
           display: flex;
           position: relative;
           overflow: hidden;
+          transition: border-color 0.35s ease, box-shadow 0.4s ease;
+          transform: translateZ(0);
+          backface-visibility: hidden;
         }
         @media (min-width: 992px) {
           .service-panel {
-            flex: 1;
+            flex: 1 1 0%;
+            min-width: 0;
             height: 100%;
+            transition: flex 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s ease,
+              box-shadow 0.4s ease;
           }
           .service-panel.expanded {
+            flex: 3.8 1 0%;
             border-color: #ffa85240;
-            flex-grow: 4.2;
             box-shadow: 0 20px 45px #0000008c, 0 0 25px #ffa8520a;
           }
         }
         .panel-bg {
-          filter: grayscale(0.15) brightness(0.55);
-          will-change: transform, filter;
           background-position: 50%;
           background-size: cover;
           width: 100%;
           height: 200px;
-          transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-            filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateZ(0);
+          backface-visibility: hidden;
+          will-change: transform;
+          transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
         }
         @media (min-width: 992px) {
           .panel-bg {
-            filter: grayscale(0.4) brightness(0.32);
             height: 100%;
             position: absolute;
             inset: 0;
           }
           .service-panel.expanded .panel-bg {
-            filter: grayscale(0) brightness(0.48);
-            transform: scale(1.05);
+            transform: scale(1.06);
           }
         }
         .panel-overlay-dark {
           z-index: 1;
           pointer-events: none;
-          background: linear-gradient(#07090e4d 0%, #07090ed9 100%);
+          background: linear-gradient(#07090e66 0%, #07090ef2 100%);
           position: absolute;
           inset: 0;
+          opacity: 0.85;
+          transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .service-panel.expanded .panel-overlay-dark {
+          opacity: 0.5;
         }
         .panel-overlay-glow {
           z-index: 2;
@@ -306,10 +209,10 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           opacity: 0;
           background: radial-gradient(
             circle at 50% 100%,
-            #ffa85208,
+            #ffa85214,
             transparent 70%
           );
-          transition: opacity 0.8s;
+          transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
           position: absolute;
           inset: 0;
         }
@@ -324,12 +227,14 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           padding: 2.2rem 1.8rem;
           display: flex;
           position: relative;
+          min-width: 0;
         }
         @media (min-width: 992px) {
           .panel-content {
             padding: 2.8rem;
             position: absolute;
             inset: 0;
+            overflow: hidden;
           }
         }
         .panel-collapsed-header {
@@ -339,11 +244,13 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           .panel-collapsed-header {
             pointer-events: none;
             opacity: 1;
+            transform: translateY(0);
             flex-direction: column;
             align-items: center;
             gap: 1.5rem;
             margin: 0 auto;
-            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             display: flex;
             position: absolute;
             top: 2.8rem;
@@ -352,6 +259,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           }
           .service-panel.expanded .panel-collapsed-header {
             opacity: 0;
+            transform: translateY(-8px);
           }
         }
         .panel-num {
@@ -384,14 +292,17 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           .panel-body {
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.32s,
-              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.32s;
-            transform: translateY(18px);
+            transform: translateY(14px);
+            transition: opacity 0.22s ease-out,
+              transform 0.22s ease-out;
+            min-width: 320px;
           }
           .service-panel.expanded .panel-body {
             opacity: 1;
             pointer-events: auto;
             transform: translateY(0);
+            transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1) 0.12s,
+              transform 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.12s;
           }
         }
         .panel-subtitle-label {
@@ -418,40 +329,31 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           }
         }
         .panel-desc {
+          font-family: var(--font-desc);
           color: var(--text-muted);
           max-width: 500px;
           margin-bottom: 1.5rem;
           font-size: 0.95rem;
           line-height: 1.6;
         }
-        .panel-duration {
-          color: var(--text-main);
+        .panel-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1.8rem;
+        }
+        .panel-tag-chip {
+          display: inline-flex;
           align-items: center;
-          margin-bottom: 1.5rem;
-          font-size: 0.85rem;
+          font-size: 0.72rem;
           font-weight: 600;
-          display: flex;
-        }
-        .panel-bullets-list {
-          flex-direction: column;
-          gap: 0.6rem;
-          margin-bottom: 2rem;
-          display: flex;
-        }
-        .panel-bullet-item {
-          color: var(--text-muted);
-          align-items: center;
-          gap: 0.75rem;
-          font-size: 0.9rem;
-          display: flex;
-        }
-        .panel-bullet-dot {
-          background-color: var(--accent-peach);
-          width: 5px;
-          height: 5px;
-          box-shadow: 0 0 6px var(--accent-peach);
-          border-radius: 50%;
-          flex-shrink: 0;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: var(--accent-peach-bright);
+          background: rgba(255, 168, 82, 0.08);
+          border: 1px solid rgba(255, 168, 82, 0.2);
+          border-radius: 100px;
+          padding: 0.3rem 0.8rem;
         }
         .panel-action {
           padding-top: 0.5rem;
@@ -460,6 +362,10 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           text-align: center;
           justify-content: center;
           width: 100%;
+          box-shadow: none !important;
+        }
+        .panel-booking-btn:hover {
+          box-shadow: none !important;
         }
         @media (min-width: 768px) {
           .panel-booking-btn {

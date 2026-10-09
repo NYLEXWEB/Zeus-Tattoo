@@ -1,6 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
+import {
+  MapPin,
+  Clock,
+  Phone,
+  Navigation,
+  ExternalLink,
+  Sparkles,
+} from "lucide-react";
 
 export default function Booking() {
   const [submitted, setSubmitted] = useState(false);
@@ -300,35 +308,75 @@ export default function Booking() {
       </div>
 
       <div className="container booking-map-section">
-        <div className="map-info-card card-glass border-pulse">
-          <div className="map-text">
-            <span className="map-subtitle">Sanctuary Location</span>
-            <h3 className="map-heading">Find Our Studio</h3>
-            <p className="map-desc">
-              2nd Floor, Roji&apos;s Arch, Manorama Junction,
-              <br />
-              Eerayil Kadavu, Kottayam, Kerala 686001, India
-            </p>
-            <div className="map-contact-details">
-              <div className="contact-detail-item">
-                <span className="contact-icon">🕒</span>
-                <span>Open Daily: 10:00 AM – 8:00 PM</span>
-              </div>
-              <div className="contact-detail-item">
-                <span className="contact-icon">☎</span>
-                <span>Phone: +91 94951 86001</span>
-              </div>
+        <div className="map-showcase-card card-glass border-pulse">
+          {/* Header & Title Area */}
+          <div className="map-card-header">
+            <div className="map-title-block">
+              <span className="map-subtitle">
+                <Sparkles size={13} className="inline-sparkle" />
+                Sanctuary Location
+              </span>
+              <h3 className="map-heading">Find Our Studio</h3>
             </div>
             <a
               href="https://www.google.com/maps/search/?api=1&query=Zeus+Tattoo+Studio+Kottayam"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-secondary map-directions-btn"
+              className="map-directions-header-btn"
             >
-              Get Directions
+              <Navigation size={15} />
+              <span>Get Directions</span>
+              <ExternalLink size={13} />
             </a>
           </div>
-          <div className="map-frame-wrapper">
+
+          {/* Studio Details Row (Address, Hours, Contact) */}
+          <div className="map-info-grid">
+            <div className="info-detail-box">
+              <div className="detail-box-icon-wrap">
+                <MapPin size={18} />
+              </div>
+              <div className="detail-box-text">
+                <span className="detail-box-label">Studio Address</span>
+                <p className="detail-box-value">
+                  2nd Floor, Roji&apos;s Arch, Manorama Junction,
+                  <br />
+                  Eerayil Kadavu, Kottayam, Kerala 686001
+                </p>
+              </div>
+            </div>
+
+            <div className="info-detail-box">
+              <div className="detail-box-icon-wrap">
+                <Clock size={18} />
+              </div>
+              <div className="detail-box-text">
+                <span className="detail-box-label">Operating Hours</span>
+                <p className="detail-box-value">
+                  Open Daily: 10:00 AM – 8:00 PM
+                </p>
+                <span className="detail-box-tag">Walk-ins Welcome</span>
+              </div>
+            </div>
+
+            <div className="info-detail-box">
+              <div className="detail-box-icon-wrap">
+                <Phone size={18} />
+              </div>
+              <div className="detail-box-text">
+                <span className="detail-box-label">Direct Contact</span>
+                <p className="detail-box-value">+91 94951 86001</p>
+                <span className="detail-box-tag">Call / WhatsApp Support</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Full-Cover Bottom Map */}
+          <div className="map-bottom-cover-wrapper">
+            <div className="map-floating-pill">
+              <span className="studio-pin-dot" />
+              <span>Zeus Tattoo Studio • Kottayam</span>
+            </div>
             <iframe
               src="https://maps.google.com/maps?q=Zeus%20Tattoo%20Studio%20Kottayam&t=&z=16&ie=UTF8&iwloc=&output=embed"
               width="100%"
@@ -337,7 +385,7 @@ export default function Booking() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="google-map-iframe"
+              className="google-map-cover-iframe"
               title="Zeus Tattoo Studio Kottayam Map Location"
             />
           </div>
@@ -404,6 +452,7 @@ export default function Booking() {
           display: flex;
         }
         .step-title {
+          font-family: var(--font-headings);
           color: var(--text-main);
           text-transform: uppercase;
           letter-spacing: 0.05em;
@@ -412,11 +461,13 @@ export default function Booking() {
           font-weight: 700;
         }
         .step-desc {
+          font-family: var(--font-desc);
           color: var(--text-muted);
           font-size: 0.85rem;
           line-height: 1.5;
         }
         .direct-dm-note {
+          font-family: var(--font-desc);
           background: #ffa8520a;
           border: 1px solid #ffa8521a;
           border-radius: 12px;
@@ -448,6 +499,7 @@ export default function Booking() {
           display: grid;
         }
         .form-label {
+          font-family: var(--font-headings);
           text-transform: uppercase;
           color: var(--accent-peach);
           letter-spacing: 0.1em;
@@ -458,7 +510,7 @@ export default function Booking() {
         .form-select,
         .form-textarea {
           color: var(--text-main);
-          font-family: var(--font-body);
+          font-family: var(--font-desc);
           transition: var(--transition-fast);
           background: #07090e99;
           border: 1px solid #ffa8521f;
@@ -557,102 +609,194 @@ export default function Booking() {
           line-height: 1.6;
         }
         .booking-map-section {
-          margin-top: 5rem;
+          margin-top: 5.5rem;
         }
-        .map-info-card {
+        .map-showcase-card {
           background: linear-gradient(
             135deg,
             #0d111bf2,
             #151d2dd9
           );
-          border-color: #ffa85214;
-          border-radius: 20px;
-          grid-template-columns: 1fr;
-          display: grid;
+          border: 1px solid #ffa85226;
+          border-radius: 24px;
           overflow: hidden;
-          box-shadow: 0 15px 40px #00000073;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
         }
-        @media (min-width: 992px) {
-          .map-info-card {
-            grid-template-columns: 1fr 1.3fr;
-            height: 400px;
-          }
-        }
-        .map-text {
-          flex-direction: column;
-          justify-content: center;
-          padding: 2.2rem 1.8rem;
+        .map-card-header {
+          padding: 2.8rem 2.8rem 1.8rem;
           display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
         }
-        @media (min-width: 992px) {
-          .map-text {
-            padding: 3rem;
+        @media (min-width: 768px) {
+          .map-card-header {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-end;
           }
+        }
+        .map-title-block {
+          max-width: 500px;
         }
         .map-subtitle {
-          letter-spacing: 0.15em;
+          font-family: var(--font-body);
+          letter-spacing: 0.16em;
           text-transform: uppercase;
           color: var(--accent-peach);
-          margin-bottom: 0.4rem;
-          font-size: 0.65rem;
+          font-size: 0.75rem;
           font-weight: 700;
-          display: block;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          margin-bottom: 0.5rem;
         }
         .map-heading {
           font-family: var(--font-headings);
           color: var(--text-main);
-          letter-spacing: 0.02em;
-          margin-bottom: 1.2rem;
-          font-size: 1.75rem;
+          letter-spacing: -0.02em;
+          font-size: 2.2rem;
           font-weight: 800;
-          line-height: 1.2;
+          line-height: 1.15;
+          text-transform: uppercase;
         }
-        .map-desc {
-          color: var(--text-muted);
-          margin-bottom: 1.5rem;
-          font-size: 0.95rem;
-          line-height: 1.6;
-        }
-        .map-contact-details {
-          flex-direction: column;
-          gap: 0.6rem;
-          margin-bottom: 1.8rem;
-          display: flex;
-        }
-        .contact-detail-item {
-          color: var(--text-muted);
-          align-items: center;
-          gap: 0.75rem;
-          font-size: 0.88rem;
-          display: flex;
-        }
-        .contact-icon {
-          color: var(--accent-peach);
-          text-shadow: 0 0 10px #ffa85226;
-        }
-        .map-directions-btn {
-          justify-content: center;
-          align-items: center;
-          width: fit-content;
-          text-decoration: none;
-          display: inline-flex;
-        }
-        .map-frame-wrapper {
-          width: 100%;
-          height: 280px;
-          position: relative;
-          overflow: hidden;
-        }
-        @media (min-width: 992px) {
-          .map-frame-wrapper {
-            height: 100%;
+        @media (min-width: 768px) {
+          .map-heading {
+            font-size: 2.6rem;
           }
         }
-        .google-map-iframe {
-          filter: invert(90%) hue-rotate(180deg) contrast(1.15) brightness(0.9);
-          transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        .map-directions-header-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.75rem 1.6rem;
+          font-size: 0.8rem;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          text-decoration: none;
+          color: var(--text-dark);
+          background: linear-gradient(135deg, var(--accent-peach), #e08e3e);
+          border-radius: 100px;
+          transition: var(--transition-smooth);
+          width: fit-content;
         }
-        .google-map-iframe:hover {
+        .map-directions-header-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(255, 168, 82, 0.4);
+        }
+
+        /* 3-Column Info Details */
+        .map-info-grid {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1.2rem;
+          padding: 0 2.8rem 2.2rem;
+        }
+        @media (min-width: 768px) {
+          .map-info-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+        .info-detail-box {
+          background: rgba(7, 9, 14, 0.55);
+          border: 1px solid rgba(255, 168, 82, 0.14);
+          border-radius: 16px;
+          padding: 1.4rem;
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          transition: border-color 0.3s ease, transform 0.3s ease;
+        }
+        .info-detail-box:hover {
+          border-color: rgba(255, 168, 82, 0.4);
+          transform: translateY(-2px);
+        }
+        .detail-box-icon-wrap {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background: rgba(255, 168, 82, 0.1);
+          border: 1px solid rgba(255, 168, 82, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          color: var(--accent-peach);
+        }
+        .detail-box-text {
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
+        }
+        .detail-box-label {
+          font-family: var(--font-body);
+          font-size: 0.68rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--accent-peach);
+          font-weight: 700;
+        }
+        .detail-box-value {
+          font-family: var(--font-desc);
+          color: var(--text-main);
+          font-size: 0.88rem;
+          line-height: 1.5;
+        }
+        .detail-box-tag {
+          font-size: 0.72rem;
+          color: var(--text-muted);
+          margin-top: 0.15rem;
+        }
+
+        /* Bottom Map Cover */
+        .map-bottom-cover-wrapper {
+          position: relative;
+          width: 100%;
+          height: 380px;
+          border-top: 1px solid rgba(255, 168, 82, 0.2);
+          background: #07090e;
+          overflow: hidden;
+        }
+        @media (min-width: 768px) {
+          .map-bottom-cover-wrapper {
+            height: 440px;
+          }
+        }
+        .map-floating-pill {
+          position: absolute;
+          top: 18px;
+          left: 20px;
+          background: rgba(7, 9, 14, 0.9);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 168, 82, 0.35);
+          border-radius: 100px;
+          padding: 0.45rem 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          color: var(--accent-peach);
+          z-index: 10;
+          pointer-events: none;
+        }
+        .studio-pin-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--accent-peach);
+          box-shadow: 0 0 8px var(--accent-peach);
+        }
+        .google-map-cover-iframe {
+          width: 100%;
+          height: 100%;
+          border: 0;
+          display: block;
+          filter: invert(90%) hue-rotate(180deg) contrast(1.1) brightness(0.95);
+          transition: filter 0.4s ease;
+        }
+        .google-map-cover-iframe:hover {
           filter: invert(0%) hue-rotate(0deg) contrast(1) brightness(1);
         }
         @media (max-width: 1024px) {

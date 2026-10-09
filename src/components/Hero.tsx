@@ -34,8 +34,27 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   useEffect(() => {
     if (isMobile) return;
 
+    let isHeroInView = true;
+    let lastSeekTime = 0;
+    let prevProgress = -1;
+
+    // Observe hero visibility to completely shut off RAF & decoding when scrolled away
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isHeroInView = entry.isIntersecting;
+        if (isHeroInView && !rafIdRef.current) {
+          rafIdRef.current = requestAnimationFrame(updateLoop);
+        }
+      },
+      { rootMargin: "100px" }
+    );
+
+    if (trackRef.current) {
+      observer.observe(trackRef.current);
+    }
+
     const handleScroll = () => {
-      if (!trackRef.current) return;
+      if (!trackRef.current || !isHeroInView) return;
       const rect = trackRef.current.getBoundingClientRect();
       const trackHeight = rect.height - window.innerHeight;
       if (trackHeight <= 0) return;
@@ -52,15 +71,23 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     window.addEventListener("resize", handleScroll, { passive: true });
     handleScroll();
 
-    // High-performance requestAnimationFrame scrub loop
+    // High-performance, throttled requestAnimationFrame scrub loop
     const updateLoop = () => {
+      if (!isHeroInView) {
+        rafIdRef.current = null;
+        return;
+      }
+
       const video = videoRef.current;
       const targetTime = targetTimeRef.current;
       const progress = targetProgressRef.current;
+      const now = performance.now();
 
-      if (video && video.readyState >= 2 && !isSeekingRef.current) {
+      // Hardware-friendly video seek throttled to 30fps max (33ms) to prevent GPU decode bottlenecks
+      if (video && video.readyState >= 2 && !isSeekingRef.current && now - lastSeekTime > 32) {
         const diff = Math.abs(video.currentTime - targetTime);
-        if (diff > 0.015) {
+        if (diff > 0.03) {
+          lastSeekTime = now;
           try {
             if ("fastSeek" in video && typeof (video as unknown as { fastSeek: (t: number) => void }).fastSeek === "function") {
               (video as unknown as { fastSeek: (t: number) => void }).fastSeek(targetTime);
@@ -73,8 +100,8 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         }
       }
 
-      // Smooth hero content fade & translation during initial scroll (0% -> 18%)
-      if (contentOverlayRef.current) {
+      // Smooth hero content fade & translation during initial scroll (0% -> 22%)
+      if (contentOverlayRef.current && (prevProgress <= 0.25 || progress <= 0.25)) {
         const opacity = Math.max(0, Math.min(1, 1 - progress / 0.18));
         const translateY = -(progress * 120);
         contentOverlayRef.current.style.opacity = opacity.toString();
@@ -82,22 +109,27 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         contentOverlayRef.current.style.pointerEvents = opacity < 0.08 ? "none" : "auto";
       }
 
-      // Scroll hint pill fades out swiftly (0% -> 8%)
-      if (scrollIndicatorRef.current) {
+      // Scroll hint pill fades out swiftly (0% -> 10%)
+      if (scrollIndicatorRef.current && (prevProgress <= 0.12 || progress <= 0.12)) {
         const cueOpacity = Math.max(0, Math.min(1, 1 - progress / 0.08));
         scrollIndicatorRef.current.style.opacity = cueOpacity.toString();
         scrollIndicatorRef.current.style.pointerEvents = cueOpacity < 0.08 ? "none" : "auto";
       }
 
+      prevProgress = progress;
       rafIdRef.current = requestAnimationFrame(updateLoop);
     };
 
     rafIdRef.current = requestAnimationFrame(updateLoop);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
-      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+      if (rafIdRef.current) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
     };
   }, [isMobile]);
 
@@ -153,19 +185,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           <div className="hero-content-layer" ref={contentOverlayRef}>
             <div className="container hero-container-grid">
               <div className="hero-content">
-                <div className="hero-badge">
-                  <span className="spark-accent">⚡</span> Kottayam&apos;s Premier Body Art Collective
-                </div>
                 <h1 className="hero-title">
                   Chiseled by <span className="lightning-text">Lightning</span>,
                   <br />
                   Inked for Eternity
                 </h1>
-                <p className="hero-description">
-                  Experience premium custom tattoos, clinical-grade body piercings, and
-                  expert semi-permanent microblading. Illustrated with Olympian
-                  precision and clinical sterility in the heart of Kottayam.
-                </p>
+
                 <div className="hero-actions">
                   <a
                     href="#booking"
@@ -199,14 +224,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           </div>
 
           {/* Scroll To Explore Indicator */}
-          <div className="scroll-indicator-container" ref={scrollIndicatorRef}>
-            <div className="scroll-pill">
-              <span className="scroll-pill-text">Scroll to explore studio</span>
-              <div className="scroll-chevron-track">
-                <span className="scroll-chevron">↓</span>
-              </div>
-            </div>
-          </div>
+
         </div>
       )}
 
@@ -215,9 +233,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         <div className="hero-mobile-static-wrapper">
           <div className="container hero-mobile-container">
             <div className="hero-content">
-              <div className="hero-badge">
-                <span className="spark-accent">⚡</span> Kottayam&apos;s Premier Body Art Collective
-              </div>
+             
               <h1 className="hero-title">
                 Chiseled by <span className="lightning-text">Lightning</span>,
                 <br />
@@ -366,6 +382,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         }
 
         .hero-badge {
+          font-family: var(--font-headings);
           text-transform: uppercase;
           letter-spacing: 0.15em;
           color: var(--accent-peach);
@@ -384,6 +401,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         }
 
         .hero-title {
+          font-family: var(--font-headings);
           text-transform: uppercase;
           letter-spacing: 0.02em;
           margin-bottom: 1rem;
@@ -394,6 +412,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         }
 
         .hero-description {
+          font-family: var(--font-desc);
           color: #cbd5e1;
           max-width: 540px;
           margin-bottom: 1.8rem;
@@ -463,7 +482,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           border: 1px solid rgba(255, 168, 82, 0.25);
           border-radius: 100px;
           backdrop-filter: blur(10px);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .scroll-pill-text {

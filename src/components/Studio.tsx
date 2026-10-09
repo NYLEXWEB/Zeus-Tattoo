@@ -57,33 +57,22 @@ export default function Studio() {
             <span className="section-subtitle">The Space</span>
             <h2 className="section-title">Our Studio</h2>
             <p className="studio-description">
-              Step inside a sanctuary designed for artistic expression and
-              physical articulation. Located in the heart of Kottayam, our
-              studio balances a luxury neoclassical aesthetic with absolute
-              clinical sterility.
-            </p>
-            <p className="studio-description">
-              Featuring custom-built warm hexagonal ceiling panels,
-              marble-finished workspaces, private consultation suites, and
-              medical-grade autoclave sterilization hubs, we have crafted an
-              environment where you can feel secure and inspired.
+              Located in the heart of Kottayam, our studio balances a luxury neoclassical
+              aesthetic with absolute clinical sterility. Designed for comfort, focus, and
+              uncompromising safety.
             </p>
             <div className="studio-features-list">
               <div className="feature-item">
                 <span className="feature-dot" />
-                <span>Hexagonal Ambient lighting (no glare)</span>
+                <span>Hospital-Grade Autoclave Sterilization</span>
               </div>
               <div className="feature-item">
                 <span className="feature-dot" />
-                <span>Hospital-grade sterility autoclave checks</span>
+                <span>Private &amp; Hygienic Procedure Suites</span>
               </div>
               <div className="feature-item">
                 <span className="feature-dot" />
-                <span>Private suites for clinical procedures</span>
-              </div>
-              <div className="feature-item">
-                <span className="feature-dot" />
-                <span>Comfortable leather waiting lounges</span>
+                <span>Ergonomic Leather Lounges &amp; Ambient Lighting</span>
               </div>
             </div>
             <div className="studio-controls">
@@ -237,6 +226,7 @@ export default function Studio() {
           z-index: 10;
         }
         .studio-description {
+          font-family: var(--font-desc);
           color: var(--text-muted);
           margin-bottom: 1.5rem;
           font-size: 1rem;
@@ -249,6 +239,7 @@ export default function Studio() {
           display: flex;
         }
         .feature-item {
+          font-family: var(--font-desc);
           color: var(--text-main);
           align-items: center;
           gap: 0.75rem;
@@ -287,7 +278,7 @@ export default function Studio() {
           color: var(--accent-peach);
           background: #ffa85214;
           transform: scale(1.05);
-          box-shadow: 0 0 15px #ffa85226;
+          box-shadow: none !important;
         }
         .control-counter {
           letter-spacing: 0.1em;

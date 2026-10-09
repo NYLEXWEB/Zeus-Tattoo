@@ -530,7 +530,7 @@ export default function ImmersiveScrollGallery({
                 aria-label={`Jump to item ${idx + 1}`}
                 className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                   activeIndex === idx
-                    ? "w-8 sm:w-10 bg-[#ffa852] shadow-[0_0_10px_#ffa852]"
+                    ? "w-8 sm:w-10 bg-[#ffa852]"
                     : "w-2.5 bg-white/20 hover:bg-white/40"
                 }`}
               />
@@ -547,14 +547,14 @@ export default function ImmersiveScrollGallery({
             <button
               onClick={handlePrev}
               aria-label="Previous item"
-              className="w-8 h-8 rounded-full bg-[#0d111b] hover:bg-[#ffa852] text-white hover:text-[#07090e] border border-[#ffa85226] flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-95"
+              className="w-8 h-8 rounded-full bg-[#0d111b] hover:bg-[#ffa852] text-white hover:text-[#07090e] border border-[#ffa85226] flex items-center justify-center transition-all cursor-pointer active:scale-95"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={handleNext}
               aria-label="Next item"
-              className="w-8 h-8 rounded-full bg-[#0d111b] hover:bg-[#ffa852] text-white hover:text-[#07090e] border border-[#ffa85226] flex items-center justify-center transition-all cursor-pointer shadow-lg active:scale-95"
+              className="w-8 h-8 rounded-full bg-[#0d111b] hover:bg-[#ffa852] text-white hover:text-[#07090e] border border-[#ffa85226] flex items-center justify-center transition-all cursor-pointer active:scale-95"
             >
               <ChevronRight size={16} />
             </button>

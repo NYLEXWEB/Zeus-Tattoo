@@ -37,36 +37,25 @@ export default function About({ onOpenBooking }: AboutProps) {
             <span className="section-subtitle">The Sanctuary</span>
             <h2 className="section-title">Our Story</h2>
             <p className="about-lead">
-              Founded by master illustrator Aryan “Zeus” in Kottayam, Zeus
-              Tattoo is a neoclassical body art sanctuary dedicated to permanent
-              collectibles.
+              Founded by master artist Aryan “Zeus”, our sanctuary in Kottayam
+              bridges neoclassical illustration with hospital-grade clinical precision.
             </p>
             <p className="about-text">
-              We believe that body articulation is more than a service—it is a
-              spiritual integration of geometry, myth, and anatomy. Each custom
-              design is chiseled specifically to fit your posture and skeletal
-              flow, rendering visual expressions that stand the test of time.
-            </p>
-            <p className="about-text">
-              Our studio operates under strict clinical guidelines, maintaining a
-              sterile environment that exceeds hospital standards. Whether you
-              are collecting a large neotraditional sleeve, curating an anatomical
-              ear piercing, or seeking microbladed cosmetic enhancements, our
-              sanctuary is designed to make your journey comfortable and
-              memorable.
+              Every design is custom-chiseled to harmonize with your anatomical flow—uniting
+              geometry, myth, and fine-line craftsmanship into permanent collectibles that endure.
             </p>
             <div className="about-stats">
               <div className="stat-box">
                 <span className="stat-number">100%</span>
-                <span className="stat-label">Autoclave Sterile</span>
+                <span className="stat-label">Clinical Sterility</span>
               </div>
               <div className="stat-box">
-                <span className="stat-number">5k+</span>
-                <span className="stat-label">Skins Illustrated</span>
+                <span className="stat-number">5K+</span>
+                <span className="stat-label">Custom Works</span>
               </div>
               <div className="stat-box">
-                <span className="stat-number">15+</span>
-                <span className="stat-label">Design Awards</span>
+                <span className="stat-number">10+</span>
+                <span className="stat-label">Years Mastery</span>
               </div>
             </div>
             <div className="about-action">
@@ -198,6 +187,7 @@ export default function About({ onOpenBooking }: AboutProps) {
           z-index: 10;
         }
         .about-lead {
+          font-family: var(--font-desc);
           color: var(--text-main);
           margin-bottom: 1.5rem;
           font-size: 1.15rem;
@@ -205,6 +195,7 @@ export default function About({ onOpenBooking }: AboutProps) {
           line-height: 1.6;
         }
         .about-text {
+          font-family: var(--font-desc);
           color: var(--text-muted);
           margin-bottom: 1.5rem;
           font-size: 0.95rem;

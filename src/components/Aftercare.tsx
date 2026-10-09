@@ -9,73 +9,61 @@ interface AftercareProps {
 const aftercareData = [
   {
     id: 1,
-    title: "New Tattoo Aftercare Guidelines",
+    title: "Tattoo Aftercare",
     category: "tattoo",
     icon: "⚡",
     points: [
       {
-        title: "Initial Wrap Removal",
-        desc: "Leave the medical healing wrap (SecondSkin) on for 2 to 4 days as instructed by your artist. If standard cling wrap was used, remove it after 2 to 4 hours.",
+        title: "Gentle Cleansing",
+        desc: "Wash the tattoo with lukewarm water and mild, fragrance-free antibacterial soap. Pat dry with a clean paper towel—never rub.",
       },
       {
-        title: "Gentle Cleaning",
-        desc: "Wash the tattoo immediately after wrap removal using warm water and mild, fragrance-free antibacterial liquid soap. Use only clean hands—do not scrub with washcloths.",
+        title: "Minimal Hydration",
+        desc: "Apply a sheer micro-layer of specialized tattoo lotion 2 to 3 times daily. Keep it breathable; never over-saturate.",
       },
       {
-        title: "Moisturizing Routine",
-        desc: "Pat completely dry with a clean paper towel. Apply a micro-thin layer of unscented ointment (like Aquaphor) or specialized tattoo lotion 2 to 3 times daily. Avoid over-saturating.",
-      },
-      {
-        title: "Critical Avoidance List",
-        desc: "DO NOT pick, scratch, or peel scabbing skin. Avoid direct sunlight, swimming, saunas, hot tubs, and heavy gym sweating for at least 14 days.",
+        title: "Healing Protection",
+        desc: "Do not pick or scratch flaking skin. Avoid direct sunlight, soaking baths, swimming, and heavy workouts for 14 days.",
       },
     ],
   },
   {
     id: 2,
-    title: "Precision Body Piercing Care",
+    title: "Body Piercing Care",
     category: "piercing",
     icon: "✨",
     points: [
       {
-        title: "Daily Saline Rinses",
-        desc: "Clean the piercing area twice daily using sterile saline spray (0.9% sodium chloride). Spray directly on the entrance and exit holes for 10 seconds, then pat dry.",
+        title: "Saline Mists",
+        desc: "Mist the piercing twice daily with sterile 0.9% saline spray for 10 seconds, then gently pat dry with sterile gauze.",
       },
       {
-        title: "Leave It Alone (L.I.T.A.)",
-        desc: "Do not twist, rotate, or play with the jewelry. Moving the barbell/stud tears fragile healing tissue and introduces bacteria.",
+        title: "Zero Rotation (L.I.T.A.)",
+        desc: "Leave it alone. Do not twist, turn, or play with jewelry. Twisting causes micro-tears in fragile healing tissue.",
       },
       {
-        title: "Avoid Touching & Pressures",
-        desc: "Never touch the piercing with unwashed hands. Avoid sleeping directly on new ear piercings—use a travel pillow to keep pressure off the area.",
-      },
-      {
-        title: "Signs of Healing",
-        desc: "Minor swelling, localized redness, and clear/white discharge (crusties) are normal. Do not pick crusties off dry—soak them off during saline washes.",
+        title: "Pressure Avoidance",
+        desc: "Never touch with unwashed hands. Avoid sleeping directly on new piercings—use an ear-hole travel pillow.",
       },
     ],
   },
   {
     id: 3,
-    title: "Microblading Brow Healing Process",
+    title: "Microblading Care",
     category: "microblading",
     icon: "🌙",
     points: [
       {
-        title: "Keep Brows Dry (Days 1-10)",
-        desc: "Keep your eyebrows completely dry for the first 10 days. Avoid splashing water on your face during showers and skip heavy cardiovascular workouts that induce sweating.",
+        title: "Keep Dry (Days 1–10)",
+        desc: "Keep brows completely dry for the first 10 days. Avoid splashing water, steam rooms, and sweat-inducing workouts.",
       },
       {
-        title: "Ointment Application",
-        desc: "Starting on Day 3, apply a rice-grain amount of the provided post-care balm to both brows twice daily using a clean cotton swab. Never apply with fingers.",
+        title: "Micro-Balm Care",
+        desc: "Starting Day 3, apply a rice-grain amount of post-care balm twice daily using a sterile cotton swab.",
       },
       {
-        title: "Do Not Scratch Flaking",
-        desc: "As the brows heal, they will itch and flake. This is normal. Scratching or picking flakes will pull the organic pigment out of the skin, causing patchy spots.",
-      },
-      {
-        title: "Avoid Makeup & Products",
-        desc: "Do not apply any makeup, facial cleansers, oils, or anti-aging skin products on or around your eyebrows until they are completely healed (approx. 14 days).",
+        title: "Natural Flaking",
+        desc: "Light itching and flaking are expected. Never scratch or pick flakes to ensure smooth, lifelong pigment clarity.",
       },
     ],
   },
@@ -165,22 +153,20 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
           </div>
 
           <div className="aftercare-sidebar">
-            <div className="card-glass border-pulse sidebar-card">
-              <div className="sidebar-icon">⚠</div>
-              <h3 className="sidebar-title">Warning Signs</h3>
+            <div className="card-glass sidebar-card">
+              <div className="sidebar-icon">✦</div>
+              <h3 className="sidebar-title">Healing Support</h3>
               <p className="sidebar-desc">
-                While swelling, warmth, redness, and mild throbbing are normal
-                for initial healing, please contact us or a medical
-                professional immediately if you experience:
+                Every skin heals uniquely. If you ever have questions regarding
+                your healing progress, our resident artists provide direct ongoing care.
               </p>
               <ul className="sidebar-bullets">
-                <li>Excessive, expanding redness spreading from the site</li>
-                <li>Pus, yellow/green discharge with a foul odor</li>
-                <li>Severe, increasing pain or throbbing after 48 hours</li>
-                <li>Fever or chills (signs of a systemic infection)</li>
+                <li>Complimentary 30-day healed touch-ups</li>
+                <li>Direct artist WhatsApp communication</li>
+                <li>Clinical guidance on sterile jewelry down-sizing</li>
               </ul>
               <div className="sidebar-footer">
-                <p>Have questions during healing?</p>
+                <p>Need aftercare guidance?</p>
                 <a
                   href="#booking"
                   onClick={handleBookingClick}
@@ -299,6 +285,7 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
           margin-right: 0.25rem;
         }
         .care-point-desc {
+          font-family: var(--font-desc);
           color: var(--text-muted);
           font-size: 0.85rem;
           line-height: 1.6;
@@ -306,22 +293,19 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
         .sidebar-card {
           background: linear-gradient(
             135deg,
-            #1e0a0a40 0%,
-            #0d111bb3 100%
+            #0d111bf2 0%,
+            #151d2dd9 100%
           );
-          border-color: #ff3c3c14;
+          border-color: #ffa8521f;
           padding: 2.5rem;
         }
-        .sidebar-card:after {
-          border-color: #ff5a5a26 !important;
-        }
         .sidebar-icon {
-          color: #f55;
-          text-shadow: 0 0 10px #ff55554d;
+          color: var(--accent-peach);
           margin-bottom: 1rem;
-          font-size: 2rem;
+          font-size: 1.6rem;
         }
         .sidebar-title {
+          font-family: var(--font-headings);
           text-transform: uppercase;
           color: var(--text-main);
           margin-bottom: 1rem;
@@ -329,6 +313,7 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
           font-weight: 800;
         }
         .sidebar-desc {
+          font-family: var(--font-desc);
           color: var(--text-muted);
           margin-bottom: 1.5rem;
           font-size: 0.85rem;
@@ -342,6 +327,7 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
           display: flex;
         }
         .sidebar-bullets li {
+          font-family: var(--font-desc);
           color: var(--text-muted);
           padding-left: 1.2rem;
           font-size: 0.8rem;
@@ -349,28 +335,30 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
           position: relative;
         }
         .sidebar-bullets li:before {
-          content: "!";
-          color: #f55;
-          font-weight: 800;
+          content: "✦";
+          color: var(--accent-peach);
+          font-size: 0.7rem;
           position: absolute;
           left: 0;
+          top: 1px;
         }
         .sidebar-footer {
           color: var(--text-muted);
           text-align: center;
-          border-top: 1px solid #ff5a5a14;
+          border-top: 1px solid #ffa85214;
           padding-top: 1.5rem;
           font-size: 0.85rem;
         }
         .sidebar-btn {
-          border-color: #ff5a5a26;
+          border-color: #ffa85233;
           width: 100%;
           margin-top: 0.75rem;
+          box-shadow: none !important;
         }
         .sidebar-btn:hover {
-          background: #ff55550d;
-          border-color: #f55;
-          box-shadow: 0 0 15px #ff55551a;
+          background: #ffa8520d;
+          border-color: var(--accent-peach);
+          box-shadow: none !important;
         }
         @media (max-width: 1024px) {
           .aftercare-layout {
