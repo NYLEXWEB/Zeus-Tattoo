@@ -1,130 +1,179 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Menu, X, Phone, Search } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
-interface NavbarProps {
-  onOpenBooking: () => void;
+interface HeaderProps {
+  onOpenBooking?: () => void;
 }
 
-export default function Navbar({ onOpenBooking }: NavbarProps) {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+export default function Header({ onOpenBooking }: HeaderProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [inHero, setInHero] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 40);
+      // Hide navbar when scrolled past the hero section (approx 450px or when hero leaves)
+      const heroEl = document.getElementById("home");
+      const heroHeight = heroEl ? heroEl.offsetHeight - 120 : 450;
+      if (window.scrollY > heroHeight) {
+        setInHero(false);
+      } else {
+        setInHero(true);
+      }
     };
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: "HOME", href: "#home" },
-    { name: "ABOUT", href: "#about" },
-    { name: "SERVICES", href: "#services" },
-    { name: "ARTISTS", href: "#artists" },
-    { name: "GALLERY", href: "#gallery" },
-    { name: "TESTIMONIALS", href: "#testimonials" },
-    { name: "CONTACT", href: "#contact" },
-  ];
+  const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const closeMenu = () => setMobileMenuOpen(false);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    setIsMobileMenuOpen(false);
-    const targetElement = document.querySelector(href);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: "smooth" });
+  const handleBookingClick = (e: React.MouseEvent) => {
+    if (onOpenBooking) {
+      e.preventDefault();
+      onOpenBooking();
+      closeMenu();
     }
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-[#0C0D12]/95 backdrop-blur-md py-3 shadow-xl border-b border-white/10"
-          : "bg-transparent py-5"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
-        {/* Zeus Tattoo Logo */}
-        <a
-          href="#home"
-          onClick={(e) => handleLinkClick(e, "#home")}
-          className="flex items-center group cursor-pointer"
-        >
+    <header className={`site-header ${!inHero ? "hidden-nav" : ""}`}>
+      <div className="container header-container">
+        <a href="#home" className="logo-area">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/images/zeus_logo_transparent.png"
-            alt="Zeus Tattoo Studio"
-            className="h-8 sm:h-9 md:h-10 w-auto object-contain transition-transform group-hover:scale-105"
+            src="/assets/logo.png"
+            alt="Zeus Tattoo Logo"
+            className="logo-img"
           />
+          <span className="logo-text">Zeus Tattoo</span>
         </a>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleLinkClick(e, link.href)}
-              className="font-display text-sm tracking-widest text-gray-200 hover:text-[#FFA028] transition-colors duration-200 uppercase font-semibold"
-            >
-              {link.name}
-            </a>
-          ))}
+        <nav className="nav-menu">
+          <a href="#home" className="nav-link">
+            Home
+          </a>
+          <a href="#about" className="nav-link">
+            About
+          </a>
+          <a href="#services" className="nav-link">
+            Services
+          </a>
+          <a href="#artists" className="nav-link">
+            Artists
+          </a>
+          <a href="#gallery" className="nav-link">
+            Gallery
+          </a>
+          <a href="#studio" className="nav-link">
+            Studio
+          </a>
+          <a href="#moments" className="nav-link">
+            Moments
+          </a>
+          <a href="#aftercare" className="nav-link">
+            Aftercare
+          </a>
+          <a href="#booking" className="nav-link">
+            Booking
+          </a>
         </nav>
 
-        {/* Right CTA / Call & Book Button */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="header-cta">
           <a
-            href="tel:08714131748"
-            className="px-4 py-2 border border-white/20 hover:border-[#FFA028] text-gray-200 hover:text-[#FFA028] font-display text-xs font-bold tracking-wider uppercase rounded transition-colors flex items-center gap-1.5"
+            href="#booking"
+            onClick={handleBookingClick}
+            className="btn-primary header-cta-btn"
           >
-            <Phone size={13} className="text-[#FFA028]" />
-            087141 31748
+            Book Free Consultation
           </a>
-          <button
-            onClick={onOpenBooking}
-            className="px-5 py-2 bg-[#FFA028] hover:bg-[#E07D00] text-[#0C0D12] font-display text-xs font-bold tracking-widest uppercase rounded shadow-[0_0_15px_rgba(255,160,40,0.3)] transition-all duration-200 cursor-pointer"
-          >
-            BOOK NOW
-          </button>
         </div>
 
-        {/* Mobile Menu Button */}
         <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden p-2 text-white hover:text-[#FFA028] transition-colors"
-          aria-label="Toggle Menu"
+          className="hamburger-btn"
+          onClick={toggleMenu}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
-          {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
+          {mobileMenuOpen ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="4" y1="12" x2="20" y2="12" />
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="4" y1="18" x2="20" y2="18" />
+            </svg>
+          )}
         </button>
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden bg-[#0C0D12]/98 border-b border-white/10 px-6 py-6 flex flex-col gap-4 shadow-2xl backdrop-blur-lg">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleLinkClick(e, link.href)}
-              className="font-display text-base tracking-widest text-gray-200 hover:text-[#FFA028] py-2 border-b border-white/5 uppercase"
-            >
-              {link.name}
-            </a>
-          ))}
-          <button
-            onClick={() => {
-              setIsMobileMenuOpen(false);
+      <div className={`mobile-nav ${mobileMenuOpen ? "active" : ""}`}>
+        <a href="#home" className="nav-link" onClick={closeMenu}>
+          Home
+        </a>
+        <a href="#about" className="nav-link" onClick={closeMenu}>
+          About
+        </a>
+        <a href="#services" className="nav-link" onClick={closeMenu}>
+          Services
+        </a>
+        <a href="#artists" className="nav-link" onClick={closeMenu}>
+          Artists
+        </a>
+        <a href="#gallery" className="nav-link" onClick={closeMenu}>
+          Gallery
+        </a>
+        <a href="#studio" className="nav-link" onClick={closeMenu}>
+          Studio
+        </a>
+        <a href="#moments" className="nav-link" onClick={closeMenu}>
+          Moments
+        </a>
+        <a href="#aftercare" className="nav-link" onClick={closeMenu}>
+          Aftercare
+        </a>
+        <a href="#booking" className="nav-link" onClick={closeMenu}>
+          Booking
+        </a>
+        <a
+          href="#booking"
+          className="btn-primary"
+          style={{ marginTop: "2rem" }}
+          onClick={(e) => {
+            closeMenu();
+            if (onOpenBooking) {
+              e.preventDefault();
               onOpenBooking();
-            }}
-            className="w-full py-3 mt-2 bg-[#FFA028] text-[#0C0D12] font-display text-sm font-bold tracking-widest uppercase rounded text-center shadow-lg"
-          >
-            BOOK APPOINTMENT
-          </button>
-        </div>
-      )}
+            }
+          }}
+        >
+          Book Consultation
+        </a>
+      </div>
     </header>
   );
 }

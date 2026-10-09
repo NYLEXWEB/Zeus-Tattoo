@@ -1,112 +1,583 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
-import TornPaperDivider from "./TornPaperDivider";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 interface HeroProps {
-  onOpenBooking: () => void;
+  onOpenBooking?: () => void;
 }
 
 export default function Hero({ onOpenBooking }: HeroProps) {
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+  const trackRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const contentOverlayRef = useRef<HTMLDivElement>(null);
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  const targetTimeRef = useRef(0);
+  const targetProgressRef = useRef(0);
+  const isSeekingRef = useRef(false);
+  const rafIdRef = useRef<number | null>(null);
+
+  // Responsive device check: <= 1024px uses the classic static hero with background image
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile, { passive: true });
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Desktop Scroll-Driven Video Scrub Engine (Active only on desktop > 1024px)
+  useEffect(() => {
+    if (isMobile) return;
+
+    const handleScroll = () => {
+      if (!trackRef.current) return;
+      const rect = trackRef.current.getBoundingClientRect();
+      const trackHeight = rect.height - window.innerHeight;
+      if (trackHeight <= 0) return;
+
+      const scrolled = -rect.top;
+      // Clamp progress precisely between 0 and 1
+      const progress = Math.max(0, Math.min(1, scrolled / trackHeight));
+      targetProgressRef.current = progress;
+      // 9-second video duration mapping
+      targetTimeRef.current = progress * 9.0;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    handleScroll();
+
+    // High-performance requestAnimationFrame scrub loop
+    const updateLoop = () => {
+      const video = videoRef.current;
+      const targetTime = targetTimeRef.current;
+      const progress = targetProgressRef.current;
+
+      if (video && video.readyState >= 2 && !isSeekingRef.current) {
+        const diff = Math.abs(video.currentTime - targetTime);
+        if (diff > 0.015) {
+          try {
+            if ("fastSeek" in video && typeof (video as unknown as { fastSeek: (t: number) => void }).fastSeek === "function") {
+              (video as unknown as { fastSeek: (t: number) => void }).fastSeek(targetTime);
+            } else {
+              video.currentTime = targetTime;
+            }
+          } catch {
+            video.currentTime = targetTime;
+          }
+        }
+      }
+
+      // Smooth hero content fade & translation during initial scroll (0% -> 18%)
+      if (contentOverlayRef.current) {
+        const opacity = Math.max(0, Math.min(1, 1 - progress / 0.18));
+        const translateY = -(progress * 120);
+        contentOverlayRef.current.style.opacity = opacity.toString();
+        contentOverlayRef.current.style.transform = `translate3d(0, ${translateY}px, 0)`;
+        contentOverlayRef.current.style.pointerEvents = opacity < 0.08 ? "none" : "auto";
+      }
+
+      // Scroll hint pill fades out swiftly (0% -> 8%)
+      if (scrollIndicatorRef.current) {
+        const cueOpacity = Math.max(0, Math.min(1, 1 - progress / 0.08));
+        scrollIndicatorRef.current.style.opacity = cueOpacity.toString();
+        scrollIndicatorRef.current.style.pointerEvents = cueOpacity < 0.08 ? "none" : "auto";
+      }
+
+      rafIdRef.current = requestAnimationFrame(updateLoop);
+    };
+
+    rafIdRef.current = requestAnimationFrame(updateLoop);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
+    };
+  }, [isMobile]);
+
+  const handleBookingClick = (e: React.MouseEvent) => {
+    if (onOpenBooking) {
+      e.preventDefault();
+      onOpenBooking();
+    }
   };
 
+  const handleVideoCanPlay = useCallback(() => {
+    setVideoLoaded(true);
+    if (videoRef.current) {
+      videoRef.current.currentTime = targetTimeRef.current;
+    }
+  }, []);
+
   return (
-    <section
-      id="home"
-      className="relative bg-[#0C0D12] text-white pt-28 sm:pt-36 md:pt-44 pb-20 md:pb-32 overflow-hidden"
-    >
-      {/* Background Graphic & Tattoo Machine Imagery */}
-      <div className="absolute inset-0 z-0 pointer-events-none opacity-40 lg:opacity-55">
-        <img
-          src="/images/about_story.jpg"
-          alt="Tattooing Master in Session"
-          className="w-full h-full object-cover object-right grayscale brightness-90"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0C0D12] via-[#0C0D12]/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0C0D12] via-transparent to-black/60" />
-      </div>
+    <section id="home" className={`hero-main-container ${isMobile ? "mobile-static-mode" : "desktop-scroll-mode"}`} ref={trackRef}>
+      {/* DESKTOP MODE: 9-Second Scroll-Driven Hero Video System */}
+      {!isMobile && (
+        <div className="hero-sticky-viewport">
+          {/* Background Ambient Glow */}
+          <div className="hero-ambient-glow" />
 
-      {/* Main Content Area */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        <div className="max-w-3xl">
-          {/* Trust Rating Pill */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-white/10 backdrop-blur-md border border-[#FFA028]/40 rounded-full mb-6"
-          >
-            <span className="text-[#FFA028] text-xs font-bold font-sans uppercase tracking-widest flex items-center gap-1.5">
-              ⭐ 5.0 RATED (210+ GOOGLE REVIEWS) • KOTTAYAM, KERALA
-            </span>
-          </motion.div>
+          {/* Desktop Video Canvas */}
+          <div className="hero-video-wrapper">
+            <video
+              ref={videoRef}
+              playsInline
+              muted
+              preload="auto"
+              disablePictureInPicture
+              disableRemotePlayback
+              onCanPlay={handleVideoCanPlay}
+              onSeeking={() => {
+                isSeekingRef.current = true;
+              }}
+              onSeeked={() => {
+                isSeekingRef.current = false;
+              }}
+              poster="/scrolling-video/desktop/poster.webp"
+              className={`hero-video ${videoLoaded ? "loaded" : ""}`}
+            >
+              <source src="/scrolling-video/desktop/hero-desktop.webm" type="video/webm" />
+              <source src="/scrolling-video/desktop/hero-desktop.mp4" type="video/mp4" />
+            </video>
+            {/* Cinematic Vignette Overlay */}
+            <div className="hero-vignette" />
+          </div>
 
-          {/* Main Title with Vertical Gold Line */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex items-start gap-4 sm:gap-6 mb-6"
-          >
-            {/* Vertical Orange Accent Bar */}
-            <div className="w-1 sm:w-1.5 h-24 sm:h-32 md:h-36 bg-[#FFA028] rounded-full flex-shrink-0 mt-2 shadow-[0_0_15px_rgba(255,160,40,0.5)]" />
-
-            <div className="flex flex-col">
-              <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white uppercase leading-[1.05]">
-                ZEUS TATTOO <br />
-                <span className="text-white">STUDIO </span>
-                <span className="text-[#FFA028]">KOTTAYAM</span>
-              </h1>
+          {/* Desktop Hero Content Layer */}
+          <div className="hero-content-layer" ref={contentOverlayRef}>
+            <div className="container hero-container-grid">
+              <div className="hero-content">
+                <div className="hero-badge">
+                  <span className="spark-accent">⚡</span> Kottayam&apos;s Premier Body Art Collective
+                </div>
+                <h1 className="hero-title">
+                  Chiseled by <span className="lightning-text">Lightning</span>,
+                  <br />
+                  Inked for Eternity
+                </h1>
+                <p className="hero-description">
+                  Experience premium custom tattoos, clinical-grade body piercings, and
+                  expert semi-permanent microblading. Illustrated with Olympian
+                  precision and clinical sterility in the heart of Kottayam.
+                </p>
+                <div className="hero-actions">
+                  <a
+                    href="#booking"
+                    onClick={handleBookingClick}
+                    className="btn-primary"
+                  >
+                    Book Free Consultation
+                  </a>
+                  <a href="#services" className="btn-secondary">
+                    Explore Offerings
+                  </a>
+                </div>
+                <div className="hero-stats">
+                  <div className="stat-item">
+                    <span className="stat-number">5.0</span>
+                    <span className="stat-label">Google Rating</span>
+                  </div>
+                  <div className="stat-divider" />
+                  <div className="stat-item">
+                    <span className="stat-number">150+</span>
+                    <span className="stat-label">Verified Reviews</span>
+                  </div>
+                  <div className="stat-divider" />
+                  <div className="stat-item">
+                    <span className="stat-number">100%</span>
+                    <span className="stat-label">Sterility Rate</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Subtitle / Description Text */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-gray-200 font-sans text-xs sm:text-sm md:text-base leading-relaxed tracking-wide mb-8 max-w-2xl pl-5 sm:pl-7"
-          >
-            Welcoming tattoo and piercing shop featuring professional artists and a clean, comfortable studio. Specializing in custom tattoos, fine line work, minimalist designs, and all types of piercings — nose, helix, bugadi, and ear.
-          </motion.p>
-
-          {/* Action Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-            className="flex flex-wrap items-center gap-4 pl-5 sm:pl-7"
-          >
-            <button
-              onClick={onOpenBooking}
-              className="px-8 py-3.5 bg-[#FFA028] hover:bg-[#E07D00] text-[#0C0D12] font-display text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(255,160,40,0.35)] cursor-pointer rounded"
-            >
-              BOOK CONSULTATION
-            </button>
-            <a
-              href="tel:08714131748"
-              className="px-6 py-3.5 border-2 border-white/60 hover:border-[#FFA028] text-white hover:text-[#FFA028] font-display text-sm font-bold tracking-widest uppercase transition-all duration-300 backdrop-blur-xs cursor-pointer rounded flex items-center gap-2"
-            >
-              CALL: 087141 31748
-            </a>
-            <button
-              onClick={() => scrollToSection("about")}
-              className="px-6 py-3.5 text-gray-300 hover:text-white font-display text-sm font-bold tracking-widest uppercase transition-colors cursor-pointer"
-            >
-              ABOUT STUDIO
-            </button>
-          </motion.div>
+          {/* Scroll To Explore Indicator */}
+          <div className="scroll-indicator-container" ref={scrollIndicatorRef}>
+            <div className="scroll-pill">
+              <span className="scroll-pill-text">Scroll to explore studio</span>
+              <div className="scroll-chevron-track">
+                <span className="scroll-chevron">↓</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Torn Paper Edge at the Bottom transitioning to White About section */}
-      <div className="absolute bottom-0 left-0 right-0 w-full z-20">
-        <TornPaperDivider fill="#FFFFFF" position="bottom" variant={1} />
-      </div>
+      {/* MOBILE MODE: Original Static Hero with Original Background Image */}
+      {isMobile && (
+        <div className="hero-mobile-static-wrapper">
+          <div className="container hero-mobile-container">
+            <div className="hero-content">
+              <div className="hero-badge">
+                <span className="spark-accent">⚡</span> Kottayam&apos;s Premier Body Art Collective
+              </div>
+              <h1 className="hero-title">
+                Chiseled by <span className="lightning-text">Lightning</span>,
+                <br />
+                Inked for Eternity
+              </h1>
+              <p className="hero-description">
+                Experience premium custom tattoos, clinical-grade body piercings, and
+                expert semi-permanent microblading. Illustrated with Olympian
+                precision and clinical sterility in the heart of Kottayam.
+              </p>
+              <div className="hero-actions">
+                <a
+                  href="#booking"
+                  onClick={handleBookingClick}
+                  className="btn-primary"
+                >
+                  Book Free Consultation
+                </a>
+                <a href="#services" className="btn-secondary">
+                  Explore Offerings
+                </a>
+              </div>
+              <div className="hero-stats">
+                <div className="stat-item">
+                  <span className="stat-number">5.0</span>
+                  <span className="stat-label">Google Rating</span>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                  <span className="stat-number">150+</span>
+                  <span className="stat-label">Verified Reviews</span>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                  <span className="stat-number">100%</span>
+                  <span className="stat-label">Sterility Rate</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        /* Desktop Mode: Pinned 350vh scroll track */
+        .desktop-scroll-mode {
+          position: relative;
+          height: 350vh;
+          background-color: #07090e;
+        }
+
+        .hero-sticky-viewport {
+          position: sticky;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100vh;
+          height: 100dvh;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          background-color: #07090e;
+        }
+
+        .hero-ambient-glow {
+          position: absolute;
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(
+            circle,
+            rgba(255, 168, 82, 0.12) 0%,
+            rgba(255, 168, 82, 0) 70%
+          );
+          top: 20%;
+          left: 10%;
+          filter: blur(60px);
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        .hero-video-wrapper {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+          z-index: 2;
+          background-color: #000;
+        }
+
+        .hero-video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+          display: block;
+          opacity: 0.95;
+          transition: opacity 0.4s ease;
+        }
+
+        .hero-video.loaded {
+          opacity: 1;
+        }
+
+        .hero-vignette {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            90deg,
+            rgba(7, 9, 14, 0.92) 0%,
+            rgba(7, 9, 14, 0.78) 38%,
+            rgba(7, 9, 14, 0.35) 68%,
+            rgba(7, 9, 14, 0.15) 100%
+          ),
+          radial-gradient(
+            ellipse at center,
+            transparent 50%,
+            rgba(7, 9, 14, 0.65) 100%
+          );
+          pointer-events: none;
+          z-index: 3;
+        }
+
+        .hero-content-layer {
+          position: relative;
+          z-index: 10;
+          width: 100%;
+          will-change: opacity, transform;
+          transition: transform 0.05s linear;
+        }
+
+        .hero-container-grid {
+          width: 100%;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          display: grid;
+          grid-template-columns: 1.25fr 0.75fr;
+          align-items: center;
+        }
+
+        .hero-content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .hero-badge {
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: var(--accent-peach);
+          background: #ffa8520d;
+          border: 1px solid #ffa85226;
+          border-radius: 100px;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1.25rem;
+          padding: 0.45rem 1.1rem;
+          font-size: 0.72rem;
+          font-weight: 700;
+          display: inline-flex;
+          width: fit-content;
+          backdrop-filter: blur(8px);
+        }
+
+        .hero-title {
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+          margin-bottom: 1rem;
+          font-size: clamp(2.3rem, 3.8vw, 3.6rem);
+          font-weight: 900;
+          line-height: 1.12;
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-description {
+          color: #cbd5e1;
+          max-width: 540px;
+          margin-bottom: 1.8rem;
+          font-size: clamp(0.9rem, 1.1vw, 1.02rem);
+          line-height: 1.6;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .hero-actions {
+          flex-wrap: wrap;
+          gap: 1.25rem;
+          margin-bottom: 2.2rem;
+          display: flex;
+          align-items: center;
+        }
+
+        .hero-stats {
+          align-items: center;
+          gap: 1.8rem;
+          display: flex;
+        }
+
+        .stat-item {
+          flex-direction: column;
+          display: flex;
+        }
+
+        .stat-number {
+          font-family: var(--font-headings);
+          color: var(--accent-peach);
+          text-shadow: 0 0 15px #ffa85233;
+          font-size: clamp(1.6rem, 2.2vw, 1.95rem);
+          font-weight: 800;
+          line-height: 1;
+        }
+
+        .stat-label {
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #94a3b8;
+          font-size: 0.7rem;
+          margin-top: 0.25rem;
+        }
+
+        .stat-divider {
+          background-color: #ffa85226;
+          width: 1px;
+          height: 30px;
+        }
+
+        .scroll-indicator-container {
+          position: absolute;
+          bottom: 2.5rem;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 12;
+          will-change: opacity;
+          transition: opacity 0.2s ease;
+        }
+
+        .scroll-pill {
+          display: flex;
+          align-items: center;
+          gap: 0.65rem;
+          padding: 0.45rem 1rem;
+          background: rgba(7, 9, 14, 0.75);
+          border: 1px solid rgba(255, 168, 82, 0.25);
+          border-radius: 100px;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .scroll-pill-text {
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--accent-peach);
+        }
+
+        .scroll-chevron-track {
+          display: flex;
+          align-items: center;
+          animation: bounceChevron 2s infinite ease-in-out;
+        }
+
+        .scroll-chevron {
+          color: var(--accent-peach);
+          font-size: 0.8rem;
+          font-weight: 900;
+        }
+
+        @keyframes bounceChevron {
+          0%, 100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(4px);
+          }
+        }
+
+        /* MOBILE STATIC MODE: Original Static Hero with Original Background Image */
+        .mobile-static-mode {
+          position: relative;
+          height: 100vh;
+          height: 100dvh;
+          min-height: 560px;
+          background-color: #07090e;
+          background-image: linear-gradient(
+              180deg,
+              rgba(7, 9, 14, 0.88) 0%,
+              rgba(7, 9, 14, 0.94) 100%
+            ),
+            url(/assets/hero-bg.jpg);
+          background-position: center right;
+          background-repeat: no-repeat;
+          background-size: cover;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-top: 80px;
+          padding-bottom: 30px;
+          overflow: hidden;
+        }
+
+        .hero-mobile-static-wrapper {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .hero-mobile-container {
+          text-align: center;
+          padding: 0 1.5rem;
+          max-width: 600px;
+        }
+
+        .hero-mobile-container .hero-badge {
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .hero-mobile-container .hero-description {
+          margin-left: auto;
+          margin-right: auto;
+          font-size: 0.88rem;
+          margin-bottom: 1.4rem;
+        }
+
+        .hero-mobile-container .hero-title {
+          font-size: clamp(2rem, 6.5vw, 2.6rem);
+          margin-bottom: 0.85rem;
+        }
+
+        .hero-mobile-container .hero-actions {
+          justify-content: center;
+          margin-bottom: 1.6rem;
+          gap: 0.8rem;
+        }
+
+        .hero-mobile-container .hero-stats {
+          justify-content: center;
+          gap: 1.2rem;
+        }
+
+        .hero-mobile-container .stat-number {
+          font-size: 1.45rem;
+        }
+
+        .hero-mobile-container .stat-label {
+          font-size: 0.65rem;
+        }
+
+        /* Accessibility: Respect Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+          .desktop-scroll-mode {
+            height: 100vh;
+          }
+          .scroll-indicator-container {
+            display: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }

@@ -52,15 +52,14 @@ export const residentArtists: ArtistItemData[] = [
 
 export default function Artists({ onOpenBooking }: ArtistsProps) {
   return (
-    <ImmersiveScrollGallery
-      id="artists"
-      type="artists"
-      title="MEET OUR ARTISTS"
-      subtitle="MASTERS OF THE CRAFT"
-      items={residentArtists}
-      onOpenBooking={onOpenBooking}
-      topDividerFill="#FFFFFF"
-      bottomDividerFill="#181A22"
-    />
+    <section id="artists" className="artists-section">
+      <ImmersiveScrollGallery
+        type="artists"
+        title="MEET OUR ARTISTS"
+        subtitle="MASTERS OF THE CRAFT"
+        items={residentArtists}
+        onOpenBooking={onOpenBooking}
+      />
+    </section>
   );
 }

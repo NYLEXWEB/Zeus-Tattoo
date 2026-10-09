@@ -1,68 +1,91 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import SmoothScroll from "@/components/SmoothScroll";
-import Navbar from "@/components/Navbar";
+import Loader from "@/components/Loader";
+import Header from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Services from "@/components/Services";
 import Artists from "@/components/Artists";
-import Portfolio from "@/components/Portfolio";
-import Testimonials from "@/components/Testimonials";
-import ContactLocation from "@/components/ContactLocation";
-import Newsletter from "@/components/Newsletter";
+import Gallery from "@/components/Gallery";
+import Studio from "@/components/Studio";
+import Moments from "@/components/Moments";
+import Aftercare from "@/components/Aftercare";
+import Booking from "@/components/Booking";
 import Footer from "@/components/Footer";
-import BookingModal from "@/components/BookingModal";
-import CustomCursor from "@/components/CustomCursor";
 
 export default function Home() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const sections = document.querySelectorAll("section");
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("reveal-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          root: null,
+          rootMargin: "0px",
+          threshold: 0.08,
+        }
+      );
 
-  const openBooking = () => setIsBookingOpen(true);
-  const closeBooking = () => setIsBookingOpen(false);
+      sections.forEach((sec) => {
+        if (sec.id !== "home") {
+          sec.classList.add("reveal-section");
+          observer.observe(sec);
+        }
+      });
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <SmoothScroll>
-      <div className="bg-[#0C0D12] text-white font-sans selection:bg-[#FFA028] selection:text-black relative min-h-screen">
-      {/* State-aware Custom Cursor */}
-      <CustomCursor />
+      {/* 1. Real Asset Preloader tracking all critical images */}
+      <Loader />
 
-      {/* Header & Sticky Navigation */}
-      <Navbar onOpenBooking={openBooking} />
+      {/* 2. Top Navigation Bar - transparent, hides past Hero */}
+      <Header />
 
-      {/* Main Experience Flow matching the reference template 100% */}
-      <main>
-        {/* 1. Hero Section (Creating Great Tattoos For Over 25 Years) */}
-        <Hero onOpenBooking={openBooking} />
+      {/* 3. Main Page Flow */}
+      <main style={{ minHeight: "100vh", paddingTop: "0px" }}>
+        {/* Hero Section */}
+        <Hero />
 
-        {/* 2. About Us Section (Perfection That Is Forever) */}
-        <About onOpenBooking={openBooking} />
+        {/* About Section */}
+        <About />
 
-        {/* 3. Our Services Section (Warm Gold Background with 6 Service Pills + Center Slider) */}
-        <Services onOpenBooking={openBooking} />
+        {/* Services Section */}
+        <Services />
 
-        {/* 4. Meet Our Artists Section (White Background with Torn-Edge Artist Card) */}
-        <Artists onOpenBooking={openBooking} />
+        {/* Artists Section (Framed & Optimized) */}
+        <Artists />
 
-        {/* 5. Tattoo Gallery Section (Dark Charcoal Background with 10-Item Photo Grid & Lightbox) */}
-        <Portfolio />
+        {/* Portfolio / Gallery Section */}
+        <Gallery />
 
-        {/* 6. Our Customer Says Section (Warm Gold Background with Big Quotes & 5.0 Google Reviews) */}
-        <Testimonials />
+        {/* Studio Space & Fan Deck Carousel Section */}
+        <Studio />
 
-        {/* 7. Studio & Location Section (Manorama Junction, Kottayam Map & Operating Hours) */}
-        <ContactLocation onOpenBooking={openBooking} />
+        {/* Studio Moments Section */}
+        <Moments />
 
-        {/* 8. Subscribe To Newsletter Section (White Background with Wings Watermark) */}
-        <Newsletter />
+        {/* Aftercare Guidelines Section */}
+        <Aftercare />
+
+        {/* Booking & Studio Location Map Section */}
+        <Booking />
       </main>
 
-      {/* 8. Circular Golden Emblem Footer */}
+      {/* 4. Site Footer */}
       <Footer />
-
-      {/* Booking Consultation Modal Overlay */}
-      <BookingModal isOpen={isBookingOpen} onClose={closeBooking} />
-    </div>
     </SmoothScroll>
   );
 }

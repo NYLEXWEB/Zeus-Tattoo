@@ -1,121 +1,270 @@
 "use client";
 
-import { motion } from "framer-motion";
-import SectionFlourish from "./SectionFlourish";
-import TornPaperDivider from "./TornPaperDivider";
-import TornPhotoCollage from "./TornPhotoCollage";
+import React from "react";
 
 interface AboutProps {
   onOpenBooking?: () => void;
 }
 
 export default function About({ onOpenBooking }: AboutProps) {
+  const handleBookingClick = (e: React.MouseEvent) => {
+    if (onOpenBooking) {
+      e.preventDefault();
+      onOpenBooking();
+    }
+  };
+
   return (
-    <section id="about" className="relative bg-white text-[#0C0D12] pt-12 pb-24 md:pb-36 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        
-        {/* Section Title */}
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-wider text-[#0C0D12] uppercase"
-          >
-            ABOUT US
-          </motion.h2>
-          <SectionFlourish color="#FFA028" />
-        </div>
-
-        {/* 2-Column Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          
-          {/* Left Column: Torn-paper Collage of Photos */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-6 relative flex flex-col items-center"
-          >
-            <TornPhotoCollage
-              topImage="/images/about_story.jpg"
-              bottomImage="/images/about_workspace.jpg"
-            />
-          </motion.div>
-
-          {/* Right Column: Heading, Narrative & CTA */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-6 flex flex-col items-start"
-          >
-            <div className="flex items-center gap-2 px-3 py-1 bg-[#FFA028]/15 border border-[#FFA028]/40 rounded-full mb-4">
-              <span className="text-[#0C0D12] text-xs font-bold font-sans uppercase tracking-wider flex items-center gap-1.5">
-                ★ 5.0 RATED ON GOOGLE (210+ REVIEWS)
-              </span>
-            </div>
-
-            <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#0C0D12] uppercase leading-tight mb-6">
-              PERFECTION THAT IS FOREVER
-            </h3>
-
-            <p className="text-gray-800 font-sans text-sm sm:text-base leading-relaxed mb-4">
-              At <strong className="text-[#0C0D12]">Zeus Tattoo Studio Kottayam</strong>, we transform your ideas into art that lasts a lifetime. Our skilled tattoo artists and professional piercers specialize in custom tattoos, fine line work, minimalist designs, and all types of piercings — nose, helix, bugadi, and ear.
-            </p>
-
-            <p className="text-gray-600 font-sans text-xs sm:text-sm leading-relaxed mb-6">
-              Known as one of the best tattoo studios in Kottayam, we maintain the highest hygiene standards, use premium inks, and ensure a comfortable, safe, and creative experience. Whether you’re getting your first tattoo or a new piercing, Zeus Tattoo is your trusted space for self-expression and precision artistry.
-            </p>
-
-            {/* Feature Highlights */}
-            <div className="grid grid-cols-2 gap-3 mb-8 w-full">
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">CUSTOM TATTOOS</span>
-                <span className="text-[11px] text-gray-500 font-sans">Fine line, minimalist & realism</span>
-              </div>
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">EXPERT PIERCINGS</span>
-                <span className="text-[11px] text-gray-500 font-sans">Nose, helix, bugadi & ear</span>
-              </div>
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">HOSPITAL HYGIENE</span>
-                <span className="text-[11px] text-gray-500 font-sans">100% sterile single-use gear</span>
-              </div>
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <span className="block text-xs font-bold text-[#0C0D12] uppercase font-display">KOTTAYAM LOCATION</span>
-                <span className="text-[11px] text-gray-500 font-sans">Manorama Junction, 2nd Flr</span>
+    <section id="about" className="about-section">
+      <div className="container">
+        <div className="about-grid">
+          <div className="about-visual">
+            <div className="about-img-wrapper card-glass border-pulse">
+              <div className="about-img-glow" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/about-us.jpg"
+                alt="Tattoo Artist Aryan Zeus at work"
+                className="about-img"
+              />
+              <div className="about-badge">
+                <span className="badge-num">10+</span>
+                <span className="badge-txt">Years Crafting</span>
               </div>
             </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-4 w-full border-t border-gray-200 pt-6">
-              <button
-                onClick={onOpenBooking}
-                className="px-8 py-3.5 bg-[#0C0D12] hover:bg-[#FFA028] text-white hover:text-[#0C0D12] font-display text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer rounded"
-              >
-                DISCOVER MORE
-              </button>
+          </div>
+          <div className="about-content">
+            <span className="section-subtitle">The Sanctuary</span>
+            <h2 className="section-title">Our Story</h2>
+            <p className="about-lead">
+              Founded by master illustrator Aryan “Zeus” in Kottayam, Zeus
+              Tattoo is a neoclassical body art sanctuary dedicated to permanent
+              collectibles.
+            </p>
+            <p className="about-text">
+              We believe that body articulation is more than a service—it is a
+              spiritual integration of geometry, myth, and anatomy. Each custom
+              design is chiseled specifically to fit your posture and skeletal
+              flow, rendering visual expressions that stand the test of time.
+            </p>
+            <p className="about-text">
+              Our studio operates under strict clinical guidelines, maintaining a
+              sterile environment that exceeds hospital standards. Whether you
+              are collecting a large neotraditional sleeve, curating an anatomical
+              ear piercing, or seeking microbladed cosmetic enhancements, our
+              sanctuary is designed to make your journey comfortable and
+              memorable.
+            </p>
+            <div className="about-stats">
+              <div className="stat-box">
+                <span className="stat-number">100%</span>
+                <span className="stat-label">Autoclave Sterile</span>
+              </div>
+              <div className="stat-box">
+                <span className="stat-number">5k+</span>
+                <span className="stat-label">Skins Illustrated</span>
+              </div>
+              <div className="stat-box">
+                <span className="stat-number">15+</span>
+                <span className="stat-label">Design Awards</span>
+              </div>
+            </div>
+            <div className="about-action">
               <a
-                href="https://zeustattoo.in/"
-                target="_blank"
-                rel="noreferrer"
-                className="px-6 py-3.5 border border-gray-300 hover:border-[#0C0D12] text-gray-700 hover:text-[#0C0D12] font-display text-xs sm:text-sm font-bold tracking-widest uppercase transition-all duration-300 rounded"
+                href="#booking"
+                onClick={handleBookingClick}
+                className="btn-primary about-btn"
               >
-                OFFICIAL WEBSITE
+                Request Consultation
               </a>
             </div>
-
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      {/* Torn Paper Edge at the Bottom transitioning to Orange Services Section */}
-      <div className="absolute bottom-0 left-0 right-0 w-full z-20">
-        <TornPaperDivider fill="#FFA028" position="bottom" variant={2} />
-      </div>
+      <style jsx>{`
+        .about-section {
+          background: linear-gradient(
+            180deg,
+            var(--bg-storm-dark) 0%,
+            var(--bg-storm-medium) 100%
+          );
+          padding: 8rem 0;
+          position: relative;
+          overflow: hidden;
+        }
+        .about-grid {
+          grid-template-columns: 1fr;
+          align-items: center;
+          gap: 5rem;
+          display: grid;
+        }
+        @media (min-width: 992px) {
+          .about-grid {
+            grid-template-columns: 1.1fr 1.2fr;
+            gap: 5rem;
+          }
+        }
+        .about-visual {
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          display: flex;
+          position: relative;
+        }
+        .about-img-wrapper {
+          aspect-ratio: 2.7 / 4;
+          background: linear-gradient(135deg, #0d111bf2, #151d2dd9);
+          border-color: #ffa85214;
+          border-radius: 24px;
+          width: 100%;
+          max-width: 440px;
+          padding: 0.75rem;
+          transition: border-color 0.4s, box-shadow 0.4s;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 25px 60px #0000008c;
+        }
+        .about-img-wrapper:hover {
+          border-color: #ffa85240;
+          box-shadow: 0 30px 70px #000000a6, 0 0 30px #ffa8520a;
+        }
+        .about-img-glow {
+          background: var(--accent-peach);
+          filter: blur(100px);
+          opacity: 0.1;
+          pointer-events: none;
+          z-index: 1;
+          width: 250px;
+          height: 250px;
+          position: absolute;
+          top: 20%;
+          left: 20%;
+        }
+        .about-img {
+          object-fit: cover;
+          border-radius: 18px;
+          width: 100%;
+          height: 100%;
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .about-img-wrapper:hover .about-img {
+          transform: scale(1.03);
+        }
+        .about-badge {
+          background: linear-gradient(
+            135deg,
+            var(--bg-storm-medium),
+            var(--bg-storm-light)
+          );
+          z-index: 10;
+          border: 1px solid #ffa85233;
+          border-radius: 16px;
+          flex-direction: column;
+          align-items: center;
+          padding: 1rem 1.4rem;
+          transition: transform 0.4s;
+          display: flex;
+          position: absolute;
+          bottom: 2rem;
+          right: -1rem;
+          box-shadow: 0 10px 30px #00000080;
+        }
+        .about-img-wrapper:hover .about-badge {
+          transform: translateY(-5px);
+        }
+        @media (max-width: 480px) {
+          .about-badge {
+            bottom: 1.5rem;
+            right: 1.5rem;
+          }
+        }
+        .badge-num {
+          font-family: var(--font-headings);
+          color: var(--accent-peach);
+          font-size: 1.6rem;
+          font-weight: 800;
+          line-height: 1;
+        }
+        .badge-txt {
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-top: 0.25rem;
+          font-size: 0.65rem;
+          font-weight: 700;
+        }
+        .about-content {
+          z-index: 10;
+        }
+        .about-lead {
+          color: var(--text-main);
+          margin-bottom: 1.5rem;
+          font-size: 1.15rem;
+          font-weight: 500;
+          line-height: 1.6;
+        }
+        .about-text {
+          color: var(--text-muted);
+          margin-bottom: 1.5rem;
+          font-size: 0.95rem;
+          line-height: 1.7;
+        }
+        .about-stats {
+          border-top: 1px solid #ffa85214;
+          border-bottom: 1px solid #ffa85214;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+          margin: 3rem 0;
+          padding: 2.2rem 0;
+          display: grid;
+        }
+        @media (max-width: 480px) {
+          .about-stats {
+            text-align: center;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+        }
+        .stat-box {
+          flex-direction: column;
+          gap: 0.4rem;
+          display: flex;
+        }
+        .stat-number {
+          font-family: var(--font-headings);
+          color: var(--accent-peach);
+          text-shadow: 0 0 10px #ffa8521a;
+          font-size: 1.8rem;
+          font-weight: 800;
+          line-height: 1;
+        }
+        @media (min-width: 768px) {
+          .stat-number {
+            font-size: 2.2rem;
+          }
+        }
+        .stat-label {
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+        .about-action {
+          margin-top: 2rem;
+        }
+        .about-btn {
+          text-align: center;
+          justify-content: center;
+          width: 100%;
+        }
+        @media (min-width: 768px) {
+          .about-btn {
+            width: auto;
+          }
+        }
+      `}</style>
     </section>
   );
 }

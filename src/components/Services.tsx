@@ -1,185 +1,472 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import SectionFlourish from "./SectionFlourish";
-import TornPaperDivider from "./TornPaperDivider";
+import React, { useState } from "react";
 
 interface ServicesProps {
-  onOpenBooking: () => void;
+  onOpenBooking?: () => void;
 }
 
+const servicesData = [
+  {
+    id: 1,
+    title: "Bespoke Tattoos",
+    subtitle: "Custom & Flash Artistry",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+      </svg>
+    ),
+    description:
+      "From micro-realism to large mythological backpieces, our resident artists compose digital mockups of custom designs, chiseled to fit your anatomy.",
+    duration: "Depends on design complexity",
+    bullets: [
+      "100% sterile, single-use needle setups",
+      "Neotraditional, Realism & Fine-line Art",
+      "Complimentary touch-ups for 30 days",
+      "Medical-grade protective healing wraps",
+    ],
+    image: "/assets/tattoo-ganesha.jpg",
+  },
+  {
+    id: 2,
+    title: "Clinical Piercings",
+    subtitle: "Precision Body Articulation",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="4" />
+        <line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
+      </svg>
+    ),
+    description:
+      "Expertly curated ear, facial, and body placement using hospital-grade sterilization, autoclave checks, and premium titanium and gold hardware.",
+    duration: "15 - 30 minutes",
+    bullets: [
+      "Implant-grade ASTM F-136 Titanium",
+      "Autoclave sterile-indicator pouches",
+      "No piercing guns—needle-only precision",
+      "Detailed custom anatomical curations",
+    ],
+    image: "/assets/piercing-2.jpg",
+  },
+  {
+    id: 3,
+    title: "Microblading",
+    subtitle: "Semi-Permanent Brow Artistry",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M12 20h9" />
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+      </svg>
+    ),
+    description:
+      "Transform your brows with hyper-realistic, individual strokes mimicking natural hair growth or smooth ombre powder shading.",
+    duration: "2 - 3 hours",
+    bullets: [
+      "Anatomy-based brow measurements",
+      "Hypoallergenic organic pigment ranges",
+      "Initial shaping consultation included",
+      "Includes follow-up check in 6 weeks",
+    ],
+    image: "/assets/service-microblading.jpg",
+  },
+  {
+    id: 4,
+    title: "Lip Pigmentation",
+    subtitle: "Blush & Color Correction",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z" />
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+      </svg>
+    ),
+    description:
+      "Enhance your natural lip shape and color with permanent lip blushing, defining borders, correcting symmetry, and adding a lasting, healthy tint.",
+    duration: "2 - 2.5 hours",
+    bullets: [
+      "Custom shade-matching pigment tests",
+      "Symmetry mapping & correction mapping",
+      "Hypoallergenic, organic lip pigments",
+      "Quick healing process (~5 days)",
+    ],
+    image: "/assets/service-lip.jpg",
+  },
+];
+
 export default function Services({ onOpenBooking }: ServicesProps) {
-  const [selectedService, setSelectedService] = useState(0);
+  const [activePanel, setActivePanel] = useState(1);
 
-  const servicesList = [
-    {
-      id: "01",
-      name: "Custom Tattoo",
-      title: "CUSTOM TATTOOS",
-      desc: "Bespoke custom designs, high-contrast photorealism, and portraiture crafted with micro-needle precision and premium inks. From lifelike wildlife and mythology to heirloom custom concepts tailored to your body contours.",
-      image: "/images/IMG_20260829_212716_292.jpg",
-      icon: "/images/IMG_20260829_212801_249.jpg",
-    },
-    {
-      id: "02",
-      name: "Fine Line / Minimalist",
-      title: "FINE LINE & MINIMALIST",
-      desc: "Delicate single-needle linework, minimalist designs, calligraphy scripts, and botanical art. Whisper-thin execution with zero pigment bleed and razor-sharp clarity that lasts a lifetime.",
-      image: "/images/IMG_20260829_212719_574.jpg",
-      icon: "/images/IMG_20260829_212754_172.jpg",
-    },
-    {
-      id: "03",
-      name: "Ear & Helix Piercing",
-      title: "EAR & HELIX PIERCING",
-      desc: "Expert clinical piercing for earlobes, helix, tragus, conch, and curated ear stacks. Performed with sterile single-use needles and ASTM F-136 Implant-Grade Titanium jewelry.",
-      image: "/images/piercing/IMG_20260829_213245_583.jpg",
-      icon: "/images/piercing/IMG_20260829_213245_633.jpg",
-    },
-    {
-      id: "04",
-      name: "Nose & Bugadi",
-      title: "NOSE & BUGADI PIERCING",
-      desc: "Specialized nose, nostril studs, septum, and traditional bugadi piercings with precision anatomical alignment and gentle, rapid-healing techniques.",
-      image: "/images/piercing/IMG_20260829_213245_714.jpg",
-      icon: "/images/piercing/IMG_20260829_213245_723.jpg",
-    },
-    {
-      id: "05",
-      name: "Tribal & Blackwork",
-      title: "TRIBAL & GEOMETRIC",
-      desc: "Sacred geometry, Polynesian patterns, and bold blackwork designed to flow with anatomical posture. Deep pigment saturation and sharp geometric edges.",
-      image: "/images/IMG_20260829_212727_311.jpg",
-      icon: "/images/IMG_20260829_212727_311.jpg",
-    },
-    {
-      id: "06",
-      name: "Cover-Up Tattoo",
-      title: "CUSTOM COVER-UPS",
-      desc: "Advanced pigment restructuring and layered shading to completely transform faded, unwanted tattoos into stunning modern masterworks without laser scarring.",
-      image: "/images/IMG_20260829_212734_480.jpg",
-      icon: "/images/about_story.jpg",
-    },
-  ];
-
-  const current = servicesList[selectedService];
-
-  const handleNext = () => {
-    setSelectedService((prev) => (prev + 1) % servicesList.length);
-  };
-
-  const handlePrev = () => {
-    setSelectedService((prev) => (prev - 1 + servicesList.length) % servicesList.length);
+  const handleBookingClick = (e: React.MouseEvent) => {
+    if (onOpenBooking) {
+      e.preventDefault();
+      onOpenBooking();
+    }
   };
 
   return (
-    <section id="services" className="relative bg-[#FFA028] text-[#0C0D12] pt-12 pb-24 md:pb-36 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-12">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-wider text-[#0C0D12] uppercase"
-          >
-            OUR SERVICES
-          </motion.h2>
-          <SectionFlourish color="#0C0D12" />
+    <section id="services" className="services-section">
+      <div className="container">
+        <div className="section-title-wrapper">
+          <span className="section-subtitle">Our Expertise</span>
+          <h2 className="section-title">Studio Services</h2>
         </div>
-
-        {/* Top 6 Thumbnail Pills Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-14 max-w-5xl mx-auto">
-          {servicesList.map((service, idx) => (
-            <button
-              key={service.id}
-              onClick={() => setSelectedService(idx)}
-              className={`flex flex-col items-center gap-2 p-2 sm:p-3 rounded-lg transition-all duration-300 cursor-pointer ${
-                selectedService === idx
-                  ? "bg-[#0C0D12] text-white shadow-2xl scale-105"
-                  : "bg-white/40 hover:bg-white/70 text-[#0C0D12] border border-[#0C0D12]/15"
-              }`}
-            >
-              <div className="w-full aspect-[4/3] rounded overflow-hidden bg-black/20">
-                <img
-                  src={service.icon}
-                  alt={service.name}
-                  className="w-full h-full object-cover grayscale contrast-125"
-                />
-              </div>
-              <span className="font-display text-xs sm:text-sm font-bold tracking-wide uppercase text-center">
-                {service.name}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        {/* Center Featured Showcase Card with Slider Arrows */}
-        <div className="relative max-w-3xl mx-auto">
-          {/* Left Arrow Button */}
-          <button
-            onClick={handlePrev}
-            aria-label="Previous Service"
-            className="absolute -left-4 sm:-left-12 top-1/3 -translate-y-1/2 z-20 w-10 h-10 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] flex items-center justify-center rounded-full shadow-xl transition-all cursor-pointer"
-          >
-            <ChevronLeft size={22} />
-          </button>
-
-          {/* Right Arrow Button */}
-          <button
-            onClick={handleNext}
-            aria-label="Next Service"
-            className="absolute -right-4 sm:-right-12 top-1/3 -translate-y-1/2 z-20 w-10 h-10 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] flex items-center justify-center rounded-full shadow-xl transition-all cursor-pointer"
-          >
-            <ChevronRight size={22} />
-          </button>
-
-          {/* Card Content */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={current.id}
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col items-center text-center"
-            >
-              {/* White Framed Showcase Photo */}
-              <div className="w-full max-w-xl aspect-[16/10] bg-white p-3 sm:p-4 rounded shadow-2xl overflow-hidden mb-8 border-4 border-white">
-                <img
-                  src={current.image}
-                  alt={current.title}
-                  className="w-full h-full object-cover contrast-110"
-                />
-              </div>
-
-              {/* Title & Description */}
-              <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-wider text-[#0C0D12] uppercase mb-4">
-                {current.title}
-              </h3>
-
-              <p className="text-[#0C0D12]/80 font-sans text-xs sm:text-sm md:text-base leading-relaxed max-w-xl mb-8">
-                {current.desc}
-              </p>
-
-              {/* Read More Button */}
-              <button
-                onClick={onOpenBooking}
-                className="px-8 py-3 bg-[#0C0D12] hover:bg-white text-white hover:text-[#0C0D12] font-display text-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-xl cursor-pointer"
+        <div className="services-panels-container">
+          {servicesData.map((item) => {
+            const isExpanded = activePanel === item.id;
+            return (
+              <div
+                key={item.id}
+                onMouseEnter={() => setActivePanel(item.id)}
+                onClick={() => setActivePanel(item.id)}
+                className={`service-panel ${isExpanded ? "expanded" : ""}`}
               >
-                READ MORE
-              </button>
-            </motion.div>
-          </AnimatePresence>
+                <div
+                  style={{ backgroundImage: `url(${item.image})` }}
+                  className="panel-bg"
+                />
+                <div className="panel-overlay-dark" />
+                <div className="panel-overlay-glow" />
+                <div className="panel-content">
+                  <div className="panel-collapsed-header">
+                    <span className="panel-num">0{item.id}</span>
+                    <h3 className="panel-vertical-title">{item.title}</h3>
+                  </div>
+                  <div className="panel-body">
+                    <span className="panel-subtitle-label">
+                      {item.subtitle}
+                    </span>
+                    <h3 className="panel-title-expanded">{item.title}</h3>
+                    <p className="panel-desc">{item.description}</p>
+                    <div className="panel-duration">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{
+                          color: "var(--accent-peach)",
+                          marginRight: "0.5rem",
+                        }}
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                      </svg>
+                      <span>Estimated Duration: {item.duration}</span>
+                    </div>
+                    <ul className="panel-bullets-list">
+                      {item.bullets.map((bullet, idx) => (
+                        <li key={idx} className="panel-bullet-item">
+                          <span className="panel-bullet-dot" />
+                          <span>{bullet}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="panel-action">
+                      <a
+                        href="#booking"
+                        onClick={handleBookingClick}
+                        className="btn-primary panel-booking-btn"
+                      >
+                        Book Consultation
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Torn Paper Edge at the Bottom transitioning to White Artists Section */}
-      <div className="absolute bottom-0 left-0 right-0 w-full z-20">
-        <TornPaperDivider fill="#FFFFFF" position="bottom" variant={3} />
-      </div>
+      <style jsx>{`
+        .services-section {
+          background: linear-gradient(
+            180deg,
+            var(--bg-storm-dark) 0%,
+            var(--bg-storm-medium) 100%
+          );
+          padding: 8rem 0;
+          position: relative;
+        }
+        .services-panels-container {
+          flex-direction: column;
+          gap: 1.5rem;
+          width: 100%;
+          margin-top: 4rem;
+          display: flex;
+        }
+        @media (min-width: 992px) {
+          .services-panels-container {
+            flex-direction: row;
+            gap: 1rem;
+            height: 550px;
+          }
+        }
+        .service-panel {
+          cursor: pointer;
+          will-change: flex-grow;
+          border: 1px solid #ffa8520d;
+          border-radius: 20px;
+          flex-direction: column;
+          width: 100%;
+          transition: flex-grow 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+            border-color 0.4s, box-shadow 0.4s;
+          display: flex;
+          position: relative;
+          overflow: hidden;
+        }
+        @media (min-width: 992px) {
+          .service-panel {
+            flex: 1;
+            height: 100%;
+          }
+          .service-panel.expanded {
+            border-color: #ffa85240;
+            flex-grow: 4.2;
+            box-shadow: 0 20px 45px #0000008c, 0 0 25px #ffa8520a;
+          }
+        }
+        .panel-bg {
+          filter: grayscale(0.15) brightness(0.55);
+          will-change: transform, filter;
+          background-position: 50%;
+          background-size: cover;
+          width: 100%;
+          height: 200px;
+          transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+            filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @media (min-width: 992px) {
+          .panel-bg {
+            filter: grayscale(0.4) brightness(0.32);
+            height: 100%;
+            position: absolute;
+            inset: 0;
+          }
+          .service-panel.expanded .panel-bg {
+            filter: grayscale(0) brightness(0.48);
+            transform: scale(1.05);
+          }
+        }
+        .panel-overlay-dark {
+          z-index: 1;
+          pointer-events: none;
+          background: linear-gradient(#07090e4d 0%, #07090ed9 100%);
+          position: absolute;
+          inset: 0;
+        }
+        .panel-overlay-glow {
+          z-index: 2;
+          pointer-events: none;
+          opacity: 0;
+          background: radial-gradient(
+            circle at 50% 100%,
+            #ffa85208,
+            transparent 70%
+          );
+          transition: opacity 0.8s;
+          position: absolute;
+          inset: 0;
+        }
+        .service-panel.expanded .panel-overlay-glow {
+          opacity: 1;
+        }
+        .panel-content {
+          z-index: 10;
+          flex-direction: column;
+          flex-grow: 1;
+          justify-content: flex-end;
+          padding: 2.2rem 1.8rem;
+          display: flex;
+          position: relative;
+        }
+        @media (min-width: 992px) {
+          .panel-content {
+            padding: 2.8rem;
+            position: absolute;
+            inset: 0;
+          }
+        }
+        .panel-collapsed-header {
+          display: none;
+        }
+        @media (min-width: 992px) {
+          .panel-collapsed-header {
+            pointer-events: none;
+            opacity: 1;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 0 auto;
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            position: absolute;
+            top: 2.8rem;
+            left: 0;
+            right: 0;
+          }
+          .service-panel.expanded .panel-collapsed-header {
+            opacity: 0;
+          }
+        }
+        .panel-num {
+          font-family: var(--font-headings);
+          color: var(--accent-peach);
+          letter-spacing: 0.05em;
+          text-shadow: 0 0 10px #ffa85233;
+          font-size: 1.4rem;
+          font-weight: 400;
+        }
+        .panel-vertical-title {
+          writing-mode: vertical-rl;
+          font-family: var(--font-headings);
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          white-space: nowrap;
+          font-size: 1.25rem;
+          font-weight: 700;
+          transform: rotate(180deg);
+        }
+        .panel-body {
+          opacity: 1;
+          pointer-events: auto;
+          flex-direction: column;
+          display: flex;
+          transform: none;
+        }
+        @media (min-width: 992px) {
+          .panel-body {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.32s,
+              transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.32s;
+            transform: translateY(18px);
+          }
+          .service-panel.expanded .panel-body {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+          }
+        }
+        .panel-subtitle-label {
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: var(--accent-peach);
+          margin-bottom: 0.4rem;
+          font-size: 0.65rem;
+          font-weight: 700;
+          display: block;
+        }
+        .panel-title-expanded {
+          font-family: var(--font-headings);
+          color: var(--text-main);
+          letter-spacing: 0.02em;
+          margin-bottom: 1.2rem;
+          font-size: 1.8rem;
+          font-weight: 800;
+          line-height: 1.2;
+        }
+        @media (min-width: 768px) {
+          .panel-title-expanded {
+            font-size: 2.2rem;
+          }
+        }
+        .panel-desc {
+          color: var(--text-muted);
+          max-width: 500px;
+          margin-bottom: 1.5rem;
+          font-size: 0.95rem;
+          line-height: 1.6;
+        }
+        .panel-duration {
+          color: var(--text-main);
+          align-items: center;
+          margin-bottom: 1.5rem;
+          font-size: 0.85rem;
+          font-weight: 600;
+          display: flex;
+        }
+        .panel-bullets-list {
+          flex-direction: column;
+          gap: 0.6rem;
+          margin-bottom: 2rem;
+          display: flex;
+        }
+        .panel-bullet-item {
+          color: var(--text-muted);
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 0.9rem;
+          display: flex;
+        }
+        .panel-bullet-dot {
+          background-color: var(--accent-peach);
+          width: 5px;
+          height: 5px;
+          box-shadow: 0 0 6px var(--accent-peach);
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+        .panel-action {
+          padding-top: 0.5rem;
+        }
+        .panel-booking-btn {
+          text-align: center;
+          justify-content: center;
+          width: 100%;
+        }
+        @media (min-width: 768px) {
+          .panel-booking-btn {
+            width: auto;
+          }
+        }
+      `}</style>
     </section>
   );
 }
