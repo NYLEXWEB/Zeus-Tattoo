@@ -174,8 +174,8 @@ export default function Hero({ onOpenBooking }: HeroProps) {
               poster="/scrolling-video/desktop/poster.webp"
               className={`hero-video ${videoLoaded ? "loaded" : ""}`}
             >
-              <source src="/scrolling-video/desktop/hero-desktop.webm" type="video/webm" />
               <source src="/scrolling-video/desktop/hero-desktop.mp4" type="video/mp4" />
+              <source src="/scrolling-video/desktop/hero-desktop.webm" type="video/webm" />
             </video>
             {/* Cinematic Vignette Overlay */}
             <div className="hero-vignette" />

@@ -11,10 +11,14 @@ export default function Header({ onOpenBooking }: HeaderProps) {
   const [inHero, setInHero] = useState(true);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Hide navbar when scrolled past the hero section (approx 450px or when hero leaves)
+    let heroHeight = 450;
+
+    const updateHeroHeight = () => {
       const heroEl = document.getElementById("home");
-      const heroHeight = heroEl ? heroEl.offsetHeight - 120 : 450;
+      heroHeight = heroEl ? heroEl.offsetHeight - 120 : 450;
+    };
+
+    const handleScroll = () => {
       if (window.scrollY > heroHeight) {
         setInHero(false);
       } else {
@@ -22,9 +26,15 @@ export default function Header({ onOpenBooking }: HeaderProps) {
       }
     };
 
+    updateHeroHeight();
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", updateHeroHeight, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateHeroHeight);
+    };
   }, []);
 
   const toggleMenu = () => setMobileMenuOpen(!mobileMenuOpen);
