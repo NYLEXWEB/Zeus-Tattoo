@@ -303,22 +303,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           background-color: #07090e;
         }
 
-        .hero-ambient-glow {
-          position: absolute;
-          width: 600px;
-          height: 600px;
-          background: radial-gradient(
-            circle,
-            rgba(255, 168, 82, 0.12) 0%,
-            rgba(255, 168, 82, 0) 70%
-          );
-          top: 20%;
-          left: 10%;
-          filter: blur(60px);
-          pointer-events: none;
-          z-index: 1;
-        }
-
         .hero-video-wrapper {
           position: absolute;
           inset: 0;
@@ -335,31 +319,11 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           object-fit: cover;
           object-position: center;
           display: block;
-          opacity: 0.95;
-          transition: opacity 0.4s ease;
+          opacity: 1;
         }
 
         .hero-video.loaded {
           opacity: 1;
-        }
-
-        .hero-vignette {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            90deg,
-            rgba(7, 9, 14, 0.92) 0%,
-            rgba(7, 9, 14, 0.78) 38%,
-            rgba(7, 9, 14, 0.35) 68%,
-            rgba(7, 9, 14, 0.15) 100%
-          ),
-          radial-gradient(
-            ellipse at center,
-            transparent 50%,
-            rgba(7, 9, 14, 0.65) 100%
-          );
-          pointer-events: none;
-          z-index: 3;
         }
 
         .hero-content-layer {
@@ -519,30 +483,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         }
 
         /* MOBILE SCROLL MODE: Portrait Video & Cinematic Layout */
-        .mobile-scroll-mode .hero-vignette {
-          background: linear-gradient(
-            180deg,
-            rgba(7, 9, 14, 0.88) 0%,
-            rgba(7, 9, 14, 0.45) 25%,
-            rgba(7, 9, 14, 0.40) 70%,
-            rgba(7, 9, 14, 0.92) 100%
-          ),
-          radial-gradient(
-            ellipse at center,
-            rgba(7, 9, 14, 0.15) 0%,
-            rgba(7, 9, 14, 0.65) 100%
-          );
-        }
-
-        .mobile-scroll-mode .hero-ambient-glow {
-          width: 320px;
-          height: 320px;
-          top: 15%;
-          left: 50%;
-          transform: translateX(-50%);
-          opacity: 0.18;
-        }
-
         .mobile-scroll-mode .scroll-indicator-container {
           bottom: 1.25rem;
         }
