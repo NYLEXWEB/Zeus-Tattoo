@@ -243,7 +243,7 @@ export default function Gallery() {
   };
 
   return (
-    <section id="gallery" className="gallery-section">
+    <section id="gallery" ref={sectionRef} className="gallery-section">
       <div className="container">
         {/* Clean Centered Header */}
         <div className="gallery-header-wrapper">
