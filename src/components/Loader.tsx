@@ -44,7 +44,7 @@ export default function Loader() {
     let isMounted = true;
     let loadedCount = 0;
     const isDesktop = typeof window !== "undefined" && window.innerWidth > 1024;
-    const totalAssets = CRITICAL_ASSETS.length + (isDesktop ? 1 : 0);
+    const totalAssets = CRITICAL_ASSETS.length + 1;
 
     // Smooth counter animation loop synced with real progress
     const animInterval = setInterval(() => {
@@ -87,15 +87,15 @@ export default function Loader() {
       }
     });
 
-    // 2. Preload desktop hero video buffer on desktop screens
-    if (isDesktop) {
-      const testVid = document.createElement("video");
-      testVid.preload = "auto";
-      testVid.src = "/scrolling-video/desktop/hero-desktop.mp4";
-      testVid.onloadeddata = updateRealProgress;
-      testVid.oncanplay = updateRealProgress;
-      testVid.onerror = updateRealProgress;
-    }
+    // 2. Preload hero video buffer (desktop or mobile)
+    const testVid = document.createElement("video");
+    testVid.preload = "auto";
+    testVid.src = isDesktop
+      ? "/scrolling-video/desktop/hero-desktop.mp4"
+      : "/scrolling-video/mobile/flow-1a1f07c4-bc50-446a-bce2-.mp4";
+    testVid.onloadeddata = updateRealProgress;
+    testVid.oncanplay = updateRealProgress;
+    testVid.onerror = updateRealProgress;
 
     // 3. Wait for web fonts & DOM ready state
     if (document.fonts) {
