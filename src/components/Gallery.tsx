@@ -65,8 +65,10 @@ const portfolioItems: PortfolioItem[] = [
 export default function Gallery() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const [screenWidth, setScreenWidth] = useState(1200);
 
+  const sectionRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
 
@@ -76,6 +78,22 @@ export default function Gallery() {
     updateWidth();
     window.addEventListener("resize", updateWidth);
     return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  // Viewport intersection observer to avoid CPU cycles when offscreen
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { rootMargin: "100px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   // Advance next: active image transitions to left, right image comes to center
@@ -90,16 +108,16 @@ export default function Gallery() {
     );
   }, []);
 
-  // Auto-advance every 3 seconds (3000ms)
+  // Auto-advance every 3 seconds only when in viewport and not hovered
   useEffect(() => {
-    if (isHovered) return;
+    if (!isInView || isHovered) return;
 
     const timer = setInterval(() => {
       handleNext();
     }, 3000);
 
     return () => clearInterval(timer);
-  }, [isHovered, handleNext]);
+  }, [isInView, isHovered, handleNext]);
 
   // Keyboard navigation
   useEffect(() => {
