@@ -154,9 +154,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       ref={trackRef}
     >
       <div className="hero-sticky-viewport">
-        {/* Background Ambient Glow */}
-        <div className="hero-ambient-glow" />
-
         {/* Video Canvas */}
         <div className="hero-video-wrapper">
           <video
@@ -195,8 +192,6 @@ export default function Hero({ onOpenBooking }: HeroProps) {
               </>
             )}
           </video>
-          {/* Cinematic Vignette Overlay */}
-          <div className="hero-vignette" />
         </div>
 
         {/* Hero Content Layer */}
