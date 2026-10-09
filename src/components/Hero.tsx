@@ -30,10 +30,8 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Desktop Scroll-Driven Video Scrub Engine (Active only on desktop > 1024px)
+  // Scroll-Driven Video Scrub Engine (Active on both desktop & mobile)
   useEffect(() => {
-    if (isMobile) return;
-
     let isHeroInView = true;
     let lastSeekTime = 0;
     let prevProgress = -1;
@@ -63,8 +61,13 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       // Clamp progress precisely between 0 and 1
       const progress = Math.max(0, Math.min(1, scrolled / trackHeight));
       targetProgressRef.current = progress;
-      // 9-second video duration mapping
-      targetTimeRef.current = progress * 9.0;
+      
+      const video = videoRef.current;
+      const duration =
+        video && video.duration && !isNaN(video.duration) && video.duration > 0
+          ? video.duration
+          : 9.0;
+      targetTimeRef.current = progress * duration;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -83,19 +86,16 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       const progress = targetProgressRef.current;
       const now = performance.now();
 
-      // Hardware-friendly video seek throttled to 30fps max (33ms) to prevent GPU decode bottlenecks
-      if (video && video.readyState >= 2 && !isSeekingRef.current && now - lastSeekTime > 32) {
+      // Hardware-friendly video seek throttled to 30fps max (32ms) to prevent GPU decode bottlenecks
+      const isSeekingLocked = isSeekingRef.current && (now - lastSeekTime < 50);
+      if (video && video.readyState >= 1 && !isSeekingLocked && now - lastSeekTime > 30) {
         const diff = Math.abs(video.currentTime - targetTime);
-        if (diff > 0.03) {
+        if (diff > 0.02) {
           lastSeekTime = now;
           try {
-            if ("fastSeek" in video && typeof (video as unknown as { fastSeek: (t: number) => void }).fastSeek === "function") {
-              (video as unknown as { fastSeek: (t: number) => void }).fastSeek(targetTime);
-            } else {
-              video.currentTime = targetTime;
-            }
-          } catch {
             video.currentTime = targetTime;
+          } catch {
+            // Ignore transient seek errors
           }
         }
       }
@@ -148,41 +148,60 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   }, []);
 
   return (
-    <section id="home" className={`hero-main-container ${isMobile ? "mobile-static-mode" : "desktop-scroll-mode"}`} ref={trackRef}>
-      {/* DESKTOP MODE: 9-Second Scroll-Driven Hero Video System */}
-      {!isMobile && (
-        <div className="hero-sticky-viewport">
-          {/* Background Ambient Glow */}
-          <div className="hero-ambient-glow" />
+    <section
+      id="home"
+      className={`hero-main-container ${isMobile ? "mobile-scroll-mode" : "desktop-scroll-mode"}`}
+      ref={trackRef}
+    >
+      <div className="hero-sticky-viewport">
+        {/* Background Ambient Glow */}
+        <div className="hero-ambient-glow" />
 
-          {/* Desktop Video Canvas */}
-          <div className="hero-video-wrapper">
-            <video
-              ref={videoRef}
-              playsInline
-              muted
-              preload="auto"
-              disablePictureInPicture
-              disableRemotePlayback
-              onCanPlay={handleVideoCanPlay}
-              onSeeking={() => {
-                isSeekingRef.current = true;
-              }}
-              onSeeked={() => {
-                isSeekingRef.current = false;
-              }}
-              poster="/scrolling-video/desktop/poster.webp"
-              className={`hero-video ${videoLoaded ? "loaded" : ""}`}
-            >
-              <source src="/scrolling-video/desktop/hero-desktop.mp4" type="video/mp4" />
-              <source src="/scrolling-video/desktop/hero-desktop.webm" type="video/webm" />
-            </video>
-            {/* Cinematic Vignette Overlay */}
-            <div className="hero-vignette" />
-          </div>
+        {/* Video Canvas */}
+        <div className="hero-video-wrapper">
+          <video
+            ref={videoRef}
+            playsInline
+            muted
+            preload="auto"
+            disablePictureInPicture
+            disableRemotePlayback
+            onCanPlay={handleVideoCanPlay}
+            onSeeking={() => {
+              isSeekingRef.current = true;
+            }}
+            onSeeked={() => {
+              isSeekingRef.current = false;
+            }}
+            poster={isMobile ? undefined : "/scrolling-video/desktop/poster.webp"}
+            className={`hero-video ${videoLoaded ? "loaded" : ""}`}
+            key={isMobile ? "hero-vid-mobile" : "hero-vid-desktop"}
+          >
+            {isMobile ? (
+              <source
+                src="/scrolling-video/mobile/flow-1a1f07c4-bc50-446a-bce2-.mp4"
+                type="video/mp4"
+              />
+            ) : (
+              <>
+                <source
+                  src="/scrolling-video/desktop/hero-desktop.mp4"
+                  type="video/mp4"
+                />
+                <source
+                  src="/scrolling-video/desktop/hero-desktop.webm"
+                  type="video/webm"
+                />
+              </>
+            )}
+          </video>
+          {/* Cinematic Vignette Overlay */}
+          <div className="hero-vignette" />
+        </div>
 
-          {/* Desktop Hero Content Layer */}
-          <div className="hero-content-layer" ref={contentOverlayRef}>
+        {/* Hero Content Layer */}
+        <div className="hero-content-layer" ref={contentOverlayRef}>
+          {!isMobile ? (
             <div className="container hero-container-grid">
               <div className="hero-content">
                 <h1 className="hero-title">
@@ -221,65 +240,56 @@ export default function Hero({ onOpenBooking }: HeroProps) {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Scroll To Explore Indicator */}
-
-        </div>
-      )}
-
-      {/* MOBILE MODE: Original Static Hero with Original Background Image */}
-      {isMobile && (
-        <div className="hero-mobile-static-wrapper">
-          <div className="container hero-mobile-container">
-            <div className="hero-content">
-             
-              <h1 className="hero-title">
-                Chiseled by <span className="lightning-text">Lightning</span>,
-                <br />
-                Inked for Eternity
-              </h1>
-              <p className="hero-description">
-                Experience premium custom tattoos, clinical-grade body piercings, and
-                expert semi-permanent microblading. Illustrated with Olympian
-                precision and clinical sterility in the heart of Kottayam.
-              </p>
-              <div className="hero-actions">
-                <a
-                  href="#booking"
-                  onClick={handleBookingClick}
-                  className="btn-primary"
-                >
-                  Book Free Consultation
-                </a>
-                <a href="#services" className="btn-secondary">
-                  Explore Offerings
-                </a>
-              </div>
-              <div className="hero-stats">
-                <div className="stat-item">
-                  <span className="stat-number">5.0</span>
-                  <span className="stat-label">Google Rating</span>
+          ) : (
+            <div className="container hero-mobile-container">
+              <div className="hero-content">
+                <h1 className="hero-title">
+                  Chiseled by <span className="lightning-text">Lightning</span>,
+                  <br />
+                  Inked for Eternity
+                </h1>
+              
+                <div className="hero-actions">
+                  <a
+                    href="#booking"
+                    onClick={handleBookingClick}
+                    className="btn-primary"
+                  >
+                    Book Free Consultation
+                  </a>
+                  <a href="#services" className="btn-secondary">
+                    Explore Offerings
+                  </a>
                 </div>
-                <div className="stat-divider" />
-                <div className="stat-item">
-                  <span className="stat-number">150+</span>
-                  <span className="stat-label">Verified Reviews</span>
-                </div>
-                <div className="stat-divider" />
-                <div className="stat-item">
-                  <span className="stat-number">100%</span>
-                  <span className="stat-label">Sterility Rate</span>
+                <div className="hero-stats">
+                  <div className="stat-item">
+                    <span className="stat-number">5.0</span>
+                    <span className="stat-label">Google Rating</span>
+                  </div>
+                  <div className="stat-divider" />
+                  <div className="stat-item">
+                    <span className="stat-number">150+</span>
+                    <span className="stat-label">Verified Reviews</span>
+                  </div>
+                  <div className="stat-divider" />
+                  <div className="stat-item">
+                    <span className="stat-number">100%</span>
+                    <span className="stat-label">Sterility Rate</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
+
+
+      </div>
 
       <style jsx>{`
-        /* Desktop Mode: Pinned 350vh scroll track */
-        .desktop-scroll-mode {
+        /* Desktop & Mobile Scroll Track */
+        .hero-main-container,
+        .desktop-scroll-mode,
+        .mobile-scroll-mode {
           position: relative;
           height: 350vh;
           background-color: #07090e;
