@@ -170,9 +170,8 @@ export default function Gallery() {
     if (absDiff > 3) {
       const exitDir = diff > 0 ? 1 : -1;
       return {
-        transform: `translateX(${exitDir * (step3X + 120)}px) translateZ(-400px) scale(0.4) rotateY(${
-          exitDir * -50
-        }deg)`,
+        transform: `translateX(${exitDir * (step3X + 120)}px) translateZ(-400px) scale(0.4) rotateY(${exitDir * -50
+          }deg)`,
         opacity: 0,
         zIndex: 0,
         pointerEvents: "none" as const,
@@ -196,11 +195,9 @@ export default function Gallery() {
     if (absDiff === 1) {
       const isRight = diff > 0;
       return {
-        transform: `translateX(${
-          isRight ? step1X : -step1X
-        }px) translateY(${isMobile ? 12 : 10}px) translateZ(-70px) scale(${
-          isMobile ? 0.78 : 0.83
-        }) rotateY(${isRight ? -25 : 25}deg)`,
+        transform: `translateX(${isRight ? step1X : -step1X
+          }px) translateY(${isMobile ? 12 : 10}px) translateZ(-70px) scale(${isMobile ? 0.78 : 0.83
+          }) rotateY(${isRight ? -25 : 25}deg)`,
         zIndex: 22,
         opacity: isMobile ? 0.45 : 0.65,
         pointerEvents: "auto" as const,
@@ -213,11 +210,9 @@ export default function Gallery() {
     if (absDiff === 2) {
       const isRight = diff > 0;
       return {
-        transform: `translateX(${
-          isRight ? step2X : -step2X
-        }px) translateY(${isMobile ? 22 : 18}px) translateZ(-180px) scale(${
-          isMobile ? 0.6 : 0.68
-        }) rotateY(${isRight ? -36 : 36}deg)`,
+        transform: `translateX(${isRight ? step2X : -step2X
+          }px) translateY(${isMobile ? 22 : 18}px) translateZ(-180px) scale(${isMobile ? 0.6 : 0.68
+          }) rotateY(${isRight ? -36 : 36}deg)`,
         zIndex: 14,
         opacity: isMobile ? 0.15 : 0.35,
         pointerEvents: "auto" as const,
@@ -229,11 +224,9 @@ export default function Gallery() {
     // Step 3: Layered farthest behind
     const isRight = diff > 0;
     return {
-      transform: `translateX(${
-        isRight ? step3X : -step3X
-      }px) translateY(26px) translateZ(-280px) scale(0.52) rotateY(${
-        isRight ? -46 : 46
-      }deg)`,
+      transform: `translateX(${isRight ? step3X : -step3X
+        }px) translateY(26px) translateZ(-280px) scale(0.52) rotateY(${isRight ? -46 : 46
+        }deg)`,
       zIndex: 6,
       opacity: isMobile ? 0 : 0.15,
       pointerEvents: isMobile ? ("none" as const) : ("auto" as const),
@@ -248,7 +241,6 @@ export default function Gallery() {
         {/* Clean Centered Header */}
         <div className="gallery-header-wrapper">
           <span className="gallery-subtitle">
-            <Sparkles className="sparkle-icon" size={14} />
             OUR ARTISTRY
           </span>
           <h2 className="gallery-main-title">
@@ -284,9 +276,8 @@ export default function Gallery() {
                     onClick={() => {
                       if (!isActive) setCurrentIndex(idx);
                     }}
-                    className={`coverflow-card ${
-                      isActive ? "active-center" : "layered-side"
-                    }`}
+                    className={`coverflow-card ${isActive ? "active-center" : "layered-side"
+                      }`}
                   >
                     <div className="card-media-wrapper">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -345,6 +336,7 @@ export default function Gallery() {
           padding: 7rem 0 6rem;
           position: relative;
           overflow: hidden;
+          padding-top:2px;
         }
 
         /* Centered Clean Header */

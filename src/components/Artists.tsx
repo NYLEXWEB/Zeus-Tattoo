@@ -99,11 +99,15 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Responsive 3D circle radii
+  // Responsive 3D circle radii with balanced symmetrical margins
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
-  const radiusX = isMobile ? 260 : isTablet ? 380 : 490;
-  const radiusZ = isMobile ? 180 : isTablet ? 240 : 310;
+  const radiusX = isMobile
+    ? Math.min(windowWidth * 0.36, 240)
+    : isTablet
+    ? Math.min(windowWidth * 0.33, 340)
+    : Math.min(windowWidth * 0.31, 440);
+  const radiusZ = isMobile ? 140 : isTablet ? 190 : 230;
 
   // Viewport intersection observer to completely halt RAF when not in view
   useEffect(() => {
@@ -235,25 +239,23 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
 
   return (
     <section id="artists" ref={sectionRef} className="artists-revolving-section">
-      {/* Top Seamless Torn Paper Divider */}
-      <TornPaperDivider position="top" fill="var(--bg-storm-medium)" variant={2} />
+    
 
-      <div className="container artists-header-container">
+      <div className="container ">
         {/* Section Header */}
         <div className="section-title-wrapper">
           <span className="section-subtitle">
-            <Sparkles size={14} className="sparkle-gold" />
             MASTERS OF THE CRAFT
           </span>
           <h2 className="section-title">MEET OUR ARTISTS</h2>
-          <SectionFlourish color="#ffa852" className="mt-2" />
+          <br />
+
         </div>
       </div>
 
       {/* 3D Circular Revolving Carousel Stage */}
       <div
         className="carousel-3d-stage"
-        onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => {
           setIsHovered(false);
           handlePointerUp();
@@ -264,7 +266,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
         onTouchStart={(e) => handlePointerDown(e.touches[0].clientX)}
         onTouchMove={(e) => handlePointerMove(e.touches[0].clientX)}
         onTouchEnd={handlePointerUp}
-        style={{ cursor: isDragging ? "grabbing" : "grab" }}
+        style={{ cursor: isDragging ? "grabbing" : "default" }}
       >
         {/* Ambient Center Glow */}
         <div className="carousel-ambient-spotlight" />
@@ -297,6 +299,8 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
               <div
                 key={artist.ringKey}
                 onClick={(e) => handleCardClick(normAngle, e)}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
                 style={{
                   transform: `translate3d(${x}px, ${y}px, ${z}px) rotateY(${rotateY}deg) scale(${scale})`,
                   opacity,
@@ -360,52 +364,6 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
         </div>
       </div>
 
-      {/* Navigation Controls & Artist Dots */}
-      <div className="carousel-controls-bar">
-        <button
-          onClick={handlePrev}
-          aria-label="Previous artist"
-          className="carousel-nav-btn prev-btn"
-        >
-          <ChevronLeft size={20} />
-        </button>
-
-        {/* 4 Artist Indicator Dots */}
-        <div className="artist-dots-container">
-          {residentArtists.map((artist, idx) => {
-            const isActive = idx === activeArtistIndex;
-            return (
-              <button
-                key={artist.id}
-                onClick={() => {
-                  // Find ring card matching this index and snap towards it
-                  const targetCard = ringCards.findIndex((c) => c.origIdx === idx);
-                  if (targetCard !== -1) {
-                    const rawAngle = (targetAngleRef.current + targetCard * ANGLE_STEP) % 360;
-                    const norm = ((((rawAngle + 180) % 360) + 360) % 360) - 180;
-                    targetAngleRef.current -= norm;
-                  }
-                }}
-                className={`artist-dot-pill ${isActive ? "dot-active" : ""}`}
-                title={artist.name}
-              >
-                <span className="dot-text">{artist.name.split(" ")[0]}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <button
-          onClick={handleNext}
-          aria-label="Next artist"
-          className="carousel-nav-btn next-btn"
-        >
-          <ChevronRight size={20} />
-        </button>
-      </div>
-
-      {/* Bottom Seamless Torn Paper Divider */}
-      <TornPaperDivider position="bottom" fill="#07090e" variant={1} />
 
       <style jsx>{`
         .artists-revolving-section {
@@ -413,6 +371,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           padding: 6rem 0 7rem;
           position: relative;
           overflow: hidden;
+          padding-bottom: 2px;
         }
 
         .artists-header-container {
@@ -676,7 +635,6 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           background: linear-gradient(135deg, var(--accent-peach), #e08e3e);
           color: var(--text-dark);
           border-color: transparent;
-          box-shadow: 0 4px 20px rgba(255, 168, 82, 0.35);
         }
 
         .artist-consult-btn:hover {
