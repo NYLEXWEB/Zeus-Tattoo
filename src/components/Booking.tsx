@@ -813,6 +813,100 @@ export default function Booking() {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
+
+          /* Find Our Studio - Mobile Alignment & Spacing */
+          .booking-map-section {
+            margin-top: 3.5rem;
+          }
+          .map-showcase-card {
+            border-radius: 18px;
+          }
+          .map-card-header {
+            padding: 1.6rem 1.25rem 1.2rem;
+            gap: 1.1rem;
+            align-items: stretch;
+          }
+          .map-title-block {
+            max-width: 100%;
+          }
+          .map-subtitle {
+            font-size: 0.7rem;
+            margin-bottom: 0.35rem;
+          }
+          .map-heading {
+            font-size: clamp(1.6rem, 5.5vw, 1.95rem);
+            line-height: 1.2;
+          }
+          .map-directions-header-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 0.85rem 1.2rem;
+            font-size: 0.8rem;
+            border-radius: 12px;
+          }
+          .map-info-grid {
+            padding: 0 1.25rem 1.4rem;
+            gap: 0.85rem;
+          }
+          .info-detail-box {
+            padding: 1.15rem 1rem;
+            border-radius: 14px;
+            gap: 0.85rem;
+            align-items: flex-start;
+          }
+          .detail-box-icon-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            flex-shrink: 0;
+          }
+          .detail-box-text {
+            gap: 0.25rem;
+            flex: 1;
+            min-width: 0;
+          }
+          .detail-box-label {
+            font-size: 0.65rem;
+          }
+          .detail-box-value {
+            font-size: 0.84rem;
+            line-height: 1.45;
+            word-break: break-word;
+          }
+          .detail-box-tag {
+            font-size: 0.7rem;
+            margin-top: 0.2rem;
+          }
+          .map-bottom-cover-wrapper {
+            height: 290px;
+          }
+          .map-floating-pill {
+            top: 12px;
+            left: 12px;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.68rem;
+            max-width: calc(100% - 24px);
+          }
+        }
+
+        @media (max-width: 480px) {
+          .map-card-header {
+            padding: 1.4rem 1rem 1rem;
+          }
+          .map-info-grid {
+            padding: 0 1rem 1.25rem;
+            gap: 0.75rem;
+          }
+          .info-detail-box {
+            padding: 1rem 0.85rem;
+            gap: 0.75rem;
+          }
+          .map-heading {
+            font-size: 1.55rem;
+          }
+          .map-bottom-cover-wrapper {
+            height: 260px;
+          }
         }
       `}</style>
     </section>
