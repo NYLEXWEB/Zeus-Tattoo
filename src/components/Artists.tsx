@@ -10,7 +10,6 @@ export interface ArtistItemData {
   image: string;
   name: string;
   role: string;
-  styles: string;
   experience?: string;
   description: string;
   awards?: string;
@@ -23,43 +22,48 @@ interface ArtistsProps {
 export const residentArtists: ArtistItemData[] = [
   {
     id: "artist-1",
-    image: "/images/artist_arjun.jpg",
-    name: "ARYAN 'ZEUS'",
-    role: "FOUNDER & MASTER ARTIST",
-    styles: "Realism • Mythology • Neoclassical Art",
-    experience: "10+ Years Experience • Master Illustrator",
+    image: "/images/IMG_20261103_134519.jpg",
+    name: "SHAIBIN AS",
+    role: "FOUNDER OF ZEUS & PIERCING ARTIST",
+    experience: "FOUNDER OF ZEUS",
     description:
-      "Internationally acclaimed realism specialist dedicated to rendering high-contrast portraiture, mythical iconography, and anatomically precise wildlife imagery chiseled with clinical precision.",
+      "Founder of Zeus, passionate about body art and dedicated to providing professional piercing services.",
   },
   {
     id: "artist-2",
-    image: "/images/artist_meera.jpg",
-    name: "MEERA NAIR",
-    role: "FINE LINE SPECIALIST",
-    styles: "Single-Needle Micro • Botanical • Minimalist Geometry",
-    experience: "8+ Years Experience • Single-Needle Pioneer",
+    image: "/images/IMG_20261103_134832.jpg",
+    name: "JINS GEORGE",
+    role: "SENIOR TATTOO ARTIST",
+    experience: "10+ YEARS EXPERIENCE",
     description:
-      "Master of delicate single-needle micro-realism, fine botanical illustrations, and geometric minimalism. Meera crafts whisper-thin linework engineered for zero pigment bleed and lifelong healed clarity.",
+      "An experienced tattoo artist specializing in creating detailed, creative, and high-quality tattoo designs.",
   },
   {
     id: "artist-3",
-    image: "/images/artist_rahul.jpg",
-    name: "ARJUN VERMA",
-    role: "BLACK & GREY SPECIALIST",
-    styles: "Full Sleeves • Obsidian Wash • Dark Surrealism",
-    experience: "10+ Years Experience • Master of Shading",
+    image: "/images/IMG_20261103_134938.jpg",
+    name: "JYOTHIKA",
+    role: "PIERCING ARTIST",
+    experience: "",
     description:
-      "Specializing in large-scale multi-session sleeve compositions. Arjun combines dark surrealism, architectural flow, and obsidian gradient wash transitions that dynamically follow joint movement.",
+      "A professional piercing artist focused on precision, hygiene, and delivering a comfortable piercing experience.",
   },
   {
     id: "artist-4",
-    image: "/images/artist_sahana.jpg",
-    name: "SAHANA RAO",
-    role: "GEOMETRY & COVER-UPS",
-    styles: "Sacred Mandalas • Stipple Dotwork • Restorations",
-    experience: "9+ Years Experience • Stipple Dotwork Master",
+    image: "/images/IMG_20261103_135021.jpg",
+    name: "BIBIN GEORGE",
+    role: "TATTOO ARTIST",
+    experience: "5 YEARS EXPERIENCE",
     description:
-      "Renowned for complex sacred geometry mandalas and transformative cover-ups. Sahana utilizes multi-layered stippling and dotwork to turn old tattoos into symmetrical masterpieces.",
+      "A skilled tattoo artist with a passion for creative designs and quality tattoo craftsmanship.",
+  },
+  {
+    id: "artist-5",
+    image: "/images/IMG_20261103_134639.jpg",
+    name: "SHAHALYA SHERIN",
+    role: "TATTOO ARTIST",
+    experience: "3 YEARS EXPERIENCE",
+    description:
+      "A creative tattoo artist dedicated to bringing unique ideas to life through detailed and expressive artwork.",
   },
 ];
 
@@ -322,11 +326,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
                     />
                     <div className="artist-img-vignette" />
 
-                    {/* Master Badge */}
-                    <div className="artist-pill-badge">
-                      <Award size={12} className="text-[#ffa852]" />
-                      <span>{artist.role.includes("FOUNDER") ? "RESIDENT FOUNDER" : "RESIDENT ARTIST"}</span>
-                    </div>
+ 
                   </div>
 
                   {/* Information Panel */}
@@ -335,7 +335,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
                     <h3 className="artist-name-title">{artist.name}</h3>
 
                     <div className="artist-style-pill">
-                      <span>{artist.styles}</span>
+                      <span>{artist.experience}</span>
                     </div>
 
                     <p className="artist-bio-text">{artist.description}</p>
@@ -475,7 +475,6 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
         /* Front Center Card Highlight */
         .artist-3d-card.is-front-center .artist-card-inner {
           border-color: rgba(255, 168, 82, 0.55);
-          box-shadow: 0 0 35px rgba(255, 168, 82, 0.25), 0 25px 60px rgba(0, 0, 0, 0.85);
         }
 
         .artist-3d-card.is-revolving-side .artist-card-inner {
@@ -493,7 +492,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           width: 100%;
           height: 52%;
           overflow: hidden;
-          background: #0d111b;
+
         }
 
         .artist-portrait-img {
