@@ -19,6 +19,8 @@
 
 # production
 /build
+.astro/
+dist/
 
 # misc
 .DS_Store

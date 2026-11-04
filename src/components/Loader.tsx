@@ -26,10 +26,11 @@ const CRITICAL_ASSETS = [
   "/assets/moment-2.jpg",
   "/assets/service-microblading.jpg",
   "/assets/service-lip.jpg",
-  "/images/artist_arjun.jpg",
-  "/images/artist_meera.jpg",
-  "/images/artist_rahul.jpg",
-  "/images/artist_sahana.jpg",
+  "/images/IMG_20261103_134519.jpg",
+  "/images/IMG_20261103_134832.jpg",
+  "/images/IMG_20261103_134938.jpg",
+  "/images/IMG_20261103_135021.jpg",
+  "/images/IMG_20261103_134639.jpg",
 ];
 
 export default function Loader() {
@@ -87,21 +88,11 @@ export default function Loader() {
       }
     });
 
-    // 2. Preload hero video buffer (desktop or mobile)
-    const testVid = document.createElement("video");
-    testVid.preload = "auto";
-    testVid.src = isDesktop
-      ? "/scrolling-video/desktop/hero-desktop.mp4"
-      : "/scrolling-video/mobile/flow-1a1f07c4-bc50-446a-bce2-.mp4";
-    testVid.onloadeddata = updateRealProgress;
-    testVid.oncanplay = updateRealProgress;
-    testVid.onerror = updateRealProgress;
-
-    // 3. Wait for web fonts & DOM ready state
+    // 2. Wait for web fonts & DOM ready state
     if (document.fonts) {
       document.fonts.ready.then(() => {
-        if (targetPercentRef.current < 40 && loadedCount > 0) {
-          targetPercentRef.current = Math.max(targetPercentRef.current, 45);
+        if (targetPercentRef.current < 50 && loadedCount > 0) {
+          targetPercentRef.current = Math.max(targetPercentRef.current, 50);
         }
       });
     }
@@ -151,7 +142,7 @@ export default function Loader() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .loader-wrapper {
           z-index: 99999;
           opacity: 1;

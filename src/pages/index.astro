@@ -1,0 +1,110 @@
+---
+import Layout from "../layouts/Layout.astro";
+import SmoothScroll from "../components/SmoothScroll";
+import Loader from "../components/Loader";
+import Header from "../components/Navbar";
+import Hero from "../components/Hero";
+import About from "../components/About";
+import Services from "../components/Services";
+import Artists from "../components/Artists";
+import Gallery from "../components/Gallery";
+import Studio from "../components/Studio";
+import Moments from "../components/Moments";
+import Aftercare from "../components/Aftercare";
+import Booking from "../components/Booking";
+import Footer from "../components/Footer";
+---
+
+<Layout>
+  <!-- Global Lenis Smooth Scroll -->
+  <SmoothScroll client:load />
+
+  <!-- 1. Real Asset Preloader tracking all critical images -->
+  <Loader client:load />
+
+  <!-- 2. Top Navigation Bar with smart sticky blur -->
+  <Header client:load />
+
+  <!-- 3. Main Page Flow -->
+  <main style="min-height: 100vh; padding-top: 0px;">
+    <!-- Hero Section with Scrub Video -->
+    <Hero client:load />
+
+
+
+      <!-- About Sanctuary Section -->
+      <div class="reveal-section">
+        <About client:visible />
+      </div>
+
+      <!-- Studio Services Section -->
+      <div class="reveal-section">
+        <Services client:visible />
+      </div>
+
+      <!-- Artists Section (3D Revolving Turntable Ring) -->
+      <div class="reveal-section">
+        <Artists client:visible />
+      </div>
+
+      <!-- Portfolio / Gallery Section -->
+      <div class="reveal-section">
+        <Gallery client:visible />
+      </div>
+
+      <!-- Studio Space & Fan Deck Carousel Section -->
+      <div class="reveal-section">
+        <Studio client:visible />
+      </div>
+
+      <!-- Studio Moments Section -->
+      <div class="reveal-section">
+        <Moments client:visible />
+      </div>
+
+      <!-- Aftercare Guidelines Section -->
+      <div class="reveal-section">
+        <Aftercare client:visible />
+      </div>
+
+      <!-- Booking & Studio Location Map Section -->
+      <div class="reveal-section">
+        <Booking client:visible />
+      </div>
+  </main>
+
+  <!-- 4. Site Footer -->
+  <Footer client:visible />
+</Layout>
+
+<script>
+  // Section scroll reveal observer - observes wrapper containers, never mutates React DOM elements
+  const initSectionObserver = () => {
+    const reveals = document.querySelectorAll(".reveal-section");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("reveal-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "0px 0px -30px 0px",
+        threshold: 0.04,
+      }
+    );
+
+    reveals.forEach((el) => {
+      observer.observe(el);
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSectionObserver);
+  } else {
+    setTimeout(initSectionObserver, 150);
+  }
+</script>

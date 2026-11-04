@@ -18,6 +18,8 @@ export default function Studio() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
+  const touchStartX = useRef<number>(0);
+
   // Viewport observer
   useEffect(() => {
     const el = sectionRef.current;
@@ -71,17 +73,37 @@ export default function Studio() {
     if (isInView && !isHovered) startAutoPlay();
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      if (diff > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+  };
+
   return (
-    <section id="studio" ref={sectionRef} className="studio-section">
+    <section
+      id="studio"
+      ref={sectionRef}
+      className="studio-section"
+      suppressHydrationWarning={true}
+    >
       <div className="container">
         <div className="studio-grid">
           <div className="studio-info">
             <span className="section-subtitle">The Space</span>
             <h2 className="section-title">Our Studio</h2>
             <p className="studio-description">
-              Located in the heart of Kottayam, our studio balances a luxury neoclassical
-              aesthetic with absolute clinical sterility. Designed for comfort, focus, and
-              uncompromising safety.
+              Located in the heart of Kottayam, our studio balances a luxury
+              neoclassical aesthetic with absolute clinical sterility. Designed
+              for comfort, focus, and uncompromising safety.
             </p>
             <div className="studio-features-list">
               <div className="feature-item">
@@ -154,6 +176,8 @@ export default function Studio() {
               setHoveredCard(null);
               startAutoPlay();
             }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             className="studio-carousel-viewport"
           >
             <div className="fan-deck-container">
@@ -171,7 +195,7 @@ export default function Studio() {
 
                 if (hoveredCard !== null) {
                   if (isThisHovered) {
-                    transY -= 28;
+                    transY -= 26;
                     scaleVal += 0.06;
                     rotZ *= 0.25;
                     opac = 1;
@@ -193,9 +217,8 @@ export default function Studio() {
                     onMouseEnter={() => setHoveredCard(idx)}
                     onMouseLeave={() => setHoveredCard(null)}
                     style={{
-                      transform: `translateX(${
-                        offset * (isHovered ? 88 : 46)
-                      }px) translateY(${transY}px) rotate(${rotZ}deg) scale(${scaleVal})`,
+                      transform: `translateX(${offset * (isHovered ? 80 : 44)
+                        }px) translateY(${transY}px) rotate(${rotZ}deg) scale(${scaleVal})`,
                       zIndex: zIdx,
                       opacity: opac,
                       filter:
@@ -221,26 +244,26 @@ export default function Studio() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .studio-section {
           background: linear-gradient(
             180deg,
             var(--bg-storm-medium) 0%,
             var(--bg-storm-dark) 100%
           );
-          padding: 8rem 0;
+          padding: 7rem 0;
           position: relative;
           overflow: hidden;
         }
         .studio-grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
           align-items: center;
-          gap: 5rem;
+          gap: 3.5rem;
           display: grid;
         }
         @media (min-width: 992px) {
           .studio-grid {
-            grid-template-columns: 1fr 1.1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
             gap: 4rem;
           }
         }
@@ -283,13 +306,13 @@ export default function Studio() {
           display: flex;
         }
         .control-btn {
-          width: 48px;
-          height: 48px;
+          width: 46px;
+          height: 46px;
           color: var(--text-main);
           cursor: pointer;
           transition: var(--transition-smooth);
           background: #0d111b99;
-          border: 1px solid #ffa85226;
+          border: 1px solid rgba(255, 168, 82, 0.25);
           border-radius: 50%;
           justify-content: center;
           align-items: center;
@@ -298,9 +321,8 @@ export default function Studio() {
         .control-btn:hover {
           border-color: var(--accent-peach);
           color: var(--accent-peach);
-          background: #ffa85214;
+          background: rgba(255, 168, 82, 0.12);
           transform: scale(1.05);
-          box-shadow: none !important;
         }
         .control-counter {
           letter-spacing: 0.1em;
@@ -314,22 +336,44 @@ export default function Studio() {
           justify-content: center;
           align-items: center;
           width: 100%;
-          height: 450px;
+          height: 420px;
           display: flex;
           position: relative;
+          touch-action: pan-y;
+          user-select: none;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 640px) {
           .studio-carousel-viewport {
-            height: 560px;
+            height: 480px;
+          }
+        }
+        @media (min-width: 992px) {
+          .studio-carousel-viewport {
+            height: 540px;
           }
         }
         .fan-deck-container {
-          perspective: 1400px;
-          width: 250px;
-          height: 380px;
+          perspective: 1300px;
+          width: 240px;
+          height: 360px;
           position: relative;
         }
-        @media (min-width: 768px) {
+        @media (max-width: 480px) {
+          .fan-deck-container {
+            width: 200px;
+            height: 310px;
+          }
+          .studio-carousel-viewport {
+            height: 360px;
+          }
+        }
+        @media (min-width: 640px) {
+          .fan-deck-container {
+            width: 280px;
+            height: 420px;
+          }
+        }
+        @media (min-width: 992px) {
           .fan-deck-container {
             width: 320px;
             height: 480px;
@@ -356,10 +400,11 @@ export default function Studio() {
             box-shadow 0.8s;
           position: relative;
           overflow: hidden;
-          box-shadow: 0 15px 40px #00000073;
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
         }
         .fan-card.active .fan-card-inner {
-          box-shadow: 0 25px 60px #000000a6, 0 0 35px #ffa8520f;
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8),
+            0 0 35px rgba(255, 168, 82, 0.15);
         }
         .fan-card-img {
           object-fit: cover;

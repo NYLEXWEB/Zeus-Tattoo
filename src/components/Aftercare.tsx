@@ -84,7 +84,11 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
   };
 
   return (
-    <section id="aftercare" className="aftercare-section">
+    <section
+      id="aftercare"
+      className="aftercare-section"
+      suppressHydrationWarning={true}
+    >
       <div className="container">
         <div className="section-title-wrapper">
           <span className="section-subtitle">Long-term Healing</span>
@@ -237,7 +241,7 @@ export default function Aftercare({ onOpenBooking }: AftercareProps) {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .aftercare-section {
           background: linear-gradient(
             180deg,

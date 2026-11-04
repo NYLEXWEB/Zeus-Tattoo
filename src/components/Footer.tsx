@@ -1,7 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ArrowUp, MapPin, Sparkles, Clock, Compass } from "lucide-react";
+const MapPinIcon = ({ size = 16 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>
+  </svg>
+);
+
+const ArrowUpIcon = ({ size = 14 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>
+  </svg>
+);
 
 export default function Footer() {
   const [istTime, setIstTime] = useState<string>("");
@@ -107,7 +117,7 @@ export default function Footer() {
                 className="social-btn maps-btn"
                 aria-label="View Zeus Tattoo on Google Maps"
               >
-                <MapPin size={16} />
+                <MapPinIcon size={16} />
                 <span>Google Maps</span>
               </a>
             </div>
@@ -213,26 +223,62 @@ export default function Footer() {
           {/* Atelier Location & Hours Column */}
           <div className="footer-location-col">
             <h4 className="column-title">
-              <span className="title-bullet">✦</span> The Sanctuary
+              <span className="title-bullet">✦</span> Our Branches
             </h4>
 
             <div className="location-card">
-              <p className="studio-name">Zeus Tattoo Kottayam</p>
+              <div className="location-card-head">
+                <p className="studio-name">Zeus Tattoo Kottayam</p>
+                <span className="branch-mini-badge">Flagship</span>
+              </div>
               <address className="studio-address">
-                Eerayil Kadavu Road,<br />
-                Near Malayala Manorama Junction,<br />
-                Kottayam, Kerala 686001
+                2nd Floor, Roji's Arch, Near Manorama Junction,<br />
+                Eerayil Kadavu, Kottayam, Kerala 686001
               </address>
 
               <div className="hours-divider" />
 
               <div className="hours-block">
                 <span className="hours-label">Sanctuary Hours</span>
-                <p className="hours-line">Tue – Sun: 10:30 AM – 08:00 PM</p>
-                <p className="hours-closed">Monday: By Appointment Only</p>
+                <p className="hours-line">Daily: 10:00 AM – 08:00 PM</p>
               </div>
 
-             
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Zeus+Tattoo+Studio+Kottayam"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-dir-link"
+              >
+                <span>Get Directions</span> →
+              </a>
+            </div>
+
+            {/* Branch 2: Kakkanad, Ernakulam */}
+            <div className="location-card" style={{ marginTop: "1rem" }}>
+              <div className="location-card-head">
+                <p className="studio-name">Zeus Tattoo Kakkanad</p>
+                <span className="branch-mini-badge badge-new-color">New Branch</span>
+              </div>
+              <address className="studio-address">
+                Opposite SFS, Kakkanad,<br />
+                Ernakulam, Kochi, Kerala
+              </address>
+
+              <div className="hours-divider" />
+
+              <div className="hours-block">
+                <span className="hours-label">Sanctuary Hours</span>
+                <p className="hours-line">Daily: 10:00 AM – 08:00 PM</p>
+              </div>
+
+              <a
+                href="https://maps.app.goo.gl/uYpThd8dAbcgDZSZ9?g_st=awb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-dir-link"
+              >
+                <span>Get Directions</span> →
+              </a>
             </div>
           </div>
         </div>
@@ -260,13 +306,13 @@ export default function Footer() {
           >
             <span>Return to Top</span>
             <div className="arrow-circle">
-              <ArrowUp size={14} />
+              <ArrowUpIcon size={14} />
             </div>
           </button>
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .site-footer {
           background-color: var(--bg-storm-medium);
           position: relative;
@@ -615,6 +661,50 @@ export default function Footer() {
         }
 
         /* Location Card */
+        .location-card-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 0.5rem;
+        }
+
+        .branch-mini-badge {
+          font-family: var(--font-body);
+          font-size: 0.62rem;
+          font-weight: 800;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          padding: 0.18rem 0.55rem;
+          border-radius: 100px;
+          background: rgba(255, 168, 82, 0.14);
+          color: var(--accent-peach);
+          border: 1px solid rgba(255, 168, 82, 0.3);
+        }
+
+        .branch-mini-badge.badge-new-color {
+          background: rgba(255, 92, 92, 0.16);
+          color: #ff8c8c;
+          border-color: rgba(255, 92, 92, 0.35);
+        }
+
+        .footer-dir-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-family: var(--font-desc);
+          font-size: 0.78rem;
+          font-weight: 600;
+          color: var(--accent-peach);
+          text-decoration: none;
+          margin-top: 0.25rem;
+          transition: all 0.2s ease;
+        }
+
+        .footer-dir-link:hover {
+          color: #ffffff;
+          transform: translateX(3px);
+        }
+
         .footer-location-col {
           display: flex;
           flex-direction: column;

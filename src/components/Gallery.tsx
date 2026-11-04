@@ -1,7 +1,18 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+
+const ChevronLeftIcon = ({ size = 26 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m15 18-6-6 6-6"/>
+  </svg>
+);
+
+const ChevronRightIcon = ({ size = 26 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m9 18 6-6-6-6"/>
+  </svg>
+);
 
 interface PortfolioItem {
   id: number;
@@ -162,9 +173,9 @@ export default function Gallery() {
     const isTablet = screenWidth >= 640 && screenWidth < 1024;
 
     // Wider horizontal step spacing for larger cards
-    const step1X = isMobile ? 140 : isTablet ? 260 : 370;
-    const step2X = isMobile ? 250 : isTablet ? 470 : 660;
-    const step3X = isMobile ? 350 : isTablet ? 630 : 890;
+    const step1X = isMobile ? 120 : isTablet ? 260 : 370;
+    const step2X = isMobile ? 220 : isTablet ? 470 : 660;
+    const step3X = isMobile ? 320 : isTablet ? 630 : 890;
 
     // Beyond visible range: hide behind
     if (absDiff > 3) {
@@ -300,18 +311,18 @@ export default function Gallery() {
           {/* Navigation Arrows */}
           <button
             onClick={handlePrev}
-            className="carousel-nav-btn nav-btn-left"
+            className="gallery-nav-btn nav-btn-left"
             aria-label="Previous image"
           >
-            <ChevronLeft size={26} />
+            <ChevronLeftIcon size={26} />
           </button>
 
           <button
             onClick={handleNext}
-            className="carousel-nav-btn nav-btn-right"
+            className="gallery-nav-btn nav-btn-right"
             aria-label="Next image"
           >
-            <ChevronRight size={26} />
+            <ChevronRightIcon size={26} />
           </button>
         </div>
 
@@ -330,7 +341,7 @@ export default function Gallery() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .gallery-section {
           background-color: var(--bg-storm-dark);
           padding: 7rem 0 6rem;
@@ -468,11 +479,16 @@ export default function Gallery() {
           }
         }
 
-        /* Coverflow Card - Much larger dimensions */
+        /* Coverflow Card - Centered with precision */
         .coverflow-card {
           position: absolute;
-          width: 290px;
-          height: 400px;
+          left: 50%;
+          top: 50%;
+          width: 280px;
+          max-width: 82vw;
+          height: 390px;
+          margin-left: -140px;
+          margin-top: -195px;
           border-radius: 18px;
           transform-style: preserve-3d;
           transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
@@ -484,6 +500,8 @@ export default function Gallery() {
           .coverflow-card {
             width: 370px;
             height: 500px;
+            margin-left: -185px;
+            margin-top: -250px;
             border-radius: 20px;
           }
         }
@@ -491,6 +509,8 @@ export default function Gallery() {
           .coverflow-card {
             width: 470px;
             height: 630px;
+            margin-left: -235px;
+            margin-top: -315px;
             border-radius: 24px;
           }
         }
@@ -540,7 +560,7 @@ export default function Gallery() {
         }
 
         /* Navigation Arrows */
-        .carousel-nav-btn {
+        .gallery-nav-btn {
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
@@ -559,7 +579,7 @@ export default function Gallery() {
           box-shadow: none !important;
         }
         @media (min-width: 768px) {
-          .carousel-nav-btn {
+          .gallery-nav-btn {
             width: 56px;
             height: 56px;
           }
@@ -580,7 +600,7 @@ export default function Gallery() {
             right: 28px;
           }
         }
-        .carousel-nav-btn:hover {
+        .gallery-nav-btn:hover {
           background: var(--accent-peach);
           color: var(--text-dark);
           border-color: var(--accent-peach);
@@ -621,7 +641,7 @@ export default function Gallery() {
           border-radius: 8px;
           background: var(--accent-peach);
         }
-      `}</style>
+      ` }} />
     </section>
   );
 }

@@ -55,14 +55,30 @@ export default function Services({ onOpenBooking }: ServicesProps) {
   };
 
   const handleBookingClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (onOpenBooking) {
-      e.preventDefault();
       onOpenBooking();
+    } else {
+      const el = document.querySelector("#booking");
+      if (el) {
+        if (window.__lenis) {
+          window.__lenis.scrollTo(el as HTMLElement, { offset: 0, duration: 1.2 });
+        } else {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
     }
   };
 
   return (
-    <section id="services" className="services-section">
+    <section
+      id="services"
+      className="services-section"
+      suppressHydrationWarning={true}
+    >
+      {/* Ambient background atmosphere glow */}
+      <div className="ambient-fog-orb gold" style={{ top: "10%", right: "-10%", width: "450px", height: "450px" }} aria-hidden="true" />
+      <div className="ambient-fog-orb blue" style={{ bottom: "5%", left: "-10%", width: "400px", height: "400px" }} aria-hidden="true" />
       <div className="container">
         <div className="section-title-wrapper">
           <span className="section-subtitle">Our Expertise</span>
@@ -119,33 +135,27 @@ export default function Services({ onOpenBooking }: ServicesProps) {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .services-section {
           background: linear-gradient(
             180deg,
             var(--bg-storm-dark) 0%,
             var(--bg-storm-medium) 100%
           );
-          padding: 8rem 0;
+          padding: 7rem 0;
           position: relative;
         }
         .services-panels-container {
           flex-direction: column;
           gap: 1.5rem;
           width: 100%;
-          margin-top: 4rem;
+          margin-top: 3.5rem;
           display: flex;
         }
-        @media (min-width: 992px) {
-          .services-panels-container {
-            flex-direction: row;
-            gap: 1rem;
-            height: 550px;
-          }
-        }
+
         .service-panel {
           cursor: pointer;
-          border: 1px solid #ffa8520d;
+          border: 1px solid rgba(255, 168, 82, 0.12);
           border-radius: 20px;
           flex-direction: column;
           width: 100%;
@@ -156,7 +166,82 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           transform: translateZ(0);
           backface-visibility: hidden;
         }
+
+        /* Mobile Sticky Stacking Cards Effect (Deck Stacking) */
+        @media (max-width: 991px) {
+          .services-panels-container {
+            display: flex !important;
+            flex-direction: column !important;
+            position: relative !important;
+            gap: 0 !important;
+            padding-bottom: 3.5rem !important;
+          }
+
+          .service-panel {
+            position: sticky !important;
+            width: 100% !important;
+            border-radius: 24px !important;
+            margin-bottom: 3.5rem !important;
+            background: linear-gradient(170deg, #141c2c 0%, #07090e 100%) !important;
+            border: 1px solid rgba(255, 168, 82, 0.35) !important;
+            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.8), 0 16px 45px rgba(0, 0, 0, 0.95) !important;
+            overflow: hidden !important;
+            transform: translateZ(0) !important;
+            will-change: transform !important;
+          }
+
+          .service-panel:nth-child(1) {
+            top: 85px !important;
+            z-index: 10 !important;
+          }
+
+          .service-panel:nth-child(2) {
+            top: 105px !important;
+            z-index: 11 !important;
+          }
+
+          .service-panel:nth-child(3) {
+            top: 125px !important;
+            z-index: 12 !important;
+          }
+
+          .service-panel:nth-child(4) {
+            top: 145px !important;
+            z-index: 13 !important;
+          }
+
+          .panel-bg {
+            height: 200px !important;
+            width: 100% !important;
+          }
+
+          .panel-content {
+            padding: 1.5rem 1.4rem 1.8rem !important;
+          }
+
+          .panel-title-expanded {
+            font-size: 1.5rem !important;
+            margin-bottom: 0.75rem !important;
+          }
+
+          .panel-desc {
+            font-size: 0.88rem !important;
+            line-height: 1.5 !important;
+            margin-bottom: 1.1rem !important;
+          }
+
+          .panel-tags {
+            margin-bottom: 1.25rem !important;
+          }
+        }
+
         @media (min-width: 992px) {
+          .services-panels-container {
+            flex-direction: row;
+            gap: 1rem;
+            height: 550px;
+          }
+
           .service-panel {
             flex: 1 1 0%;
             min-width: 0;
@@ -165,17 +250,18 @@ export default function Services({ onOpenBooking }: ServicesProps) {
               border-color 0.35s ease,
               box-shadow 0.4s ease;
           }
+
           .service-panel.expanded {
-            flex: 3.8 1 0%;
-            border-color: #ffa85240;
-            box-shadow: 0 20px 45px #0000008c, 0 0 25px #ffa8520a;
+            flex: 3.6 1 0%;
+            border-color: rgba(255, 168, 82, 0.5);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
           }
         }
         .panel-bg {
-          background-position: 50%;
+          background-position: center;
           background-size: cover;
           width: 100%;
-          height: 200px;
+          height: 220px;
           transform: translateZ(0);
           backface-visibility: hidden;
           will-change: transform;
@@ -194,14 +280,17 @@ export default function Services({ onOpenBooking }: ServicesProps) {
         .panel-overlay-dark {
           z-index: 1;
           pointer-events: none;
-          background: linear-gradient(#07090e66 0%, #07090ef2 100%);
+          background: linear-gradient(
+            rgba(7, 9, 14, 0.4) 0%,
+            rgba(7, 9, 14, 0.95) 100%
+          );
           position: absolute;
           inset: 0;
           opacity: 0.85;
           transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .service-panel.expanded .panel-overlay-dark {
-          opacity: 0.5;
+          opacity: 0.55;
         }
         .panel-overlay-glow {
           z-index: 2;
@@ -209,7 +298,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           opacity: 0;
           background: radial-gradient(
             circle at 50% 100%,
-            #ffa85214,
+            rgba(255, 168, 82, 0.15),
             transparent 70%
           );
           transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -224,7 +313,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           flex-direction: column;
           flex-grow: 1;
           justify-content: flex-end;
-          padding: 2.2rem 1.8rem;
+          padding: 2rem 1.6rem;
           display: flex;
           position: relative;
           min-width: 0;
@@ -266,7 +355,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           font-family: var(--font-headings);
           color: var(--accent-peach);
           letter-spacing: 0.05em;
-          text-shadow: 0 0 10px #ffa85233;
+          text-shadow: 0 0 10px rgba(255, 168, 82, 0.3);
           font-size: 1.4rem;
           font-weight: 400;
         }
@@ -293,8 +382,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             opacity: 0;
             pointer-events: none;
             transform: translateY(14px);
-            transition: opacity 0.22s ease-out,
-              transform 0.22s ease-out;
+            transition: opacity 0.22s ease-out, transform 0.22s ease-out;
             min-width: 320px;
           }
           .service-panel.expanded .panel-body {
@@ -310,7 +398,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           text-transform: uppercase;
           color: var(--accent-peach);
           margin-bottom: 0.4rem;
-          font-size: 0.65rem;
+          font-size: 0.68rem;
           font-weight: 700;
           display: block;
         }
@@ -318,8 +406,8 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           font-family: var(--font-headings);
           color: var(--text-main);
           letter-spacing: 0.02em;
-          margin-bottom: 1.2rem;
-          font-size: 1.8rem;
+          margin-bottom: 1.1rem;
+          font-size: 1.75rem;
           font-weight: 800;
           line-height: 1.2;
         }
@@ -332,7 +420,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           font-family: var(--font-desc);
           color: var(--text-muted);
           max-width: 500px;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.4rem;
           font-size: 0.95rem;
           line-height: 1.6;
         }
@@ -340,7 +428,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           display: flex;
           flex-wrap: wrap;
           gap: 0.5rem;
-          margin-bottom: 1.8rem;
+          margin-bottom: 1.6rem;
         }
         .panel-tag-chip {
           display: inline-flex;
@@ -362,10 +450,6 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           text-align: center;
           justify-content: center;
           width: 100%;
-          box-shadow: none !important;
-        }
-        .panel-booking-btn:hover {
-          box-shadow: none !important;
         }
         @media (min-width: 768px) {
           .panel-booking-btn {

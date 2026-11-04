@@ -1,9 +1,24 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useCallback } from "react";
-import { Sparkles, ChevronLeft, ChevronRight, ArrowRight, Award } from "lucide-react";
-import SectionFlourish from "./SectionFlourish";
-import TornPaperDivider from "./TornPaperDivider";
+
+const ChevronLeftIcon = ({ size = 20 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m15 18-6-6 6-6" />
+  </svg>
+);
+
+const ChevronRightIcon = ({ size = 20 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="m9 18 6-6-6-6" />
+  </svg>
+);
+
+const ArrowRightIcon = ({ size = 14 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+);
 
 export interface ArtistItemData {
   id: string;
@@ -80,13 +95,12 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
   const [rotationAngle, setRotationAngle] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [isInView, setIsInView] = useState(false);
+  const [isInView, setIsInView] = useState(true);
   const [windowWidth, setWindowWidth] = useState(1200);
 
   const angleRef = useRef(0);
   const targetAngleRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
-  const lastTimeRef = useRef<number>(0);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   // Drag tracking
@@ -107,13 +121,13 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
   const radiusX = isMobile
-    ? Math.min(windowWidth * 0.36, 240)
+    ? Math.min(windowWidth * 0.38, 160)
     : isTablet
-    ? Math.min(windowWidth * 0.33, 340)
-    : Math.min(windowWidth * 0.31, 440);
-  const radiusZ = isMobile ? 140 : isTablet ? 190 : 230;
+      ? Math.min(windowWidth * 0.33, 340)
+      : Math.min(windowWidth * 0.31, 440);
+  const radiusZ = isMobile ? 130 : isTablet ? 190 : 230;
 
-  // Viewport intersection observer to completely halt RAF when not in view
+  // Viewport intersection observer to track visibility
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
@@ -129,34 +143,19 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
     return () => observer.disconnect();
   }, []);
 
-  // High performance smooth 60fps/120fps rotation animation loop
+  // High performance smooth 60fps/120fps snap-to-center lerp animation loop
   useEffect(() => {
-    if (!isInView) {
-      if (rafIdRef.current) {
-        cancelAnimationFrame(rafIdRef.current);
-        rafIdRef.current = null;
-      }
-      return;
-    }
-
-    const animate = (time: number) => {
-      if (!lastTimeRef.current) lastTimeRef.current = time;
-      const delta = Math.min((time - lastTimeRef.current) / 1000, 0.1);
-      lastTimeRef.current = time;
-
-      // Automatically revolve right-to-left at smooth speed (~14 sec per full turn)
-      // When hovered or dragged, pause auto-advance and smoothly lerp to target
-      if (!isHovered && !isPointerDown.current) {
-        // Continuous right-to-left rotation (decreasing angle moves cards from +X right to -X left)
-        const autoSpeed = 16.0; // degrees per second
-        angleRef.current -= autoSpeed * delta;
-        targetAngleRef.current = angleRef.current;
-      } else {
-        // Smoothly lerp towards target angle during drag / click navigation
-        angleRef.current += (targetAngleRef.current - angleRef.current) * 0.12;
+    const animate = () => {
+      // Smoothly lerp towards target center angle
+      const diff = targetAngleRef.current - angleRef.current;
+      if (Math.abs(diff) > 0.02) {
+        angleRef.current += diff * 0.12;
+        setRotationAngle(angleRef.current);
+      } else if (angleRef.current !== targetAngleRef.current) {
+        angleRef.current = targetAngleRef.current;
+        setRotationAngle(angleRef.current);
       }
 
-      setRotationAngle(angleRef.current);
       rafIdRef.current = requestAnimationFrame(animate);
     };
 
@@ -167,37 +166,69 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
         cancelAnimationFrame(rafIdRef.current);
         rafIdRef.current = null;
       }
-      lastTimeRef.current = 0;
     };
+  }, []);
+
+  // Step-based auto advance: pauses at exact center of each card for 3.8 seconds
+  useEffect(() => {
+    if (!isInView || isHovered) return;
+
+    const timer = setInterval(() => {
+      if (!isPointerDown.current) {
+        const currentSnap = Math.round(targetAngleRef.current / ANGLE_STEP) * ANGLE_STEP;
+        targetAngleRef.current = currentSnap - ANGLE_STEP;
+      }
+    }, 3800);
+
+    return () => clearInterval(timer);
   }, [isInView, isHovered]);
 
-  // Navigate to previous card (curves right-to-left)
+  // Navigate to previous card (centers previous card)
   const handlePrev = useCallback(() => {
     const currentRounded = Math.round(targetAngleRef.current / ANGLE_STEP) * ANGLE_STEP;
     targetAngleRef.current = currentRounded + ANGLE_STEP;
   }, []);
 
-  // Navigate to next card
+  // Navigate to next card (centers next card)
   const handleNext = useCallback(() => {
     const currentRounded = Math.round(targetAngleRef.current / ANGLE_STEP) * ANGLE_STEP;
     targetAngleRef.current = currentRounded - ANGLE_STEP;
   }, []);
 
-  // Rotate specific card to center front on click
+  // Direct artist selection to center front
+  const handleSelectArtist = useCallback((targetIdx: number) => {
+    let bestTarget = targetAngleRef.current;
+    let minDiff = Infinity;
+    ringCards.forEach((c, i) => {
+      if (c.origIdx === targetIdx) {
+        const cardCenterAngle = -i * ANGLE_STEP;
+        const k = Math.round((targetAngleRef.current - cardCenterAngle) / 360);
+        const candidateAngle = cardCenterAngle + k * 360;
+        const diff = Math.abs(candidateAngle - targetAngleRef.current);
+        if (diff < minDiff) {
+          minDiff = diff;
+          bestTarget = candidateAngle;
+        }
+      }
+    });
+    targetAngleRef.current = bestTarget;
+  }, []);
+
+  // Rotate specific card directly to front center on click
   const handleCardClick = (normAngle: number, e: React.MouseEvent) => {
     if (dragMoved.current) return;
 
-    // If card is already in front center (|normAngle| < 12 deg), trigger booking
     if (Math.abs(normAngle) < 14) {
       return;
     }
 
-    // Bring this clicked card directly to the front center
     e.preventDefault();
-    targetAngleRef.current = angleRef.current - normAngle;
+    const currentRounded = Math.round(targetAngleRef.current / ANGLE_STEP) * ANGLE_STEP;
+    const snapOffset = Math.round(normAngle / ANGLE_STEP) * ANGLE_STEP;
+    targetAngleRef.current = currentRounded - snapOffset;
   };
 
-  // Pointer / Touch drag controls
+  // Pointer / Touch drag controls with instant snap-to-center on release
   const handlePointerDown = (clientX: number) => {
     isPointerDown.current = true;
     dragMoved.current = false;
@@ -212,15 +243,16 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
       dragMoved.current = true;
       setIsDragging(true);
     }
-    // Map horizontal drag distance to rotation angle
-    const sensitivity = isMobile ? 0.28 : 0.22;
+    const sensitivity = isMobile ? 0.32 : 0.24;
     targetAngleRef.current = dragStartAngle.current + diff * sensitivity;
-    angleRef.current = targetAngleRef.current;
   };
 
   const handlePointerUp = () => {
     if (isPointerDown.current) {
       isPointerDown.current = false;
+      // Immediately snap to closest card center angle
+      const snapped = Math.round(targetAngleRef.current / ANGLE_STEP) * ANGLE_STEP;
+      targetAngleRef.current = snapped;
       setTimeout(() => {
         setIsDragging(false);
         dragMoved.current = false;
@@ -243,7 +275,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
 
   return (
     <section id="artists" ref={sectionRef} className="artists-revolving-section">
-    
+
 
       <div className="container ">
         {/* Section Header */}
@@ -326,7 +358,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
                     />
                     <div className="artist-img-vignette" />
 
- 
+
                   </div>
 
                   {/* Information Panel */}
@@ -353,7 +385,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
                         className={`artist-consult-btn ${isFrontCard ? "btn-active-front" : ""}`}
                       >
                         <span>Book With {artist.name.split(" ")[0]}</span>
-                        <ArrowRight size={14} />
+                        <ArrowRightIcon size={14} />
                       </a>
                     </div>
                   </div>
@@ -364,8 +396,39 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
         </div>
       </div>
 
+      {/* Navigation Controls: Arrows & Artist Pills */}
+      <div className="carousel-controls-bar">
+        <button
+          className="artist-nav-btn nav-btn-left"
+          onClick={handlePrev}
+          aria-label="Previous Artist"
+        >
+          <ChevronLeftIcon size={20} />
+        </button>
 
-      <style jsx>{`
+        <div className="artist-dots-container">
+          {residentArtists.map((artist, idx) => (
+            <button
+              key={artist.id}
+              onClick={() => handleSelectArtist(idx)}
+              className={`artist-dot-pill ${activeArtistIndex === idx ? "dot-active" : ""}`}
+            >
+              {artist.name.split(" ")[0]}
+            </button>
+          ))}
+        </div>
+
+        <button
+          className="artist-nav-btn nav-btn-right"
+          onClick={handleNext}
+          aria-label="Next Artist"
+        >
+          <ChevronRightIcon size={20} />
+        </button>
+      </div>
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .artists-revolving-section {
           background-color: var(--bg-storm-dark);
           padding: 6rem 0 7rem;
@@ -393,27 +456,32 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           width: 100%;
           min-height: 560px;
           height: 600px;
-          perspective: 1300px;
+          perspective: 1200px;
+          perspective-origin: 50% 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           user-select: none;
           touch-action: pan-y;
-          overflow: visible;
+          overflow: hidden;
         }
 
         @media (max-width: 768px) {
           .carousel-3d-stage {
-            min-height: 500px;
-            height: 530px;
+            min-height: 520px;
+            height: 540px;
             perspective: 900px;
+            perspective-origin: 50% 50%;
           }
         }
 
         .carousel-ambient-spotlight {
           position: absolute;
-          width: 500px;
-          height: 500px;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 480px;
+          height: 480px;
           border-radius: 50%;
           background: radial-gradient(
             circle,
@@ -425,20 +493,22 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           z-index: 1;
         }
 
-        /* Revolving Turntable Ring */
+        /* Revolving Turntable Ring - Pinned strictly to viewport horizontal & vertical 50% center */
         .carousel-3d-turntable {
-          position: relative;
+          position: absolute;
+          top: 50%;
+          left: 50%;
           width: 0;
           height: 0;
           transform-style: preserve-3d;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          display: block;
         }
 
-        /* 3D Artist Card */
+        /* 3D Artist Card - Exact geometric center anchor */
         .artist-3d-card {
           position: absolute;
+          top: 0;
+          left: 0;
           width: 320px;
           height: 485px;
           margin-left: -160px;
@@ -451,10 +521,10 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
 
         @media (max-width: 640px) {
           .artist-3d-card {
-            width: 270px;
-            height: 440px;
-            margin-left: -135px;
-            margin-top: -220px;
+            width: 280px;
+            height: 450px;
+            margin-left: -140px;
+            margin-top: -225px;
           }
         }
 
@@ -473,17 +543,30 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
         }
 
         /* Front Center Card Highlight */
+        .artist-3d-card.is-front-center {
+          z-index: 45 !important;
+          opacity: 1 !important;
+        }
+
         .artist-3d-card.is-front-center .artist-card-inner {
-          border-color: rgba(255, 168, 82, 0.55);
+          border-color: rgba(255, 168, 82, 0.65);
+          box-shadow: 0 0 30px rgba(255, 168, 82, 0.2), 0 20px 45px rgba(0, 0, 0, 0.9);
         }
 
         .artist-3d-card.is-revolving-side .artist-card-inner {
-          filter: brightness(0.85);
+          filter: brightness(0.7);
         }
 
         .artist-3d-card.is-revolving-side:hover .artist-card-inner {
           border-color: rgba(255, 168, 82, 0.35);
           filter: brightness(1);
+        }
+
+        @media (max-width: 640px) {
+          .artist-3d-card.is-revolving-side {
+            opacity: 0.28 !important;
+            filter: brightness(0.6) blur(0.5px);
+          }
         }
 
         /* Image Box */
@@ -651,7 +734,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           margin-top: 1.5rem;
         }
 
-        .carousel-nav-btn {
+        .artist-nav-btn {
           width: 44px;
           height: 44px;
           border-radius: 50%;
@@ -666,7 +749,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
 
-        .carousel-nav-btn:hover {
+        .artist-nav-btn:hover {
           background: rgba(255, 168, 82, 0.18);
           border-color: var(--accent-peach);
           color: #fff;
@@ -709,7 +792,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
           border-color: rgba(255, 168, 82, 0.4);
           color: var(--accent-peach);
         }
-      `}</style>
+      ` }} />
     </section>
   );
 }

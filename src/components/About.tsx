@@ -12,34 +12,52 @@ export default function About({ onOpenBooking }: AboutProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleBookingClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (onOpenBooking) {
-      e.preventDefault();
       onOpenBooking();
+    } else {
+      const el = document.querySelector("#booking");
+      if (el) {
+        if (window.__lenis) {
+          window.__lenis.scrollTo(el as HTMLElement, { offset: 0, duration: 1.2 });
+        } else {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
     }
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (typeof window !== "undefined" && window.innerWidth <= 1024) return;
     if (!visualRef.current) return;
     const rect = visualRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
-    // Subtle tilt: max 8 degrees
-    const rotateX = ((y - centerY) / centerY) * -8;
-    const rotateY = ((x - centerX) / centerX) * 8;
+    const rotateX = ((y - centerY) / centerY) * -7;
+    const rotateY = ((x - centerX) / centerX) * 7;
     setTilt({ x: rotateX, y: rotateY });
   };
 
-  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseEnter = () => {
+    if (typeof window !== "undefined" && window.innerWidth > 1024) {
+      setIsHovered(true);
+    }
+  };
+
   const handleMouseLeave = () => {
     setIsHovered(false);
     setTilt({ x: 0, y: 0 });
   };
 
   return (
-    <section id="about" className="about-section">
-      {/* Ambient background atmosphere glow & drifting embers */}
+    <section
+      id="about"
+      className="about-section"
+      suppressHydrationWarning={true}
+    >
+      {/* Ambient background atmosphere glow */}
       <div className="about-ambient-glow glow-top" aria-hidden="true" />
       <div className="about-ambient-glow glow-bottom" aria-hidden="true" />
       <div className="ambient-particles" aria-hidden="true">
@@ -53,7 +71,7 @@ export default function About({ onOpenBooking }: AboutProps) {
 
       <div className="container">
         <div className="about-grid">
-          {/* Left Visual Column with Continuous Motion & Parallax */}
+          {/* Left Visual Column */}
           <div
             className="about-visual"
             ref={visualRef}
@@ -63,7 +81,7 @@ export default function About({ onOpenBooking }: AboutProps) {
           >
             {/* Sacred Geometry Astrolabe & Circular Rotating Rings */}
             <div className="astrolabe-orbit-wrapper" aria-hidden="true">
-              {/* Outer Celestial Astrolabe Ring - Slow Clockwise Rotation */}
+              {/* Outer Celestial Astrolabe Ring */}
               <div className="astrolabe-ring astrolabe-outer-spin">
                 <svg viewBox="0 0 540 540" className="astrolabe-svg">
                   <defs>
@@ -74,21 +92,19 @@ export default function About({ onOpenBooking }: AboutProps) {
                   </defs>
                   <circle cx="270" cy="270" r="260" className="svg-ring-dashed" />
                   <circle cx="270" cy="270" r="240" className="svg-ring-thin" />
-                  {/* 4 Cardinal Crosshairs */}
                   <line x1="270" y1="2" x2="270" y2="24" className="svg-crosshair" />
                   <line x1="270" y1="516" x2="270" y2="538" className="svg-crosshair" />
                   <line x1="2" y1="270" x2="24" y2="270" className="svg-crosshair" />
                   <line x1="516" y1="270" x2="538" y2="270" className="svg-crosshair" />
-                  {/* Astrolabe Circular Monogram */}
                   <text className="svg-orbital-text">
                     <textPath href="#aboutTextPath" startOffset="0%">
-                      • ZEUS TATTOO SANCTUARY • KOTTAYAM • SACRED GEOMETRY • MASTER ARYAN •
+                      • ZEUS TATTOO SANCTUARY • KOTTAYAM • SACRED GEOMETRY • FOUNDER SHAIBIN •
                     </textPath>
                   </text>
                 </svg>
               </div>
 
-              {/* Inner Sacred Geometry Ring - Slow Counter-Clockwise Rotation */}
+              {/* Inner Sacred Geometry Ring */}
               <div className="astrolabe-ring astrolabe-inner-spin">
                 <span className="orbital-node node-1" />
                 <span className="orbital-node node-2" />
@@ -105,7 +121,7 @@ export default function About({ onOpenBooking }: AboutProps) {
               </div>
             </div>
 
-            {/* Floating Artwork Card with Smooth Tilt */}
+            {/* Floating Artwork Card */}
             <div
               className={`about-img-container ${isHovered ? "is-hovered" : "is-floating"}`}
               style={{
@@ -116,16 +132,14 @@ export default function About({ onOpenBooking }: AboutProps) {
             >
               <div className="about-img-wrapper card-glass border-pulse">
                 <div className="about-img-glow" />
-                {/* Diagonal Traveling Crystal Sheen */}
                 <div className="image-sheen-beam" aria-hidden="true" />
 
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/assets/about-us.jpg"
-                  alt="Tattoo Artist Aryan Zeus at work"
+                  alt="Tattoo Artist at work in Zeus Tattoo Studio"
                   className="about-img"
                 />
-
 
                 {/* Bottom-Right Floating Badge */}
                 <div className="about-badge badge-bottom-right">
@@ -145,7 +159,7 @@ export default function About({ onOpenBooking }: AboutProps) {
             <h2 className="section-title">Our Story</h2>
 
             <p className="about-lead">
-              Founded by master artist Aryan “Zeus”, our sanctuary in Kottayam
+              Founded by master artist Shaibin AS, our sanctuary in Kottayam
               bridges neoclassical illustration with hospital-grade clinical precision.
             </p>
             <p className="about-text">
@@ -153,7 +167,7 @@ export default function About({ onOpenBooking }: AboutProps) {
               geometry, myth, and fine-line craftsmanship into permanent collectibles that endure.
             </p>
 
-            {/* Living Stats with Continuous Travelling Laser Light Sweep */}
+            {/* Living Stats with Travelling Laser Light Sweep */}
             <div className="about-stats">
               <div className="stats-laser-beam top-laser" aria-hidden="true" />
               <div className="stat-box">
@@ -184,19 +198,19 @@ export default function About({ onOpenBooking }: AboutProps) {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .about-section {
           background: linear-gradient(
             180deg,
             var(--bg-storm-dark) 0%,
             var(--bg-storm-medium) 100%
           );
-          padding: 8rem 0;
+          padding: 7rem 0;
           position: relative;
           overflow: hidden;
         }
 
-        /* Ambient Lighting Nebulae */
+        /* Ambient Lighting */
         .about-ambient-glow {
           position: absolute;
           border-radius: 50%;
@@ -209,28 +223,19 @@ export default function About({ onOpenBooking }: AboutProps) {
           left: -5%;
           width: 500px;
           height: 500px;
-          background: radial-gradient(circle, rgba(255, 168, 82, 0.12) 0%, transparent 70%);
-          animation: floatGlowA 12s ease-in-out infinite alternate;
+          background: radial-gradient(circle, rgba(255, 168, 82, 0.14) 0%, transparent 70%);
+          animation: ambientAuraFloat 18s ease-in-out infinite alternate;
         }
         .glow-bottom {
           bottom: 5%;
           right: -5%;
-          width: 600px;
-          height: 600px;
-          background: radial-gradient(circle, rgba(76, 163, 255, 0.08) 0%, transparent 70%);
-          animation: floatGlowB 15s ease-in-out infinite alternate;
+          width: 550px;
+          height: 550px;
+          background: radial-gradient(circle, rgba(76, 163, 255, 0.1) 0%, transparent 70%);
+          animation: ambientAuraFloat 22s ease-in-out infinite alternate-reverse;
         }
 
-        @keyframes floatGlowA {
-          0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
-          100% { transform: translate(40px, 30px) scale(1.15); opacity: 0.25; }
-        }
-        @keyframes floatGlowB {
-          0% { transform: translate(0, 0) scale(1); opacity: 0.12; }
-          100% { transform: translate(-30px, -40px) scale(1.1); opacity: 0.2; }
-        }
-
-        /* Drifting Golden Ink Dust Particles */
+        /* Ink Dust Particles */
         .ambient-particles {
           position: absolute;
           inset: 0;
@@ -272,17 +277,17 @@ export default function About({ onOpenBooking }: AboutProps) {
         }
 
         .about-grid {
-          grid-template-columns: 1fr;
+          grid-template-columns: minmax(0, 1fr);
           align-items: center;
-          gap: 5rem;
+          gap: 3.5rem;
           display: grid;
           position: relative;
           z-index: 2;
         }
         @media (min-width: 992px) {
           .about-grid {
-            grid-template-columns: 1.15fr 1.15fr;
-            gap: 5.5rem;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.15fr);
+            gap: 5rem;
           }
         }
 
@@ -302,8 +307,10 @@ export default function About({ onOpenBooking }: AboutProps) {
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: 540px;
-          height: 540px;
+          width: 520px;
+          height: 520px;
+          max-width: 90%;
+          max-height: 90%;
           pointer-events: none;
           z-index: 1;
           display: flex;
@@ -312,14 +319,18 @@ export default function About({ onOpenBooking }: AboutProps) {
         }
         @media (max-width: 768px) {
           .astrolabe-orbit-wrapper {
-            width: 380px;
-            height: 380px;
+            width: 360px;
+            height: 360px;
+            max-width: 88%;
+            max-height: 88%;
           }
         }
         @media (max-width: 480px) {
           .astrolabe-orbit-wrapper {
-            width: 320px;
-            height: 320px;
+            width: 280px;
+            height: 280px;
+            max-width: 85%;
+            max-height: 85%;
           }
         }
 
@@ -332,11 +343,9 @@ export default function About({ onOpenBooking }: AboutProps) {
           will-change: transform;
         }
 
-        /* Outer Astrolabe Rotation (Clockwise) */
         .astrolabe-outer-spin {
           animation: spinAstrolabe 48s linear infinite;
         }
-        /* Inner Sacred Ring Counter-Rotation */
         .astrolabe-inner-spin {
           animation: spinAstrolabeRev 34s linear infinite;
           width: 78%;
@@ -406,14 +415,13 @@ export default function About({ onOpenBooking }: AboutProps) {
           text-transform: uppercase;
         }
 
-        /* Orbital nodes floating along the inner sacred ring */
         .orbital-node {
           position: absolute;
           width: 6px;
           height: 6px;
           border-radius: 50%;
           background: #ffa852;
-          box-shadow: 0 0 10px #ffa852, 0 0 20px #ffa85280;
+          box-shadow: 0 0 10px #ffa852, 0 0 20px rgba(255, 168, 82, 0.5);
         }
         .node-1 { top: 0%; left: 50%; transform: translate(-50%, -50%); }
         .node-2 { bottom: 0%; left: 50%; transform: translate(-50%, 50%); }
@@ -437,25 +445,21 @@ export default function About({ onOpenBooking }: AboutProps) {
             transform: translateY(0px) rotate(0deg);
           }
           50% {
-            transform: translateY(-9px) rotate(0.35deg);
+            transform: translateY(-8px) rotate(0.3deg);
           }
         }
 
         .about-img-wrapper {
           aspect-ratio: 2.7 / 4;
-          background: linear-gradient(135deg, #0d111bf2, #151d2dd9);
-          border: 1px solid #ffa85226;
+          background: linear-gradient(135deg, rgba(13, 17, 27, 0.95), rgba(21, 29, 45, 0.85));
+          border: 1px solid rgba(255, 168, 82, 0.22);
           border-radius: 24px;
           width: 100%;
           padding: 0.75rem;
           transition: border-color 0.4s, box-shadow 0.4s;
           position: relative;
           overflow: visible;
-          box-shadow: 0 25px 60px #00000099, 0 0 40px #ffa8520d;
-        }
-        .about-img-wrapper:hover {
-          border-color: #ffa85259;
-          box-shadow: 0 32px 75px #000000bf, 0 0 45px #ffa8521a;
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
         }
 
         .about-img-glow {
@@ -464,17 +468,11 @@ export default function About({ onOpenBooking }: AboutProps) {
           opacity: 0.12;
           pointer-events: none;
           z-index: 1;
-          width: 250px;
-          height: 250px;
+          width: 240px;
+          height: 240px;
           position: absolute;
           top: 20%;
           left: 20%;
-          animation: pulseGlow 4s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-          0% { transform: scale(0.9); opacity: 0.08; }
-          100% { transform: scale(1.15); opacity: 0.18; }
         }
 
         .about-img {
@@ -489,7 +487,7 @@ export default function About({ onOpenBooking }: AboutProps) {
           transform: scale(1.03);
         }
 
-        /* Diagonal Traveling Crystal Sheen */
+        /* Diagonal Traveling Sheen */
         .image-sheen-beam {
           position: absolute;
           inset: 0;
@@ -537,88 +535,6 @@ export default function About({ onOpenBooking }: AboutProps) {
           }
         }
 
-        /* Top-Left Floating Micro-Chip Badge */
-        .about-chip-badge {
-          position: absolute;
-          top: 1.5rem;
-          left: -1.2rem;
-          z-index: 10;
-          background: rgba(13, 17, 27, 0.88);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          border: 1px solid rgba(255, 168, 82, 0.3);
-          border-radius: 9999px;
-          padding: 0.55rem 1rem 0.55rem 0.8rem;
-          display: flex;
-          align-items: center;
-          gap: 0.65rem;
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 168, 82, 0.12);
-          animation: floatChip 5.6s ease-in-out infinite alternate;
-        }
-
-        @keyframes floatChip {
-          0% {
-            transform: translateY(0px);
-          }
-          100% {
-            transform: translateY(7px);
-          }
-        }
-
-        .chip-radar {
-          position: relative;
-          width: 10px;
-          height: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .radar-dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #4ade80;
-          box-shadow: 0 0 8px #4ade80;
-        }
-        .radar-wave {
-          position: absolute;
-          inset: -3px;
-          border-radius: 50%;
-          border: 1px solid #4ade80;
-          animation: radarWave 2s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-        }
-
-        @keyframes radarWave {
-          0% {
-            transform: scale(0.6);
-            opacity: 1;
-          }
-          100% {
-            transform: scale(2.2);
-            opacity: 0;
-          }
-        }
-
-        .chip-meta {
-          display: flex;
-          flex-direction: column;
-          line-height: 1.15;
-        }
-        .chip-title {
-          font-family: var(--font-headings);
-          font-size: 0.68rem;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--text-main);
-        }
-        .chip-sub {
-          font-family: var(--font-desc);
-          font-size: 0.58rem;
-          color: var(--text-muted);
-          letter-spacing: 0.02em;
-        }
-
         /* Bottom-Right Floating Badge */
         .about-badge {
           background: linear-gradient(
@@ -633,33 +549,18 @@ export default function About({ onOpenBooking }: AboutProps) {
           border-radius: 18px;
           flex-direction: column;
           align-items: center;
-          padding: 1rem 1.4rem;
+          padding: 0.9rem 1.3rem;
           display: flex;
           position: absolute;
           bottom: 2rem;
-          right: -1.2rem;
-          box-shadow: 0 16px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 168, 82, 0.15);
-          animation: floatBadge 6.2s ease-in-out infinite alternate;
+          right: -1rem;
+          box-shadow: 0 16px 35px rgba(0, 0, 0, 0.7);
         }
 
-        @keyframes floatBadge {
-          0% {
-            transform: translateY(0px);
-          }
-          100% {
-            transform: translateY(-8px);
-          }
-        }
-
-        @media (max-width: 480px) {
-          .about-chip-badge {
-            top: 1rem;
-            left: 0.75rem;
-            padding: 0.45rem 0.8rem;
-          }
+        @media (max-width: 768px) {
           .about-badge {
             bottom: 1.2rem;
-            right: 0.75rem;
+            right: 0.5rem;
             padding: 0.75rem 1rem;
           }
         }
@@ -667,17 +568,16 @@ export default function About({ onOpenBooking }: AboutProps) {
         .badge-num {
           font-family: var(--font-headings);
           color: var(--accent-peach);
-          font-size: 1.6rem;
+          font-size: 1.5rem;
           font-weight: 800;
           line-height: 1;
-          text-shadow: 0 0 12px rgba(255, 168, 82, 0.3);
         }
         .badge-txt {
           letter-spacing: 0.1em;
           text-transform: uppercase;
           color: var(--text-muted);
           margin-top: 0.25rem;
-          font-size: 0.65rem;
+          font-size: 0.62rem;
           font-weight: 700;
         }
 
@@ -686,35 +586,18 @@ export default function About({ onOpenBooking }: AboutProps) {
           z-index: 10;
         }
 
-        /* Subtitle with dynamic live pulse dot */
         .subtitle-container {
           display: inline-flex;
           align-items: center;
           gap: 0.6rem;
           margin-bottom: 0.75rem;
         }
-        .live-status-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: var(--accent-peach);
-          box-shadow: 0 0 10px var(--accent-peach);
-          position: relative;
-        }
-        .live-status-dot::before {
-          content: "";
-          position: absolute;
-          inset: -3px;
-          border-radius: 50%;
-          border: 1px solid var(--accent-peach);
-          animation: radarWave 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-        }
 
         .about-lead {
           font-family: var(--font-desc);
           color: var(--text-main);
-          margin-bottom: 1.5rem;
-          font-size: 1.15rem;
+          margin-bottom: 1.4rem;
+          font-size: clamp(1rem, 1.3vw, 1.15rem);
           font-weight: 500;
           line-height: 1.6;
         }
@@ -722,7 +605,7 @@ export default function About({ onOpenBooking }: AboutProps) {
           font-family: var(--font-desc);
           color: var(--text-muted);
           margin-bottom: 1.5rem;
-          font-size: 0.95rem;
+          font-size: clamp(0.88rem, 1.1vw, 0.96rem);
           line-height: 1.7;
         }
 
@@ -731,18 +614,17 @@ export default function About({ onOpenBooking }: AboutProps) {
           position: relative;
           grid-template-columns: repeat(3, 1fr);
           gap: 1.5rem;
-          margin: 3rem 0;
-          padding: 2.2rem 0;
+          margin: 2.5rem 0;
+          padding: 2rem 0;
           display: grid;
         }
 
-        /* Top & Bottom Laser Dividers */
         .stats-laser-beam {
           position: absolute;
           left: 0;
           right: 0;
           height: 1px;
-          background: rgba(255, 168, 82, 0.12);
+          background: rgba(255, 168, 82, 0.15);
           overflow: hidden;
         }
         .top-laser {
@@ -792,58 +674,9 @@ export default function About({ onOpenBooking }: AboutProps) {
 
         @media (max-width: 480px) {
           .about-stats {
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
             text-align: center;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-          }
-        }
-
-        .stat-box {
-          flex-direction: column;
-          gap: 0.4rem;
-          display: flex;
-        }
-        .stat-number {
-          font-family: var(--font-headings);
-          color: var(--accent-peach);
-          font-size: 1.8rem;
-          font-weight: 800;
-          line-height: 1;
-          animation: textGlowPulse 4s ease-in-out infinite alternate;
-        }
-        @media (min-width: 768px) {
-          .stat-number {
-            font-size: 2.2rem;
-          }
-        }
-
-        @keyframes textGlowPulse {
-          0% {
-            text-shadow: 0 0 8px rgba(255, 168, 82, 0.15);
-          }
-          100% {
-            text-shadow: 0 0 18px rgba(255, 168, 82, 0.4), 0 0 30px rgba(255, 168, 82, 0.2);
-          }
-        }
-
-        .stat-label {
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-          color: var(--text-muted);
-          font-size: 0.75rem;
-          font-weight: 600;
-        }
-        .about-action {
-          margin-top: 2rem;
-        }
-        .about-btn {
-          text-align: center;
-          justify-content: center;
-          width: 100%;
-        }
-        @media (min-width: 768px) {
-          .about-btn {
-            width: auto;
           }
         }
       `}</style>
