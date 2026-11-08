@@ -119,8 +119,7 @@ export default function Header({ onOpenBooking }: HeaderProps) {
 
   return (
     <header
-      className={`site-header ${isPastHero ? "header-past-hero" : "header-in-hero"} ${isScrolled ? "scrolled" : "at-top"
-        }`}
+      className={`site-header ${isPastHero ? "header-past-hero scrolled" : "header-in-hero at-top"}`}
     >
       <div className="container header-container">
         <a
