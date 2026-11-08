@@ -103,6 +103,11 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
   const rafIdRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
+  // Synchronous status refs for zero-jitter continuous RAF loop
+  const isHoveredRef = useRef(false);
+  const isDraggingRef = useRef(false);
+  const isInViewRef = useRef(true);
+
   // Drag tracking
   const dragStartX = useRef<number>(0);
   const dragStartAngle = useRef<number>(0);
@@ -135,6 +140,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
+        isInViewRef.current = entry.isIntersecting;
       },
       { rootMargin: "150px" }
     );
@@ -143,17 +149,36 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
     return () => observer.disconnect();
   }, []);
 
-  // High performance smooth 60fps/120fps snap-to-center lerp animation loop
+  // High performance continuous smooth slow auto-scroll to the left
   useEffect(() => {
-    const animate = () => {
-      // Smoothly lerp towards target center angle
-      const diff = targetAngleRef.current - angleRef.current;
-      if (Math.abs(diff) > 0.02) {
-        angleRef.current += diff * 0.12;
-        setRotationAngle(angleRef.current);
-      } else if (angleRef.current !== targetAngleRef.current) {
+    let lastTime = performance.now();
+
+    const animate = (now: number) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      lastTime = now;
+
+      const isPaused =
+        isHoveredRef.current ||
+        isDraggingRef.current ||
+        isPointerDown.current ||
+        !isInViewRef.current;
+
+      if (!isPaused) {
+        // Continuous, gentle, slow glide to the left (~7.5 deg/sec, no interval stops)
+        const ROTATION_SPEED = 7.5;
+        targetAngleRef.current -= ROTATION_SPEED * dt;
         angleRef.current = targetAngleRef.current;
         setRotationAngle(angleRef.current);
+      } else {
+        // When hovered, dragged, or stepped via controls, smoothly lerp to target
+        const diff = targetAngleRef.current - angleRef.current;
+        if (Math.abs(diff) > 0.02) {
+          angleRef.current += diff * 0.12;
+          setRotationAngle(angleRef.current);
+        } else if (angleRef.current !== targetAngleRef.current) {
+          angleRef.current = targetAngleRef.current;
+          setRotationAngle(angleRef.current);
+        }
       }
 
       rafIdRef.current = requestAnimationFrame(animate);
@@ -168,20 +193,6 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
       }
     };
   }, []);
-
-  // Step-based auto advance: pauses at exact center of each card for 3.8 seconds
-  useEffect(() => {
-    if (!isInView || isHovered) return;
-
-    const timer = setInterval(() => {
-      if (!isPointerDown.current) {
-        const currentSnap = Math.round(targetAngleRef.current / ANGLE_STEP) * ANGLE_STEP;
-        targetAngleRef.current = currentSnap - ANGLE_STEP;
-      }
-    }, 3800);
-
-    return () => clearInterval(timer);
-  }, [isInView, isHovered]);
 
   // Navigate to previous card (centers previous card)
   const handlePrev = useCallback(() => {
@@ -228,7 +239,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
     targetAngleRef.current = currentRounded - snapOffset;
   };
 
-  // Pointer / Touch drag controls with instant snap-to-center on release
+  // Pointer / Touch drag controls
   const handlePointerDown = (clientX: number) => {
     isPointerDown.current = true;
     dragMoved.current = false;
@@ -241,6 +252,7 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
     const diff = clientX - dragStartX.current;
     if (Math.abs(diff) > 5) {
       dragMoved.current = true;
+      isDraggingRef.current = true;
       setIsDragging(true);
     }
     const sensitivity = isMobile ? 0.32 : 0.24;
@@ -250,13 +262,9 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
   const handlePointerUp = () => {
     if (isPointerDown.current) {
       isPointerDown.current = false;
-      // Immediately snap to closest card center angle
-      const snapped = Math.round(targetAngleRef.current / ANGLE_STEP) * ANGLE_STEP;
-      targetAngleRef.current = snapped;
-      setTimeout(() => {
-        setIsDragging(false);
-        dragMoved.current = false;
-      }, 50);
+      isDraggingRef.current = false;
+      setIsDragging(false);
+      dragMoved.current = false;
     }
   };
 
@@ -335,8 +343,14 @@ export default function Artists({ onOpenBooking }: ArtistsProps) {
               <div
                 key={artist.ringKey}
                 onClick={(e) => handleCardClick(normAngle, e)}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
+                onMouseEnter={() => {
+                  isHoveredRef.current = true;
+                  setIsHovered(true);
+                }}
+                onMouseLeave={() => {
+                  isHoveredRef.current = false;
+                  setIsHovered(false);
+                }}
                 style={{
                   transform: `translate3d(${x}px, ${y}px, ${z}px) rotateY(${rotateY}deg) scale(${scale})`,
                   opacity,

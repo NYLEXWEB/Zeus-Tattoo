@@ -220,67 +220,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Atelier Location & Hours Column */}
-          <div className="footer-location-col">
-            <h4 className="column-title">
-              <span className="title-bullet">✦</span> Our Branches
-            </h4>
-
-            <div className="location-card">
-              <div className="location-card-head">
-                <p className="studio-name">Zeus Tattoo Kottayam</p>
-                <span className="branch-mini-badge">Flagship</span>
-              </div>
-              <address className="studio-address">
-                2nd Floor, Roji's Arch, Near Manorama Junction,<br />
-                Eerayil Kadavu, Kottayam, Kerala 686001
-              </address>
-
-              <div className="hours-divider" />
-
-              <div className="hours-block">
-                <span className="hours-label">Sanctuary Hours</span>
-                <p className="hours-line">Daily: 10:00 AM – 08:00 PM</p>
-              </div>
-
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Zeus+Tattoo+Studio+Kottayam"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-dir-link"
-              >
-                <span>Get Directions</span> →
-              </a>
-            </div>
-
-            {/* Branch 2: Kakkanad, Ernakulam */}
-            <div className="location-card" style={{ marginTop: "1rem" }}>
-              <div className="location-card-head">
-                <p className="studio-name">Zeus Tattoo Kakkanad</p>
-                <span className="branch-mini-badge badge-new-color">New Branch</span>
-              </div>
-              <address className="studio-address">
-                Opposite SFS, Kakkanad,<br />
-                Ernakulam, Kochi, Kerala
-              </address>
-
-              <div className="hours-divider" />
-
-              <div className="hours-block">
-                <span className="hours-label">Sanctuary Hours</span>
-                <p className="hours-line">Daily: 10:00 AM – 08:00 PM</p>
-              </div>
-
-              <a
-                href="https://maps.app.goo.gl/uYpThd8dAbcgDZSZ9?g_st=awb"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-dir-link"
-              >
-                <span>Get Directions</span> →
-              </a>
-            </div>
-          </div>
+ 
         </div>
 
         {/* Archival Monogram Watermark */}

@@ -2,42 +2,6 @@
 
 import React, { useState } from "react";
 
-const MapPinIcon = ({ size = 16 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>
-  </svg>
-);
-
-const ClockIcon = ({ size = 16 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-  </svg>
-);
-
-const PhoneIcon = ({ size = 16 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-  </svg>
-);
-
-const NavigationIcon = ({ size = 14 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="3 11 22 2 13 21 11 13 3 11"/>
-  </svg>
-);
-
-const ExternalLinkIcon = ({ size = 12 }: { size?: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-  </svg>
-);
-
-const SparklesIcon = ({ size = 13, className = "" }: { size?: number; className?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-  </svg>
-);
-
 export interface StudioBranch {
   id: string;
   name: string;
@@ -374,56 +338,47 @@ export default function Booking() {
         </div>
       </div>
 
-      {/* Studio Branches & Map Section */}
+      {/* Studio Branches & Map Section - Architectural Atelier Edition */}
       <div className="container booking-map-section">
-        <div className="map-showcase-card card-glass border-pulse">
-          <div className="map-card-header">
-            <div className="map-title-block">
-              <span className="map-subtitle">
-                <SparklesIcon size={13} className="inline-sparkle" />
-                Our Studio Branches
-              </span>
-              <h3 className="map-heading">Visit Our Sanctuaries</h3>
+        <div className="atelier-branches-wrap">
+          {/* Minimal Editorial Header */}
+          <div className="atelier-header">
+            <div className="atelier-title-group">
+              <span className="atelier-kicker">PHYSICAL SANCTUARIES</span>
+              <h3 className="atelier-heading">OUR STUDIO BRANCHES</h3>
             </div>
 
-            <div className="branch-toggle-pills">
-              {studioBranches.map((branch, idx) => (
-                <button
-                  key={branch.id}
-                  type="button"
-                  onClick={() => setActiveBranchIndex(idx)}
-                  className={`branch-pill-btn ${activeBranchIndex === idx ? "pill-active" : ""}`}
-                >
-                  <MapPinIcon size={14} />
-                  <span>{branch.locationName}</span>
-                  {branch.id === "kakkanad" && (
-                    <span className="branch-new-badge">NEW</span>
-                  )}
-                </button>
-              ))}
+            <div className="atelier-branch-nav" role="tablist" aria-label="Studio Branches">
+              {studioBranches.map((branch, idx) => {
+                const isActive = activeBranchIndex === idx;
+                return (
+                  <button
+                    key={branch.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    onClick={() => setActiveBranchIndex(idx)}
+                    className={`atelier-nav-item ${isActive ? "is-selected" : ""}`}
+                  >
+                    <span className="atelier-nav-num">0{idx + 1}</span>
+                    <span className="atelier-nav-city">
+                      {branch.id === "kottayam" ? "KOTTAYAM" : "KAKKANAD"}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-
-            <a
-              href={currentBranch.directionsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="map-directions-header-btn"
-            >
-              <NavigationIcon size={15} />
-              <span>Get Directions</span>
-              <ExternalLinkIcon size={13} />
-            </a>
           </div>
 
-          {/* Interactive Dual Branch Cards */}
-          <div className="branches-dual-grid">
+          {/* Architectural Cards Grid */}
+          <div className="atelier-cards-grid">
             {studioBranches.map((branch, idx) => {
               const isSelected = activeBranchIndex === idx;
               return (
                 <div
                   key={branch.id}
                   onClick={() => setActiveBranchIndex(idx)}
-                  className={`branch-showcase-box ${isSelected ? "is-selected" : ""}`}
+                  className={`atelier-card ${isSelected ? "is-active-branch" : ""}`}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
@@ -432,81 +387,50 @@ export default function Booking() {
                     }
                   }}
                 >
-                  <div className="branch-box-header">
-                    <div className="branch-box-titles">
-                      <div className="branch-tag-line">
-                        <span
-                          className={`branch-badge-pill ${branch.id === "kakkanad"
-                              ? "pill-new"
-                              : "pill-flagship"
-                            }`}
-                        >
-                          {branch.tag}
-                        </span>
-                        {isSelected && (
-                          <span className="branch-active-indicator">
-                            ● Active View
-                          </span>
-                        )}
-                      </div>
-                      <h4 className="branch-box-name">{branch.name}</h4>
-                      <p className="branch-box-location-title">
-                        {branch.locationName}
+                  <div className="atelier-card-header">
+                    <span className="atelier-card-num">0{idx + 1}</span>
+                    <span className="atelier-card-region">
+                      {branch.id === "kottayam" ? "CENTRAL KERALA" : "KOCHI METRO"}
+                    </span>
+                  </div>
+
+                  <h4 className="atelier-card-title">{branch.locationName}</h4>
+
+                  <div className="atelier-card-specs">
+                    <div className="atelier-spec-row">
+                      <span className="atelier-spec-title">ADDRESS</span>
+                      <p className="atelier-spec-text">
+                        {branch.addressLine1}
+                        <br />
+                        {branch.addressLine2}
+                      </p>
+                    </div>
+
+                    <div className="atelier-spec-row">
+                      <span className="atelier-spec-title">HOURS</span>
+                      <p className="atelier-spec-text">{branch.hours}</p>
+                    </div>
+
+                    <div className="atelier-spec-row">
+                      <span className="atelier-spec-title">DIRECT LINE</span>
+                      <p className="atelier-spec-text">
+                        <a href={`tel:${branch.phone.replace(/\s+/g, "")}`} className="atelier-tel-link">
+                          {branch.phone}
+                        </a>
                       </p>
                     </div>
                   </div>
 
-                  <div className="branch-box-body">
-                    <div className="branch-info-row">
-                      <div className="detail-box-icon-wrap branch-icon-wrap">
-                        <MapPinIcon size={16} />
-                      </div>
-                      <div className="branch-row-content">
-                        <span className="detail-box-label">Address</span>
-                        <p className="detail-box-value">
-                          {branch.addressLine1}
-                          <br />
-                          {branch.addressLine2}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="branch-info-row">
-                      <div className="detail-box-icon-wrap branch-icon-wrap">
-                        <ClockIcon size={16} />
-                      </div>
-                      <div className="branch-row-content">
-                        <span className="detail-box-label">Operating Hours</span>
-                        <p className="detail-box-value">{branch.hours}</p>
-                        <span className="detail-box-tag">Walk-ins Welcome</span>
-                      </div>
-                    </div>
-
-                    <div className="branch-info-row">
-                      <div className="detail-box-icon-wrap branch-icon-wrap">
-                        <PhoneIcon size={16} />
-                      </div>
-                      <div className="branch-row-content">
-                        <span className="detail-box-label">Direct Contact</span>
-                        <p className="detail-box-value">{branch.phone}</p>
-                        <span className="detail-box-tag">Call / WhatsApp Support</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="branch-box-footer">
+                  <div className="atelier-card-footer">
                     <a
                       href={branch.directionsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="branch-direct-nav-btn"
+                      className="atelier-directions-btn"
                     >
-                      <NavigationIcon size={14} />
-                      <span>
-                        Directions to {branch.id === "kottayam" ? "Kottayam" : "Kakkanad"}
-                      </span>
-                      <ExternalLinkIcon size={12} />
+                      <span>GET DIRECTIONS</span>
+                      <span className="atelier-arrow">→</span>
                     </a>
                   </div>
                 </div>
@@ -514,25 +438,37 @@ export default function Booking() {
             })}
           </div>
 
-          <div className="map-bottom-cover-wrapper">
-            <div className="map-floating-pill">
-              <span className="studio-pin-dot" />
-              <span>
-                {currentBranch.name} • {currentBranch.locationName}
+          {/* Architectural Framed Dark Map */}
+          <div className="atelier-map-frame">
+            <div className="atelier-map-meta-bar">
+              <span className="atelier-map-current-label">
+                STUDIO LOCATION // {currentBranch.locationName.toUpperCase()}
               </span>
+              <a
+                href={currentBranch.directionsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="atelier-map-open-link"
+              >
+                <span>OPEN IN GOOGLE MAPS</span>
+                <span className="atelier-arrow">→</span>
+              </a>
             </div>
-            <iframe
-              key={currentBranch.id}
-              src={currentBranch.mapEmbedUrl}
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              className="google-map-cover-iframe"
-              title={`${currentBranch.locationName} Map Location`}
-            />
+
+            <div className="atelier-map-viewport">
+              <iframe
+                key={currentBranch.id}
+                src={currentBranch.mapEmbedUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="atelier-map-iframe"
+                title={`${currentBranch.locationName} Map View`}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -728,387 +664,344 @@ export default function Booking() {
         }
 
         .booking-map-section {
-          margin-top: 5rem;
+          margin-top: 5.5rem;
+          position: relative;
         }
-        .map-showcase-card {
-          background: linear-gradient(
-            135deg,
-            rgba(13, 17, 27, 0.95),
-            rgba(21, 29, 45, 0.85)
-          );
-          border: 1px solid rgba(255, 168, 82, 0.2);
-          border-radius: 22px;
+
+        .atelier-branches-wrap {
+          border: 1px solid rgba(255, 255, 255, 0.09);
+          background: #080a0f;
+          border-radius: 4px;
+          box-shadow: none !important;
           overflow: hidden;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
-        .map-card-header {
-          padding: 2.4rem 2.4rem 1.6rem;
+
+        .atelier-header {
           display: flex;
           flex-direction: column;
-          gap: 1.25rem;
+          gap: 1.5rem;
+          padding: 2.4rem 2.4rem 2rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          background: #06070a;
+          box-shadow: none !important;
         }
+
         @media (min-width: 768px) {
-          .map-card-header {
+          .atelier-header {
             flex-direction: row;
-            justify-content: space-between;
             align-items: flex-end;
+            justify-content: space-between;
           }
         }
-        .map-subtitle {
+
+        .atelier-title-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .atelier-kicker {
           font-family: var(--font-body);
-          letter-spacing: 0.16em;
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.22em;
           text-transform: uppercase;
           color: var(--accent-peach);
-          font-size: 0.75rem;
-          font-weight: 700;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.45rem;
-          margin-bottom: 0.4rem;
-        }
-        .map-heading {
-          font-family: var(--font-headings);
-          color: var(--text-main);
-          letter-spacing: -0.02em;
-          font-size: clamp(1.8rem, 3.5vw, 2.5rem);
-          font-weight: 800;
-          line-height: 1.15;
-          text-transform: uppercase;
-        }
-        .map-directions-header-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.6rem;
-          padding: 0.75rem 1.5rem;
-          font-size: 0.8rem;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          text-decoration: none;
-          color: var(--text-dark);
-          background: linear-gradient(135deg, var(--accent-peach), #e08e3e);
-          border-radius: 100px;
-          transition: var(--transition-smooth);
-          width: fit-content;
-        }
-        .map-directions-header-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(255, 168, 82, 0.35);
         }
 
-        .branch-toggle-pills {
+        .atelier-heading {
+          font-family: var(--font-headings);
+          font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+          font-weight: 800;
+          letter-spacing: -0.01em;
+          text-transform: uppercase;
+          color: #ffffff;
+          line-height: 1.15;
+          margin: 0;
+        }
+
+        .atelier-branch-nav {
           display: flex;
           align-items: center;
-          gap: 0.6rem;
-          background: rgba(7, 9, 14, 0.7);
-          border: 1px solid rgba(255, 168, 82, 0.22);
-          border-radius: 100px;
-          padding: 0.35rem;
-          width: fit-content;
+          gap: 0;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          background: #0a0d13;
+          border-radius: 2px;
+          box-shadow: none !important;
         }
 
-        .branch-pill-btn {
+        .atelier-nav-item {
           display: inline-flex;
           align-items: center;
-          gap: 0.45rem;
-          padding: 0.45rem 1rem;
-          border-radius: 100px;
-          border: 1px solid transparent;
+          gap: 0.6rem;
+          padding: 0.75rem 1.4rem;
           background: transparent;
-          color: var(--text-muted);
+          border: none;
+          color: rgba(255, 255, 255, 0.45);
           font-family: var(--font-body);
           font-size: 0.75rem;
           font-weight: 700;
-          letter-spacing: 0.06em;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
           cursor: pointer;
-          transition: var(--transition-fast);
+          transition: color 0.2s ease, background 0.2s ease;
+          box-shadow: none !important;
         }
 
-        .branch-pill-btn:hover {
-          color: var(--text-main);
+        .atelier-nav-item:first-child {
+          border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .atelier-nav-item:hover {
+          color: #ffffff;
+          background: rgba(255, 255, 255, 0.03);
+        }
+
+        .atelier-nav-item.is-selected {
+          color: var(--accent-peach);
           background: rgba(255, 168, 82, 0.08);
         }
 
-        .branch-pill-btn.pill-active {
-          background: rgba(255, 168, 82, 0.2);
-          border-color: rgba(255, 168, 82, 0.45);
-          color: var(--accent-peach);
-          box-shadow: 0 0 15px rgba(255, 168, 82, 0.2);
+        .atelier-nav-num {
+          font-size: 0.68rem;
+          letter-spacing: 0.1em;
+          opacity: 0.7;
         }
 
-        .branch-new-badge {
-          background: linear-gradient(135deg, #ff4c4c, #ff8c42);
-          color: #ffffff;
-          font-size: 0.58rem;
-          font-weight: 900;
-          padding: 0.12rem 0.4rem;
-          border-radius: 100px;
-          letter-spacing: 0.05em;
-        }
-
-        .branches-dual-grid {
+        .atelier-cards-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 1.25rem;
-          padding: 0 2.4rem 2rem;
+          gap: 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         @media (min-width: 900px) {
-          .branches-dual-grid {
+          .atelier-cards-grid {
             grid-template-columns: repeat(2, 1fr);
           }
         }
 
-        .branch-showcase-box {
-          background: rgba(7, 9, 14, 0.65);
-          border: 1px solid rgba(255, 168, 82, 0.16);
-          border-radius: 18px;
-          padding: 1.6rem;
+        .atelier-card {
+          padding: 2.2rem 2.4rem;
+          background: #080a0f;
+          cursor: pointer;
+          transition: background 0.25s ease;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          cursor: pointer;
-          transition: all 0.35s ease;
+          box-shadow: none !important;
           position: relative;
-          overflow: hidden;
         }
 
-        .branch-showcase-box:hover {
-          border-color: rgba(255, 168, 82, 0.4);
-          transform: translateY(-3px);
-          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        @media (min-width: 900px) {
+          .atelier-card:first-child {
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+          }
         }
 
-        .branch-showcase-box.is-selected {
-          border-color: rgba(255, 168, 82, 0.7);
-          background: linear-gradient(
-            165deg,
-            rgba(21, 29, 45, 0.85) 0%,
-            rgba(13, 17, 27, 0.95) 100%
-          );
-          box-shadow: 0 15px 35px rgba(255, 168, 82, 0.12);
+        @media (max-width: 899px) {
+          .atelier-card:first-child {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          }
         }
 
-        .branch-showcase-box.is-selected::before {
+        .atelier-card:hover {
+          background: #0b0e15;
+        }
+
+        .atelier-card.is-active-branch {
+          background: #0d1017;
+        }
+
+        .atelier-card.is-active-branch::before {
           content: "";
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, var(--accent-peach), #ffc285);
+          height: 2px;
+          background: var(--accent-peach);
         }
 
-        .branch-box-header {
-          margin-bottom: 1.25rem;
-        }
-
-        .branch-tag-line {
+        .atelier-card-header {
           display: flex;
           align-items: center;
-          gap: 0.6rem;
-          margin-bottom: 0.5rem;
+          justify-content: space-between;
+          margin-bottom: 1rem;
         }
 
-        .branch-badge-pill {
-          font-family: var(--font-body);
-          font-size: 0.62rem;
-          font-weight: 800;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          padding: 0.22rem 0.6rem;
-          border-radius: 100px;
-        }
-
-        .pill-flagship {
-          background: rgba(255, 168, 82, 0.16);
-          color: var(--accent-peach);
-          border: 1px solid rgba(255, 168, 82, 0.35);
-        }
-
-        .pill-new {
-          background: rgba(255, 92, 92, 0.18);
-          color: #ff8c8c;
-          border: 1px solid rgba(255, 92, 92, 0.4);
-        }
-
-        .branch-active-indicator {
-          font-size: 0.68rem;
-          font-weight: 700;
-          color: var(--accent-peach);
-          letter-spacing: 0.05em;
-        }
-
-        .branch-box-name {
+        .atelier-card-num {
           font-family: var(--font-headings);
-          font-size: 1.25rem;
-          font-weight: 800;
-          color: var(--text-main);
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-          margin-bottom: 0.2rem;
-        }
-
-        .branch-box-location-title {
-          font-family: var(--font-desc);
           font-size: 0.85rem;
-          font-weight: 600;
-          color: var(--accent-peach-bright);
+          font-weight: 800;
+          letter-spacing: 0.15em;
+          color: var(--accent-peach);
         }
 
-        .branch-box-body {
+        .atelier-card-region {
+          font-family: var(--font-body);
+          font-size: 0.65rem;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          color: rgba(255, 255, 255, 0.35);
+          text-transform: uppercase;
+        }
+
+        .atelier-card-title {
+          font-family: var(--font-headings);
+          font-size: 1.35rem;
+          font-weight: 800;
+          letter-spacing: 0.02em;
+          color: #ffffff;
+          text-transform: uppercase;
+          margin: 0 0 1.8rem;
+          line-height: 1.25;
+        }
+
+        .atelier-card-specs {
           display: flex;
           flex-direction: column;
-          gap: 1rem;
-          margin-bottom: 1.4rem;
+          gap: 0;
+          margin-bottom: 2rem;
         }
 
-        .branch-info-row {
-          display: flex;
-          align-items: flex-start;
+        .atelier-spec-row {
+          display: grid;
+          grid-template-columns: 100px 1fr;
+          gap: 1rem;
+          padding: 0.85rem 0;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          align-items: baseline;
+        }
+
+        .atelier-spec-title {
+          font-family: var(--font-body);
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          color: rgba(255, 255, 255, 0.4);
+          text-transform: uppercase;
+        }
+
+        .atelier-spec-text {
+          font-family: var(--font-desc);
+          font-size: 0.88rem;
+          color: rgba(255, 255, 255, 0.82);
+          line-height: 1.55;
+          margin: 0;
+        }
+
+        .atelier-tel-link {
+          color: var(--accent-peach);
+          text-decoration: none;
+          transition: color 0.2s ease;
+        }
+
+        .atelier-tel-link:hover {
+          color: #ffffff;
+          text-decoration: underline;
+        }
+
+        .atelier-card-footer {
+          margin-top: auto;
+          padding-top: 1.2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .atelier-directions-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          font-family: var(--font-body);
+          font-size: 0.74rem;
+          font-weight: 700;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--accent-peach);
+          text-decoration: none;
+          transition: gap 0.25s ease, color 0.25s ease;
+        }
+
+        .atelier-directions-btn:hover {
+          color: #ffffff;
           gap: 0.85rem;
         }
 
-        .branch-icon-wrap {
-          width: 34px;
-          height: 34px;
+        .atelier-arrow {
+          display: inline-block;
+          transition: transform 0.25s ease;
         }
 
-        .branch-row-content {
+        .atelier-directions-btn:hover .atelier-arrow {
+          transform: translateX(3px);
+        }
+
+        /* Architectural Map Frame */
+        .atelier-map-frame {
+          position: relative;
+          width: 100%;
+          background: #050608;
+          box-shadow: none !important;
+        }
+
+        .atelier-map-meta-bar {
           display: flex;
-          flex-direction: column;
-          gap: 0.18rem;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.9rem 2.4rem;
+          background: #06070a;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          box-shadow: none !important;
         }
 
-        .branch-box-footer {
-          margin-top: auto;
-          padding-top: 1rem;
-          border-top: 1px solid rgba(255, 168, 82, 0.12);
+        .atelier-map-current-label {
+          font-family: var(--font-body);
+          font-size: 0.68rem;
+          font-weight: 700;
+          letter-spacing: 0.15em;
+          color: rgba(255, 255, 255, 0.45);
         }
 
-        .branch-direct-nav-btn {
+        .atelier-map-open-link {
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
           font-family: var(--font-body);
-          font-size: 0.75rem;
-          font-weight: 700;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: var(--accent-peach);
-          background: rgba(255, 168, 82, 0.1);
-          border: 1px solid rgba(255, 168, 82, 0.25);
-          border-radius: 100px;
-          padding: 0.5rem 1rem;
-          transition: var(--transition-fast);
-          text-decoration: none;
-        }
-
-        .branch-direct-nav-btn:hover {
-          background: var(--accent-peach);
-          color: var(--text-dark);
-          border-color: var(--accent-peach);
-        }
-
-        .info-detail-box {
-          background: rgba(7, 9, 14, 0.55);
-          border: 1px solid rgba(255, 168, 82, 0.14);
-          border-radius: 14px;
-          padding: 1.25rem;
-          display: flex;
-          align-items: flex-start;
-          gap: 0.9rem;
-          transition: border-color 0.3s ease;
-        }
-        .info-detail-box:hover {
-          border-color: rgba(255, 168, 82, 0.35);
-        }
-        .detail-box-icon-wrap {
-          width: 38px;
-          height: 38px;
-          border-radius: 10px;
-          background: rgba(255, 168, 82, 0.1);
-          border: 1px solid rgba(255, 168, 82, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-          color: var(--accent-peach);
-        }
-        .detail-box-text {
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-        }
-        .detail-box-label {
-          font-family: var(--font-body);
           font-size: 0.68rem;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: var(--accent-peach);
           font-weight: 700;
-        }
-        .detail-box-value {
-          font-family: var(--font-desc);
-          color: var(--text-main);
-          font-size: 0.86rem;
-          line-height: 1.5;
-        }
-        .detail-box-tag {
-          font-size: 0.7rem;
-          color: var(--text-muted);
-          margin-top: 0.15rem;
+          letter-spacing: 0.14em;
+          color: var(--accent-peach);
+          text-decoration: none;
+          transition: color 0.2s ease;
         }
 
-        .map-bottom-cover-wrapper {
+        .atelier-map-open-link:hover {
+          color: #ffffff;
+        }
+
+        .atelier-map-viewport {
           position: relative;
           width: 100%;
-          height: 360px;
-          border-top: 1px solid rgba(255, 168, 82, 0.18);
-          background: #07090e;
-          overflow: hidden;
+          height: 380px;
+          background: #050608;
         }
+
         @media (min-width: 768px) {
-          .map-bottom-cover-wrapper {
-            height: 420px;
+          .atelier-map-viewport {
+            height: 440px;
           }
         }
-        .map-floating-pill {
-          position: absolute;
-          top: 16px;
-          left: 18px;
-          background: rgba(7, 9, 14, 0.9);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 168, 82, 0.35);
-          border-radius: 100px;
-          padding: 0.4rem 0.9rem;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          font-size: 0.72rem;
-          font-weight: 700;
-          letter-spacing: 0.05em;
-          color: var(--accent-peach);
-          z-index: 10;
-          pointer-events: none;
-        }
-        .studio-pin-dot {
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          background: var(--accent-peach);
-          box-shadow: 0 0 8px var(--accent-peach);
-        }
-        .google-map-cover-iframe {
+
+        .atelier-map-iframe {
           width: 100%;
           height: 100%;
           border: 0;
           display: block;
-          filter: invert(90%) hue-rotate(180deg) contrast(1.1) brightness(0.95);
+          filter: invert(90%) hue-rotate(180deg) contrast(1.15) brightness(0.9);
           transition: filter 0.4s ease;
         }
-        .google-map-cover-iframe:hover {
+
+        .atelier-map-iframe:hover {
           filter: invert(0%) hue-rotate(0deg) contrast(1) brightness(1);
         }
 
@@ -1130,31 +1023,37 @@ export default function Booking() {
           .booking-map-section {
             margin-top: 3.5rem;
           }
-          .map-card-header {
-            padding: 1.5rem 1.2rem 1.2rem;
+          .atelier-header {
+            padding: 1.6rem 1.4rem;
           }
-          .branch-toggle-pills {
+          .atelier-branch-nav {
             width: 100%;
-            justify-content: center;
           }
-          .branch-pill-btn {
+          .atelier-nav-item {
             flex: 1;
             justify-content: center;
-            padding: 0.45rem 0.6rem;
+            padding: 0.65rem 0.8rem;
             font-size: 0.7rem;
           }
-          .branches-dual-grid {
-            padding: 0 1.2rem 1.4rem;
-            gap: 1rem;
+          .atelier-card {
+            padding: 1.6rem 1.4rem;
           }
-          .branch-showcase-box {
-            padding: 1.25rem 1.1rem;
+          .atelier-card-title {
+            font-size: 1.15rem;
+            margin-bottom: 1.25rem;
           }
-          .map-directions-header-btn {
-            width: 100%;
-            justify-content: center;
+          .atelier-spec-row {
+            grid-template-columns: 85px 1fr;
+            gap: 0.6rem;
+            padding: 0.7rem 0;
           }
-          .map-bottom-cover-wrapper {
+          .atelier-map-meta-bar {
+            padding: 0.75rem 1.4rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.4rem;
+          }
+          .atelier-map-viewport {
             height: 280px;
           }
         }
