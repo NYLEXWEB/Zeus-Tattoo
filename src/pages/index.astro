@@ -5,6 +5,7 @@ import Loader from "../components/Loader";
 import Header from "../components/Navbar";
 import Hero from "../components/Hero";
 import About from "../components/About";
+import LogoReveal from "../components/LogoReveal.astro";
 import Services from "../components/Services";
 import Artists from "../components/Artists";
 import Gallery from "../components/Gallery";
@@ -35,6 +36,11 @@ import Footer from "../components/Footer";
       <!-- About Sanctuary Section -->
       <div class="reveal-section">
         <About client:visible />
+      </div>
+
+      <!-- 3D Official Zeus Logo Reveal Section -->
+      <div class="reveal-section">
+        <LogoReveal />
       </div>
 
       <!-- Studio Services Section -->

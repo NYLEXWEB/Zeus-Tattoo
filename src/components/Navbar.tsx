@@ -152,6 +152,11 @@ export default function Header({ onOpenBooking }: HeaderProps) {
             About
           </a>
           <a
+            href="#brand"
+            onClick={(e) => handleNavClick(e, "#craftsmanship")}
+            className="nav-link"
+          >Emblem</a>
+          <a
             href="#services"
             onClick={(e) => handleNavClick(e, "#services")}
             className="nav-link"
@@ -293,6 +298,11 @@ export default function Header({ onOpenBooking }: HeaderProps) {
           >
             About
           </a>
+          <a
+            href="#brand"
+            className="mobile-nav-link"
+            onClick={(e) => handleNavClick(e, "#craftsmanship")}
+          >Emblem</a>
           <a
             href="#services"
             className="mobile-nav-link"

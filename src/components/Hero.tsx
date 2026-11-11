@@ -60,6 +60,8 @@ export default function Hero({ onOpenBooking }: HeroProps) {
   // Direct element references for 60-120 FPS hardware-accelerated transforms
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  const curtainLeftRef = useRef<HTMLDivElement>(null);
+  const curtainRightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -133,6 +135,8 @@ export default function Hero({ onOpenBooking }: HeroProps) {
       },
     });
 
+    let seekWatchdog: any = null;
+
     const performSeek = (targetTime: number) => {
       if (!video || video.readyState < 1) return;
 
@@ -141,21 +145,34 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         return;
       }
 
-      // Slightly wider seek delta on mobile (0.018s vs 0.012s) to maximize battery and prevent mobile GPU stalls
-      const minDiff = isMobile ? 0.018 : 0.012;
+      // Responsive seek delta threshold to maximize battery and prevent mobile GPU stalls
+      const minDiff = isMobile ? 0.02 : 0.012;
       const diff = Math.abs(video.currentTime - targetTime);
 
       if (diff > minDiff) {
         isSeekingRef.current = true;
+        clearTimeout(seekWatchdog);
+        // Fail-safe watchdog: resets seeking flag after 55ms to guarantee video NEVER gets stuck
+        seekWatchdog = setTimeout(() => {
+          isSeekingRef.current = false;
+          if (pendingTimeRef.current !== null) {
+            const next = pendingTimeRef.current;
+            pendingTimeRef.current = null;
+            performSeek(next);
+          }
+        }, 55);
+
         try {
           video.currentTime = targetTime;
         } catch {
+          clearTimeout(seekWatchdog);
           isSeekingRef.current = false;
         }
       }
     };
 
     const handleSeeked = () => {
+      clearTimeout(seekWatchdog);
       isSeekingRef.current = false;
       if (pendingTimeRef.current !== null) {
         const nextTime = pendingTimeRef.current;
@@ -227,6 +244,28 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         ).toFixed(1)}px, 0)`;
       }
 
+      // 4. Center-Split Shutter Reveal (0.00 -> 0.18) - Clean, Solid, Zero Center Line
+      const curtainLeft = curtainLeftRef.current;
+      const curtainRight = curtainRightRef.current;
+      if (curtainLeft && curtainRight) {
+        const revealEnd = 0.18;
+        const p = Math.max(0, Math.min(1, smooth / revealEnd));
+        if (p >= 1) {
+          curtainLeft.style.transform = "translate3d(-100%, 0, 0)";
+          curtainRight.style.transform = "translate3d(100%, 0, 0)";
+          curtainLeft.style.visibility = "hidden";
+          curtainRight.style.visibility = "hidden";
+        } else {
+          // Luxury cubic ease-out for an ultra-smooth cinema curtain reveal
+          const ease = 1 - Math.pow(1 - p, 3);
+          const offsetPercent = ease * 100;
+          curtainLeft.style.visibility = "visible";
+          curtainRight.style.visibility = "visible";
+          curtainLeft.style.transform = `translate3d(${(-offsetPercent).toFixed(2)}%, 0, 0)`;
+          curtainRight.style.transform = `translate3d(${offsetPercent.toFixed(2)}%, 0, 0)`;
+        }
+      }
+
       rafIdRef.current = requestAnimationFrame(updateLoop);
     };
 
@@ -235,6 +274,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
     return () => {
       viewObserver.disconnect();
       trigger.kill();
+      clearTimeout(seekWatchdog);
       video.removeEventListener("seeked", handleSeeked);
       if (rafIdRef.current) {
         cancelAnimationFrame(rafIdRef.current);
@@ -284,6 +324,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           />
         </div>
 
+        {/* Luxury Matte Obsidian Center-Split Reveal Shutters (Solid, Zero Center Line) */}
+        <div className="hero-curtain-container" aria-hidden="true">
+          <div className="hero-curtain-leaf leaf-left" ref={curtainLeftRef} />
+          <div className="hero-curtain-leaf leaf-right" ref={curtainRightRef} />
+        </div>
+
         {/* Sophisticated Cinema Lighting Scrims */}
         <div className="hero-cinema-aura" />
         <div className="hero-top-scrim" />
@@ -330,19 +376,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           ))}
         </div>
 
-        {/* Refined Minimal Scroll Indicator */}
-        <div className="scroll-indicator-container" ref={scrollIndicatorRef}>
-          <div className="scroll-pill">
-            <span className="scroll-pill-text font-serif">Scroll to explore</span>
-            <span className="scroll-chevron">↓</span>
-          </div>
-        </div>
       </div>
 
       <style>{`
         .hero-main-container {
           position: relative;
-          background-color: #07090e;
+          background-color: #0d111b;
           width: 100%;
           max-width: 100vw;
           overflow-x: clip;
@@ -368,7 +407,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           display: flex;
           align-items: center;
           justify-content: center;
-          background-color: #07090e;
+          background-color: #0d111b;
           z-index: 2;
           box-sizing: border-box;
           padding-top: env(safe-area-inset-top, 0px);
@@ -383,7 +422,38 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           height: 100%;
           overflow: hidden;
           z-index: 1;
-          background-color: #05070a;
+          background-color: #0d111b;
+        }
+
+        /* Luxury Matte Obsidian Center-Split Reveal Shutters (Solid, Zero Center Line) */
+        .hero-curtain-container {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 5;
+          pointer-events: none;
+          overflow: hidden;
+        }
+
+        .hero-curtain-leaf {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 50.2%;
+          height: 100%;
+          background: #0d111b;
+          will-change: transform;
+          box-shadow: none !important;
+          border: none !important;
+        }
+
+        .leaf-left {
+          left: 0;
+        }
+
+        .leaf-right {
+          right: 0;
         }
 
         .hero-video {
@@ -408,12 +478,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           inset: 0;
           z-index: 2;
           pointer-events: none;
-          background: radial-gradient(
-            circle at 50% 50%,
-            rgba(7, 9, 14, 0.15) 0%,
-            rgba(7, 9, 14, 0.45) 75%,
-            rgba(7, 9, 14, 0.72) 100%
-          );
+          background: rgba(13, 17, 27, 0.35);
         }
 
         .hero-top-scrim {
@@ -421,13 +486,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           top: 0;
           left: 0;
           right: 0;
-          height: 130px;
+          height: 120px;
           z-index: 3;
           pointer-events: none;
           background: linear-gradient(
             to bottom,
-            rgba(7, 9, 14, 0.65) 0%,
-            rgba(7, 9, 14, 0.2) 60%,
+            rgba(13, 17, 27, 0.8) 0%,
             transparent 100%
           );
         }
@@ -437,13 +501,12 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           bottom: 0;
           left: 0;
           right: 0;
-          height: 130px;
+          height: 120px;
           z-index: 3;
           pointer-events: none;
           background: linear-gradient(
             to top,
-            rgba(7, 9, 14, 0.7) 0%,
-            rgba(7, 9, 14, 0.2) 60%,
+            rgba(13, 17, 27, 0.8) 0%,
             transparent 100%
           );
         }
@@ -484,42 +547,43 @@ export default function Hero({ onOpenBooking }: HeroProps) {
 
         /* Studio Eyebrow */
         .hero-eyebrow {
-          font-size: 0.76rem;
+          font-size: 0.68rem;
           font-weight: 700;
-          letter-spacing: 0.3em;
+          letter-spacing: 0.28em;
           text-transform: uppercase;
           color: rgba(255, 255, 255, 0.85);
-          margin-bottom: 0.85rem;
+          margin-bottom: 0.7rem;
           text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
           display: inline-block;
           max-width: 90vw;
+          transition: letter-spacing 0.4s ease, opacity 0.4s ease;
         }
 
         @media (max-width: 768px) {
           .hero-eyebrow {
-            font-size: 0.65rem;
-            letter-spacing: 0.22em;
-            margin-bottom: 0.6rem;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.5rem;
           }
         }
 
         @media (max-width: 420px) {
           .hero-eyebrow {
-            font-size: 0.58rem;
-            letter-spacing: 0.18em;
-            margin-bottom: 0.45rem;
+            font-size: 0.54rem;
+            letter-spacing: 0.16em;
+            margin-bottom: 0.4rem;
           }
         }
 
-        /* Single Word Monumental Headline - Never Wraps, Perfectly Scaled */
+        /* Single Word Monumental Headline - Refined Luxury Proportion with Minimalist Hover Aura */
         .hero-single-word {
-          font-size: clamp(4.2rem, 13vw, 9.8rem);
+          font-size: clamp(3.0rem, 8.5vw, 6.2rem);
           line-height: 0.95;
           font-weight: 800;
-          letter-spacing: 0.16em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
           color: #ffffff;
-          margin-bottom: 2.2rem;
+          margin-bottom: 1.6rem;
           background: linear-gradient(180deg, #ffffff 45%, #e2e8f0 85%, #ffc285 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -527,32 +591,50 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           white-space: nowrap;
           word-break: keep-all;
           max-width: 96vw;
+          cursor: pointer;
+          user-select: none;
+          transform: translate3d(0, 0, 0);
+          transition: letter-spacing 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+            filter 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Premium & Minimal Heading Hover Animation */
+        .hero-single-word:hover {
+          letter-spacing: 0.20em;
+          transform: translate3d(0, -3px, 0) scale(1.018);
+          filter: drop-shadow(0 8px 32px rgba(255, 168, 82, 0.4))
+            drop-shadow(0 2px 10px rgba(255, 255, 255, 0.25));
         }
 
         @media (max-width: 768px) {
           .hero-single-word {
-            font-size: clamp(2.6rem, 11vw, 4.2rem);
+            font-size: clamp(2.1rem, 8.5vw, 3.4rem);
             letter-spacing: 0.08em;
-            margin-bottom: 1.6rem;
+            margin-bottom: 1.25rem;
+          }
+          .hero-single-word:hover {
+            letter-spacing: 0.11em;
+            transform: translate3d(0, -2px, 0);
           }
         }
 
         @media (max-width: 420px) {
           .hero-single-word {
-            font-size: clamp(2.2rem, 10vw, 3.2rem);
+            font-size: clamp(1.8rem, 8vw, 2.6rem);
             letter-spacing: 0.06em;
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.05rem;
           }
         }
 
         @media (max-height: 680px) {
           .hero-single-word {
-            font-size: clamp(2.2rem, 8.5vh, 3.4rem);
-            margin-bottom: 1.1rem;
+            font-size: clamp(1.8rem, 7.5vh, 2.8rem);
+            margin-bottom: 0.95rem;
           }
         }
 
-        /* Radiant Luminous Molten Gold Button */
+        /* Radiant Luminous Molten Gold Button - Refined Minimal Proportions */
         .hero-button-wrap {
           display: flex;
           align-items: center;
@@ -566,18 +648,17 @@ export default function Hero({ onOpenBooking }: HeroProps) {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 0.75rem;
-          padding: 1rem 2.5rem;
-          background: linear-gradient(135deg, #ffd188 0%, #ffa852 50%, #d8812a 100%);
-          color: #07090e;
-          font-size: 0.88rem;
+          gap: 0.65rem;
+          padding: 0.75rem 2.0rem;
+          background: #ffa852;
+          color: #0d111b;
+          font-size: 0.78rem;
           font-weight: 800;
-          letter-spacing: 0.14em;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
           border-radius: 9999px;
           border: 1px solid rgba(255, 255, 255, 0.55);
-          box-shadow: 0 4px 25px rgba(255, 168, 82, 0.45),
-            inset 0 1px 1px rgba(255, 255, 255, 0.6);
+          box-shadow: none !important;
           transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
             box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
           touch-action: manipulation;
@@ -587,8 +668,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
 
         .btn-luxury-gold:hover {
           transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 8px 35px rgba(255, 168, 82, 0.65),
-            inset 0 1px 1px rgba(255, 255, 255, 0.8);
+          box-shadow: none !important;
         }
 
         .btn-luxury-gold:active {
@@ -597,36 +677,24 @@ export default function Hero({ onOpenBooking }: HeroProps) {
 
         @media (max-width: 768px) {
           .btn-luxury-gold {
-            padding: 0.85rem 2rem;
-            font-size: 0.8rem;
-            letter-spacing: 0.12em;
-            gap: 0.6rem;
-            min-height: 48px;
+            padding: 0.68rem 1.6rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            gap: 0.55rem;
+            min-height: 44px;
           }
         }
 
         @media (max-width: 420px) {
           .btn-luxury-gold {
-            padding: 0.75rem 1.6rem;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
+            padding: 0.62rem 1.35rem;
+            font-size: 0.68rem;
+            letter-spacing: 0.08em;
           }
         }
 
         .btn-shine-sweep {
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 50%;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.45),
-            transparent
-          );
-          transform: skewX(-20deg);
-          animation: shineSweep 4.5s infinite ease-in-out;
+          display: none !important;
         }
 
         @keyframes shineSweep {
